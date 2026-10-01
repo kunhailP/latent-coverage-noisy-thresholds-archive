@@ -503,3 +503,73 @@ def test_exact_reliability_matches_stress_simulation():
             assert abs(e - s.reliability) < 3.5 * max(s.se_rel, 1e-3), (K, rule, e, s.reliability)
     big = ex[ex.K == 1000000].set_index('rule').reliability
     assert big['usual'] < 0.2 and big['marginal'] < 0.01 and big['certified'] > 0.95
+
+
+def _eh_true(q, k, L):
+    """E min(1, q e^{-eps}) for eps = L (V - mu), V with density prop. e^{kv} on [0, 1]."""
+    from scipy import integrate
+    Z = integrate.quad(lambda v: np.exp(k * v), 0, 1)[0]
+    mu = integrate.quad(lambda v: v * np.exp(k * v), 0, 1)[0] / Z
+    vc = min(max(mu + np.log(q) / L, 0), 1)
+    f = lambda v: min(1, q * np.exp(-L * (v - mu))) * np.exp(k * v) / Z
+    return integrate.quad(f, 0, vc)[0] + integrate.quad(f, vc, 1)[0]
+
+
+def test_noise_class_symmetric_unimodal_closed_form():
+    """Theorem 4(i): the closed form of Psi_SU matches a direct maximization over the scale of
+    uniform noise, and the two-sided split certificate holds at (0.9018, 0.9) and (0.9, 0.8981)."""
+    from scipy.optimize import minimize_scalar
+    from uai.noise_classes import psi_su_enclosure, split_certificate_su
+    for q in (0.8, 0.9, 0.95):
+        c = np.log(q)
+        g = lambda r: q * np.sinh(r) / r if r <= -c else (c + r + 1 - q * np.exp(-r)) / (2 * r)
+        r = minimize_scalar(lambda lr: -g(np.exp(lr)), bounds=(-8, 3), method='bounded',
+                            options={'xatol': 1e-12})
+        lo, hi = psi_su_enclosure(q)
+        assert lo - 1e-12 <= -r.fun <= hi + 1e-12
+    assert split_certificate_su('0.9018', '0.9')[0] and split_certificate_su('0.9', '0.8981')[0]
+
+
+def test_noise_class_log_concave_enclosures_are_sound():
+    """The box enclosures of uai.noise_classes bound E h from above at random points inside the
+    boxes (region I against quadrature, regions II-III against the truncated exponential law),
+    and the centred exponential point value is the closed form."""
+    from scipy import integrate
+    from uai.noise_classes import eh_region1, eh_region2, eh_region3, lc_point
+    rng = np.random.default_rng(4)
+    q = 0.9
+    for _ in range(40):
+        k0 = rng.uniform(-2, 1.9); k1 = k0 + rng.uniform(1e-3, 0.1)
+        L0 = np.exp(rng.uniform(np.log(0.2), np.log(30))); L1 = L0 * np.exp(rng.uniform(1e-3, 0.1))
+        ub = float(eh_region1(q, k0, k1, L0, L1).upper())
+        for _ in range(3):
+            assert _eh_true(q, rng.uniform(k0, k1), rng.uniform(L0, L1)) <= ub + 1e-12
+    for _ in range(30):
+        t0 = rng.uniform(0.02, 0.45); t1 = t0 + rng.uniform(1e-3, 0.05)
+        s0 = np.exp(rng.uniform(np.log(0.01), np.log(5))); s1 = s0 * np.exp(rng.uniform(1e-3, 0.1))
+        u2 = float(eh_region2(q, t0, t1, s0, s1).upper())
+        u3 = float(eh_region3(q, t0, t1, s0, s1).upper())
+        k, s = 1 / rng.uniform(t0, t1), rng.uniform(s0, s1)
+        Z = -np.expm1(-k)
+        m = 1 - k * np.exp(-k) / Z
+        dens = lambda tau: np.exp(-tau) / Z
+        right = integrate.quad(lambda tau: min(1, q * np.exp(-s * (tau - m))) * dens(tau), 0, k, limit=200)[0]
+        left = integrate.quad(lambda tau: min(1, q * np.exp(-s * (m - tau))) * dens(tau), 0, k, limit=200)[0]
+        assert right <= u2 + 1e-12 and left <= u3 + 1e-12
+    v = lc_point('0.9', 0.1177686817)
+    assert abs(float(v.mid()) - 0.9051755359) < 1e-9
+
+
+def test_noise_classes_results_file():
+    """Every certificate behind Theorem 4 and the levels quoted in the paper holds in
+    results/noise_classes.json (E41)."""
+    import json
+    d = json.loads((ROOT / 'results' / 'noise_classes.json').read_text())
+    su, lc = d['symmetric_unimodal'], d['log_concave']
+    assert all(r['ok'] for r in su['split']) and all(r['fails'] for r in su['fails'])
+    assert {(r['p'], r['q']) for r in su['split']} >= {('0.9018', '0.9'), ('0.9', '0.8981'), ('0.9068', '0.9')}
+    assert all(r['ok'] for r in lc['one_sided']) and any(r['target'] == '0.9052' for r in lc['one_sided'])
+    assert {(r['p'], r['q']) for r in lc['split'] if r['ok']} >= {('0.9068', '0.9'), ('0.906', '0.9'), ('0.9', '0.8935')}
+    lows = {r['q']: r['psi_lo'] for r in lc['exp_lower']}
+    assert lows['0.9'] > 0.90517 and lows['0.8942'] > 0.9
+    assert 0.90079 < d['gaussian']['0.9']['psi'] <= 0.901

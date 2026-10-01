@@ -25,6 +25,7 @@ figures:
 constants:
 	$(PY) experiments/e27_interval_constants.py $(PROCS)
 	$(PY) experiments/e37_coverage_transfer.py $(PROCS)
+	$(PY) experiments/e41_noise_classes.py $(PROCS)
 
 # the exact two-dimensional reduction, the boundary map and certified upper bounds of R (hours)
 certified:

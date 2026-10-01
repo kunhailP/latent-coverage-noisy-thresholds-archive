@@ -8,6 +8,8 @@ A prediction interval for a latent quantity, such as the true mean of an area th
 
 **In coverage terms:** noisy coverage 0.9 implies latent coverage at least 0.8991 for every bi-log-concave latent law and every noise level, while 0.8992 cannot be guaranteed even for log-concave laws (Corollary 1; certified in ball arithmetic by `experiments/e37_coverage_transfer.py`).
 
+**Beyond Gaussian noise:** noisy coverage 0.9 guarantees latent coverage 0.8981 under any symmetric unimodal noise (heavy tails allowed; closed form, Theorem 4(i)) and 0.8935 under any mean-zero log-concave noise (skewed allowed; localization plus a ball-arithmetic branch and bound, Theorem 4(ii)); noisy level 0.9018, respectively 0.906, restores 0.9 (for log-concave noise the one-sided supremum lies in [0.90517, 0.9052], attained by the centred exponential law). The noise laws may differ between units and their variances may be unknown, so the noisy threshold at rank 105 of 110 (level 0.9068) is valid for every such noise. Under mean-zero unimodal noise nothing can be guaranteed (Theorem 4(iii)). `src/uai/noise_classes.py`, `experiments/e41_noise_classes.py`.
+
 **In one sentence:** the location of the latent mean governs the worst-case widening (order `D` away from the boundary, `c_q D^{1/2}` without restriction, `c_0.9 = 0.0191`); the widening is at most 1.16% of the radius at `q = 0.9` for every bi-log-concave law (numerically at most 0.22% for log-concave laws), and a calibration slack of `10^{-3}` removes it, so the noisy threshold at a suitable rank is valid even with unknown heterogeneous variances.
 
 ## Main results
@@ -52,6 +54,7 @@ make test
 |---|---|---|
 | Constants `c_q`, `C_{p,q}`, slack intervals (Lemma 1, Corollary 1) | `make constants` | `results/interval_constants.json` |
 | Coverage form of Corollary 1 (0.9 → 0.8991) | `make constants` | `results/coverage_transfer.json` |
+| Non-Gaussian noise classes (Proposition 5, Theorem 4) | `make constants` | `results/noise_classes.json` |
 | Centring and transition values, Figure 1 | `make quick figures` | `results/centering.json`, `paper/fig_transition.pdf` |
 | Edge constants `M_q` (not in the manuscript) | `make edge` | `results/edge.json` |
 | Radius correction by location of the mean (Supplement S2) | `make quick figures` | `results/mean_location.csv`, `paper/fig_mean_location.pdf` |
