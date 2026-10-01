@@ -1,0 +1,23 @@
+{
+ "0.2": {
+  "quantile_sd_constant": 1.399475392471459,
+  "truncation": 0.754415322704347,
+  "gaussian": 1.2815515655446004,
+  "worst_normal_interval_coverage_trunc_laplace": 0.7399426680308439,
+  "worst_at_truncation": 0.01
+ },
+ "0.1": {
+  "quantile_sd_constant": 1.755849434563105,
+  "truncation": 2.704858147349729,
+  "gaussian": 1.6448536269514722,
+  "worst_normal_interval_coverage_trunc_laplace": 0.8774624193057162,
+  "worst_at_truncation": 2.16835227840928
+ },
+ "0.05": {
+  "quantile_sd_constant": 2.1690659711680698,
+  "truncation": 4.479665474821317,
+  "gaussian": 1.959963984540054,
+  "worst_normal_interval_coverage_trunc_laplace": 0.9297275510322232,
+  "worst_at_truncation": 3.609919663988799
+ }
+}
