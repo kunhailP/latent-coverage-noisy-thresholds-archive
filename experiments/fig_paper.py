@@ -39,7 +39,7 @@ ax.set_xlabel(r'$x = D/t^2$'); ax.set_ylabel(r'$100\{R_{q,q}(x) - 1\}$')
 tidy(ax); ax.legend(frameon=False, loc='lower left')
 fig.tight_layout(); fig.savefig(OUT / 'fig_boundary.pdf')
 
-# Figure 2: certified R over the whole range
+# Figure 2: numerical upper bounds of R over the whole range
 c = pd.read_csv(RESULTS / 'certified_R.csv')
 fig, ax = plt.subplots(figsize=(5.2, 3.0))
 x = np.linspace(1e-4, 0.37, 400)
@@ -50,7 +50,7 @@ ax.plot(x, ub, color=MUTED, lw=1, ls=':', label=r'shape-free bound, $p = 0.9036$
 for p, col in ((0.9, '#1c5cab'), (0.9036, '#86b6ef')):
     edge = (1 / stats.norm.ppf((1 + p) / 2)) ** 2          # beyond it no law is feasible
     g = c[np.isclose(c.p, p) & np.isfinite(c.U) & (c.x < edge)].sort_values('x')
-    ax.plot(g.x, g.U, color=col, lw=1.6, label=rf'certified $R_{{{p:g},0.9}}(x)$')
+    ax.plot(g.x, g.U, color=col, lw=1.6, label=rf'numerical upper bound of $R_{{{p:g},0.9}}(x)$')
 ax.set_xlim(0, 0.37); ax.set_ylim(0, 1.3)
 ax.set_xlabel(r'$x = D/t^2$'); ax.set_ylabel('latent radius / noisy threshold')
 tidy(ax); ax.legend(frameon=False, loc='lower left')
