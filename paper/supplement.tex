@@ -297,21 +297,21 @@ For $q > 1/2$, $v_q$ is continuous on $(0,\infty)$, tends to $0$ as $u \to 0$ an
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{M-thm:mean}]
-Let $\mu = E(W)$. If $W$ is a point mass, $Q_q(|W|) = |\mu| \le B$. Otherwise, for $s > 0$ the law of $W + s^{1/2}Z$ is in $\mathcal B$ \citep{saumard2019}, with mean $\mu$, distribution function $F_s$ and a positive smooth density $f_s$. For $r > \mu$ let $h = f_s(r)/F_s(r)$. The tangent of $\log F_s$ at $r$ gives $F_s(y) \le \min\{F_s(r)\mathrm{e}^{h(y - r)}, 1\}$, the distribution function of an exponential tail with mean $r - \{1 + \log F_s(r)\}/h$ that lies stochastically below $W + s^{1/2}Z$, so $\mu \ge r - \{1 + \log F_s(r)\}/h$ and $h(r - \mu) \le 1$. Laws in $\mathcal B$ satisfy $f_s' \le f_s^2/F_s$ \citep{dumbgen2017}, so $(\log f_s)'(r) \le h \le 1/(r - \mu)$; applied to $-W$ this gives $(\log f_s)'(-r) \ge -1/(r + \mu)$. Hence, for $r > B$,
+Let $\mu = E(W)$. If $W$ is a point mass, $Q_q(|W|) = |\mu| \le M$. Otherwise, for $s > 0$ the law of $W + s^{1/2}Z$ is in $\mathcal B$ \citep{saumard2019}, with mean $\mu$, distribution function $F_s$ and a positive smooth density $f_s$. For $r > \mu$ let $h = f_s(r)/F_s(r)$. The tangent of $\log F_s$ at $r$ gives $F_s(y) \le \min\{F_s(r)\mathrm{e}^{h(y - r)}, 1\}$, the distribution function of an exponential tail with mean $r - \{1 + \log F_s(r)\}/h$ that lies stochastically below $W + s^{1/2}Z$, so $\mu \ge r - \{1 + \log F_s(r)\}/h$ and $h(r - \mu) \le 1$. Laws in $\mathcal B$ satisfy $f_s' \le f_s^2/F_s$ \citep{dumbgen2017}, so $(\log f_s)'(r) \le h \le 1/(r - \mu)$; applied to $-W$ this gives $(\log f_s)'(-r) \ge -1/(r + \mu)$. Hence, for $r > M$,
 \[
-f_s'(r) \le \frac{f_s(r)}{r - B}, \qquad -f_s'(-r) \le \frac{f_s(-r)}{r - B}.
+f_s'(r) \le \frac{f_s(r)}{r - M}, \qquad -f_s'(-r) \le \frac{f_s(-r)}{r - M}.
 \]
 Let $H_s(r) = \pr(|W + s^{1/2}Z| \le r)$. By the heat equation $\partial_s f_s = f_s''/2$,
 \[
-\partial_s H_s(r) = \tfrac12\{f_s'(r) - f_s'(-r)\} \le \frac{f_s(r) + f_s(-r)}{2(r - B)} = \frac{\partial_r H_s(r)}{2(r - B)}.
+\partial_s H_s(r) = \tfrac12\{f_s'(r) - f_s'(-r)\} \le \frac{f_s(r) + f_s(-r)}{2(r - M)} = \frac{\partial_r H_s(r)}{2(r - M)}.
 \]
-The quantile $r(s) = Q_q(|W + s^{1/2}Z|)$ solves $H_s\{r(s)\} = q$ and is continuously differentiable on $s > 0$, with $r'(s) \ge -1/[2\{r(s) - B\}]$ where $r(s) > B$. Hence $\{r(s) - B\}_+^2$ has derivative at least $-1$ almost everywhere, and $\{r(\epsilon) - B\}_+^2 \le \{r(\sigma^2) - B\}_+^2 + \sigma^2 - \epsilon$. As $\epsilon \to 0$, $r(\epsilon) \to Q_q(|W|)$, because a nondegenerate law in $\mathcal B$ has a positive density on the interior of its support \citep{dumbgen2017}, so the distribution function of $|W|$ is continuous and strictly increasing where it lies strictly between $0$ and $1$. Since $r(\sigma^2) \le t$, the first inequality follows, and the second from $(d^2 + \sigma^2)^{1/2} \le d + \sigma^2/(2d)$.
+The quantile $r(s) = Q_q(|W + s^{1/2}Z|)$ solves $H_s\{r(s)\} = q$ and is continuously differentiable on $s > 0$, with $r'(s) \ge -1/[2\{r(s) - M\}]$ where $r(s) > M$. Hence $\{r(s) - M\}_+^2$ has derivative at least $-1$ almost everywhere, and $\{r(\epsilon) - M\}_+^2 \le \{r(\sigma^2) - M\}_+^2 + \sigma^2 - \epsilon$. As $\epsilon \to 0$, $r(\epsilon) \to Q_q(|W|)$, because a nondegenerate law in $\mathcal B$ has a positive density on the interior of its support \citep{dumbgen2017}, so the distribution function of $|W|$ is continuous and strictly increasing where it lies strictly between $0$ and $1$. Since $r(\sigma^2) \le t$, the first inequality follows, and the second from $(d^2 + \sigma^2)^{1/2} \le d + \sigma^2/(2d)$.
 \end{proof}
 
 \subsection*{Theorem~\ref{M-thm:transition}: the transition}
 
 \begin{proof}[Proof of Theorem~\ref{M-thm:transition}, first part]
-Let $V = W + x^{1/2}Z$ with distribution function $F$. Since $\log F$ and $\log(1 - F)$ are concave and $F(V)$ is uniform, $E\{\log F(V)\} = -1$ and Jensen's inequality gives $F\{E(V)\} \ge \mathrm{e}^{-1}$ and likewise $1 - F\{E(V)\} \ge \mathrm{e}^{-1}$. If $E(W) \ge 1$ then $\pr(|V| \le 1) \le F\{E(W)\} \le 1 - \mathrm{e}^{-1} < q$, and similarly if $E(W) \le -1$; so $|E(W)| < 1$. Theorem~\ref{M-thm:mean} with $B = |E(W)|$ and $t = 1$ gives $\Delta \le (d^2 + x)^{1/2} - d$ with $d = 1 - |E(W)|$, which is \eqref{M-eq:necessary}.
+Let $V = W + x^{1/2}Z$ with distribution function $F$. Since $\log F$ and $\log(1 - F)$ are concave and $F(V)$ is uniform, $E\{\log F(V)\} = -1$ and Jensen's inequality gives $F\{E(V)\} \ge \mathrm{e}^{-1}$ and likewise $1 - F\{E(V)\} \ge \mathrm{e}^{-1}$. If $E(W) \ge 1$ then $\pr(|V| \le 1) \le F\{E(W)\} \le 1 - \mathrm{e}^{-1} < q$, and similarly if $E(W) \le -1$; so $|E(W)| < 1$. Theorem~\ref{M-thm:mean} with $M = |E(W)|$ and $t = 1$ gives $\Delta \le (d^2 + x)^{1/2} - d$ with $d = 1 - |E(W)|$, which is \eqref{M-eq:necessary}.
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{M-thm:transition}, the limit]
@@ -395,7 +395,7 @@ limit $1 - \log(1/q)$ & $0.777$ & $0.895$ & $0.949$ \\
 \end{tabular}
 \end{table}
 
-At $q = 0.9$, $L_q(25) = 0.017393$ and $L_q(50) = 0.0089448$. For the mean-zero laws of Proposition~\ref{prop:centred}, the coefficient with $\beta = 0.2$ and $\ell = 2$ at $q = 0.9$ is $0.0156540$; the expansion is accurate to $6\times10^{-5}$ at $x = 1.3\times10^{-4}$ but fails at $x \approx 1.1\times10^{-3}$, where the noise reaches the end of the support and the threshold may already be shrunk. As a numerical check of the proved bound of Theorem~\ref{M-thm:mean}, including its form with $|E(W)| \le B$, it was evaluated on $642$ laws from the family of Proposition~\ref{prop:centred}, with no violation.
+At $q = 0.9$, $L_q(25) = 0.017393$ and $L_q(50) = 0.0089448$. For the mean-zero laws of Proposition~\ref{prop:centred}, the coefficient with $\beta = 0.2$ and $\ell = 2$ at $q = 0.9$ is $0.0156540$; the expansion is accurate to $6\times10^{-5}$ at $x = 1.3\times10^{-4}$ but fails at $x \approx 1.1\times10^{-3}$, where the noise reaches the end of the support and the threshold may already be shrunk. As a numerical check of the proved bound of Theorem~\ref{M-thm:mean}, including its form with $|E(W)| \le M$, it was evaluated on $642$ laws from the family of Proposition~\ref{prop:centred}, with no violation.
 
 \subsection*{The location of the mean in examples}
 
