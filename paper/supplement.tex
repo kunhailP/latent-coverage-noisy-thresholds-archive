@@ -6,6 +6,10 @@
 \usepackage[subscriptcorrection]{newtxmath}
 \usepackage[round,authoryear]{natbib}
 \usepackage{xr}
+\usepackage[hyphens]{url}
+\emergencystretch=3em
+\let\usc\_
+\renewcommand{\_}{\usc\allowbreak}
 \externaldocument[M-]{main}
 
 \newtheorem{theorem}{Theorem}
@@ -33,137 +37,19 @@
 \begin{document}
 \maketitle
 
-\noindent Equation, theorem and section numbers without the prefix S refer to the main paper. Numbers that are not proved are labelled as numerical, and the precision of each computation is stated.
+\noindent Equation, theorem, table and section numbers without the prefix S refer to the main paper. The sections follow the order of the main paper. Each numerical statement says how it is supported: proved, certified in ball arithmetic, computed in double precision, or found by an exploratory search; \S~\ref{sec:s-cert} keeps these levels apart, and \S~\ref{sec:s-open} records a conjecture that no result uses.
 
-\section{Proofs omitted from the main paper}\label{sec:s-proofs}
+\section{Coverage transfer for classes of noise laws}\label{sec:s-general}
 
-\begin{proof}[Proof of Proposition~\ref{M-prop:reduction}]
-Since $\mathcal F \subset \LC$ it suffices to bound the supremum over $\LC$. Let $W \in \LC$ satisfy $E\{g_x(W)\} \ge p$ and let $s < Q_q(|W|)$, so that $\pr(|W| < s) \le q - \gamma$ for some $\gamma > 0$. Choose $M \ge s$ with $g_x(w) \le p$ for $|w| \ge M$, and let $W_M$ be $W$ conditioned on $|W| \le M$, which is log-concave. With $\varepsilon_M = \pr(|W| > M)$, the conditioning removes only mass on which the kernel is at most $p$, so
-\[
-E\{g_x(W_M)\} \ge \frac{p - p\varepsilon_M}{1 - \varepsilon_M} = p, \qquad \pr(|W_M| < s) \le \frac{q - \gamma}{1-\varepsilon_M} < q
-\]
-for $M$ large. On $[-M, M]$ the constraint function $g_x - p$ is continuous, and $\mu \mapsto -\mu(-s, s)$ is linear and upper semicontinuous for weak convergence because $(-s,s)$ is open. By the localization theorem \citep{kannan1995, fradelizi2004}, the supremum of this functional over the log-concave probability measures on $[-M, M]$ that satisfy $\int(g_x - p)\,d\mu \ge 0$ is attained at a point mass or at a law with log-affine density on a segment. Hence some member of $\mathcal F$ is feasible and has $\pr(|W| < s) < q$, that is, $Q_q(|W|) \ge s$. Since $s < Q_q(|W|)$ was arbitrary the claim follows. Only continuity of the kernel and its decay at infinity were used, so the argument applies to the average kernel $\bar g$ of \S~\ref{M-sec:hetero}.
-\end{proof}
-
-For $\beta > 0$ and $\sigma = x^{1/2}$, integration by parts gives
-\begin{equation}\label{eq:closed}
-\int_a^b e^{\beta w}\Phi\Big(\frac{c-w}{\sigma}\Big)dw = \frac{1}{\beta}\Big[e^{\beta w}\Phi\Big(\frac{c-w}{\sigma}\Big)\Big]_a^b + \frac{e^{\beta c + \beta^2\sigma^2/2}}{\beta}\Big\{\Phi\Big(\frac{b-c-\beta\sigma^2}{\sigma}\Big) - \Phi\Big(\frac{a-c-\beta\sigma^2}{\sigma}\Big)\Big\},
-\end{equation}
-so the constraint is a combination of normal distribution functions. For fixed slope and length, the translations $c$ of a member of $\mathcal F$ that satisfy the constraint form an interval, because $c \mapsto \pr(|W + c + e| \le 1)$ is log-concave \citep{prekopa1973}, and $c \mapsto \pr(|W + c| \le s)$ is log-concave, so $c \mapsto Q_q(|W + c|)$ is quasi-convex and is maximized at an end of that interval. Each end is found by a root-finding in $c$, and the quantile by a second root-finding, using \eqref{eq:closed}. This two-dimensional computation over slope and length, and an independent differential-evolution search over the three-parameter family, agree to $1.5\times10^{-13}$ at all $73$ tabulated values of $x \ge 0.006$ (numerical).
-
-\begin{proof}[Proof of Lemma~\ref{M-lem:onesided}]
-Exponential tails are log-concave, which gives one inequality. Conversely, let $Y \in \LC$ with $\pr(Y + Z \le 0) \ge p$. If $Y = y_0$ is a point mass then $y_0 \le -\Phi^{-1}(p) = \lim_{u\to\infty}\{b_u(p) - u^{-1}\log(1/q)\}$. Otherwise $F = F_Y$ is continuous and $\log F$ is concave \citep{prekopa1973}. Let $v = F^{-1}(q)$ and $G(y) = F(v + y)$. The point $0$ is interior to $\{G > 0\}$, so the right derivative $u \ge 0$ of $\log G$ at $0$ is a supergradient, and $G(y) \le q e^{uy}$ for all $y$. If $u = 0$ then $G \le q < 1$, which is impossible, so $u > 0$ and $G(y) \le \min(qe^{uy}, 1)$, which is the distribution function of $b_0 - E_u$ with $b_0 = u^{-1}\log(1/q)$. Hence $Y' = v + b_0 - E_u$ lies stochastically below $Y$ and has $q$-quantile $v$, and
-\[
-p \le \pr(Y + Z \le 0) \le \pr(Y' + Z \le 0) = m_u(v + b_0).
-\]
-Since $m_u$ is decreasing, $v \le b_u(p) - b_0$. For monotonicity, let $q' > q$, let $Y$ be feasible at $(q', q')$ with $v = F_Y^{-1}(q')$, and put $\rho = (q' - q)/(1-q)$. Then $Y$ conditioned on $Y \ge F_Y^{-1}(\rho)$ is log-concave; over $\mathcal B$ it stays in $\mathcal B$, because $\log(F - \rho) = h(\log F)$ with $h(z) = \log(e^z - \rho)$ nondecreasing and concave, and the log survival function of the conditioned law is $\min\{0, \log(1-F) - \log(1-\rho)\}$, a minimum of concave functions. It satisfies the constraint at level $(q' - \rho)/(1-\rho) = q$, because the removed mass has noisy constraint value at most one, and has $q$-quantile $v$. Point masses have value $-\Phi^{-1}(q') < -\Phi^{-1}(q) \le c_q$. Finally, $c_q > 0$ because $v_q(u) = u^{-1}\log\{e^{u^2/2}\Phi(b_u - u) + e^{u b_u}\Phi(-b_u)\} = u/2 + o(u)$ as $u \to 0$, where $b_u = b_u(q)$ and $u b_u \to \log(1/q)$.
-\end{proof}
-
-\begin{proof}[Proof of Theorem~\ref{M-thm:small}, lower bound]
-Fix $\epsilon > 0$ and choose $u$ with $v_q(u) > c_q - \epsilon$. For $p' \in [q, (1+q)/2]$, $b_u(p') \ge b_{\min} > -\infty$. Let $Y = b_u(p') - E_u$ and $W = 1 + x^{1/2}Y$. With $\tau = 2x^{-1/2}$,
-\[
-\pr(|W+x^{1/2}Z| \le 1) = p' - \pr(Y + Z < -\tau) \ge p' - \eta_x, \qquad \eta_x = e^{-u(\tau + b_{\min})/2} + \Phi\{-(\tau + b_{\min})/2\},
-\]
-by splitting the event $Y + Z < -\tau$ according to whether $Z < -(\tau + b_{\min})/2$. Take $p' = q + \eta_x$, which lies in $[q, (1+q)/2]$ for small $x$. Since $\pr(|W| \le s) \le F_W(s)$, $Q_q(|W|) \ge 1 + x^{1/2}\{b_u(q + \eta_x) - u^{-1}\log(1/q)\}$. As $\eta_x \to 0$ and $b_u$ is continuous, $\liminf_{x\to0}\{R_{q,q}(x) - 1\}/x^{1/2} \ge c_q - \epsilon$.
-\end{proof}
-
-\begin{lemma}\label{lem:meanonesided}
-Let $e^{-1} < q < 1$ and $\kappa \ge 0$. Then
-\[
-\sup\{F_Y^{-1}(q) : Y \in \mathcal B,\ E(Y) \le -\kappa,\ \pr(Y + Z \le 0) \ge q\} = L_q(\kappa) = \sup\{v_q(u) : u > 0,\ k_q(u) \ge \kappa\}.
-\]
-The function $L_q$ is positive and nonincreasing, and, for $q > 1/2$, $L_q(\kappa) = c_q$ for $\kappa \le \kappa^*_q$, where $\kappa^*_q$ is the largest value of $k_q$ on the compact set of maximizers of $v_q$, and $\kappa L_q(\kappa) \to \{1 - \log(1/q)\}/2$ as $\kappa \to \infty$. In double precision $\kappa^*_q = 6.81$, $20.18$ and $50.07$ at $q = 0.8$, $0.9$ and $0.95$.
-\end{lemma}
-
-The proofs replace $Y$ by the exponential tail through a supergradient of $\log F_Y$ at its $q$-quantile, which keeps the quantile, the constraint and the bound on the mean.
-
-\begin{proof}[Proof of Lemma~\ref{lem:meanonesided}]
-For $q > 1/2$, $v_q$ is continuous on $(0,\infty)$, tends to $0$ as $u \to 0$ and to $-\Phi^{-1}(q) < 0$ as $u \to \infty$, and is positive somewhere, so its maximizers form a nonempty compact subset of $(0,\infty)$ and $\kappa^*_q$ is well defined. Let $a = \log(1/q)$ and $A = 1 - a > 0$. Let $Y$ be nondegenerate with $q$-quantile $v$. Since $\log F_Y$ is concave, a supergradient $u > 0$ at $v$ gives $F_Y(y) \le \min\{qe^{u(y - v)}, 1\}$, the distribution function of $Y' = v + a/u - E_u$; so $Y'$ lies stochastically below $Y$ and has the same $q$-quantile. Then $E(Y') \le E(Y) \le -\kappa$ and $\pr(Y' + Z \le 0) \ge q$, so the replacement keeps both constraints. For the tail $b - E_u$ the constraints read $b \le b_u(q)$ and $b \le u^{-1} - \kappa$, so the largest quantile is $\min\{v_q(u), A/u - \kappa\}$. If $k_q(u) < \kappa$ this minimum is $A/u - \kappa$; since $k_q$ is continuous and $k_q(s) \to \infty$ as $s \to 0$, some $s < u$ has $k_q(s) = \kappa$, where the value is $A/s - \kappa > A/u - \kappa$. So only $u$ with $k_q(u) \ge \kappa$ matter, and there the value is $v_q(u)$. A point mass $y_0$ satisfying the constraints has $y_0 = E(Y) \le -\kappa \le 0 < L_q(\kappa)$, where positivity holds because $v_q(u) \sim u/2$ and $k_q(u) \sim A/u$ as $u \to 0$. Since $m_u(b) \ge \Phi(-b)$, $b_u(q) \ge -\Phi^{-1}(q)$, so $k_q$ is bounded on $[u_0, \infty)$ for every $u_0 > 0$ and $k_q(u) \ge \kappa$ forces $u \to 0$ as $\kappa \to \infty$; moreover $u b_u(q) \to \log(1/q)$, so $k_q(u) = \{A + o(1)\}/u$, and $v_q(u) = u/2 + o(u)$ as $u \to 0$ (proof of Lemma~\ref{M-lem:onesided}). These expansions give $\kappa L_q(\kappa) \to A/2$: for large $\kappa$ only small $u$ are feasible, $u \le \{A + o(1)\}/\kappa$, and $v_q(u) \le \{1 + o(1)\}u/2$ with equality at the boundary. Monotonicity is clear, and $L_q(\kappa) = c_q$ while a maximizer of $v_q$ is feasible.
-\end{proof}
-
-\begin{proposition}\label{prop:centred}
-Let $X$ have density proportional to $e^{\beta x}$ on $[-\ell, 0]$ with $\beta > 0$ and $0 < \ell \le \infty$, let $W = X - E(X)$ and let $r_0 = Q_q(|W|)$. If $\pm r_0$ lie in the interior of the support of $W$, then, after scaling $W$ so that the noisy $q$-quantile of $|W + x^{1/2}Z|$ equals $1$,
-\[
-Q_q(|W|) = 1 + \tfrac{1}{2}\beta r_0\tanh(\beta r_0)\,x + o(x) \quad (x \to 0).
-\]
-For every $q \in (0,1)$ the condition holds for small $\beta\ell$, so $R^{(0)}_{q,q}(x) - 1$ is of exact order $x$.
-\end{proposition}
-
-Numerically the best coefficient in this family is $0.3466$ at $q = 0.8$, for $W = 1 - E_1$, and $0.0747$ at $q = 0.9$.
-
-\begin{proof}[Proof of Proposition~\ref{prop:centred}]
-Near $\pm r_0$ the density $f$ of $W$ is smooth with $f' = \beta f$, and the ends of the support are at positive distance. The jumps of the density at the ends of the support contribute $O\{v^{1/2}\phi(d_0/v^{1/2})\}$ near $\pm r_0$, where $d_0 > 0$ is the distance from $\pm r_0$ to the ends, which is $o(v)$. Hence $H_v(r) = \pr(|W + v^{1/2}Z| \le r) = H_0(r) + v\{f'(r) - f'(-r)\}/2 + o(v)$ uniformly near $r_0$, and the noisy quantile is $t(v) = r_0 - v\,\beta\{f(r_0) - f(-r_0)\}/[2\{f(r_0) + f(-r_0)\}] + o(v) = r_0 - (\beta v/2)\tanh(\beta r_0) + o(v)$. Scaling by $t(v)$ and writing $x = v/t(v)^2$, a continuous and increasing function of $v$ near $0$, gives the expansion. As $\beta\ell \to 0$, $W/\ell$ tends to the uniform law on $[-1/2, 1/2]$, whose $q$-quantile of $|W|/\ell$ is $q/2 < 1/2$.
-\end{proof}
-
-\begin{proof}[Proof of Theorem~\ref{M-thm:mean}]
-Let $\mu = E(W)$. If $W$ is a point mass, $Q_q(|W|) = |\mu| \le B$. Otherwise, for $s > 0$ the law of $W + s^{1/2}Z$ is in $\mathcal B$ \citep{saumard2019}, with mean $\mu$, distribution function $F_s$ and a positive smooth density $f_s$. For $r > \mu$ let $h = f_s(r)/F_s(r)$. The tangent of $\log F_s$ at $r$ gives $F_s(y) \le \min\{F_s(r)e^{h(y - r)}, 1\}$, the distribution function of an exponential tail with mean $r - \{1 + \log F_s(r)\}/h$ that lies stochastically below $W + s^{1/2}Z$, so $\mu \ge r - \{1 + \log F_s(r)\}/h$ and $h(r - \mu) \le 1$. Laws in $\mathcal B$ satisfy $f_s' \le f_s^2/F_s$ \citep{dumbgen2017}, so $(\log f_s)'(r) \le h \le 1/(r - \mu)$; applied to $-W$ this gives $(\log f_s)'(-r) \ge -1/(r + \mu)$. Hence, for $r > B$,
-\[
-f_s'(r) \le \frac{f_s(r)}{r - B}, \qquad -f_s'(-r) \le \frac{f_s(-r)}{r - B}.
-\]
-Let $H_s(r) = \pr(|W + s^{1/2}Z| \le r)$. By the heat equation $\partial_s f_s = f_s''/2$,
-\[
-\partial_s H_s(r) = \tfrac12\{f_s'(r) - f_s'(-r)\} \le \frac{f_s(r) + f_s(-r)}{2(r - B)} = \frac{\partial_r H_s(r)}{2(r - B)}.
-\]
-The quantile $r(s) = Q_q(|W + s^{1/2}Z|)$ solves $H_s\{r(s)\} = q$ and is continuously differentiable on $s > 0$, with $r'(s) \ge -1/[2\{r(s) - B\}]$ where $r(s) > B$. Hence $\{r(s) - B\}_+^2$ has derivative at least $-1$ almost everywhere, and $\{r(\epsilon) - B\}_+^2 \le \{r(\sigma^2) - B\}_+^2 + \sigma^2 - \epsilon$. As $\epsilon \to 0$, $r(\epsilon) \to Q_q(|W|)$, because a nondegenerate law in $\mathcal B$ has a positive density on the interior of its support \citep{dumbgen2017}, so the distribution function of $|W|$ is continuous and strictly increasing where it lies strictly between $0$ and $1$. Since $r(\sigma^2) \le t$, the first inequality follows, and the second from $(d^2 + \sigma^2)^{1/2} \le d + \sigma^2/(2d)$.
-\end{proof}
-
-\begin{proof}[Proof of Theorem~\ref{M-thm:transition}, first part]
-Let $V = W + x^{1/2}Z$ with distribution function $F$. Since $\log F$ and $\log(1 - F)$ are concave and $F(V)$ is uniform, $E\{\log F(V)\} = -1$ and Jensen's inequality gives $F\{E(V)\} \ge e^{-1}$ and likewise $1 - F\{E(V)\} \ge e^{-1}$. If $E(W) \ge 1$ then $\pr(|V| \le 1) \le F\{E(W)\} \le 1 - e^{-1} < q$, and similarly if $E(W) \le -1$; so $|E(W)| < 1$. Theorem~\ref{M-thm:mean} with $B = |E(W)|$ and $t = 1$ gives $\Delta \le (d^2 + x)^{1/2} - d$ with $d = 1 - |E(W)|$, which is \eqref{M-eq:necessary}.
-\end{proof}
-
-\begin{proof}[Proof of Theorem~\ref{M-thm:transition}, the limit]
-For the lower bound in the limit, take $u$ with $k_q(u) \ge \kappa$ and the law $W = 1 + x^{1/2}\{b_u(q + \eta_x) - E_u\}$ of the lower bound in Theorem~\ref{M-thm:small}. Its mean is $1 + x^{1/2}\{b_u(q + \eta_x) - u^{-1}\} \le 1 - \kappa x^{1/2}$, because $b_u$ decreases in its argument, and it is positive for small $x$; hence $\liminf_{x\to0} x^{-1/2}\{R^{(b_x)}_{q,q}(x) - 1\} \ge v_q(u)$ for every such $u$.
-
-For the upper bound, suppose that $x_n \to 0$, $h_n = x_n^{1/2}$, and that $W_n$ is feasible for $R^{(b_{x_n})}_{q,q}(x_n)$ with $Q_q(|W_n|) - 1 \ge a_0 h_n$, where $L_q(\kappa) < a_0 < 1$. By \eqref{M-eq:necessary}, $\kappa h_n \le 1 - |E(W_n)| \le \bar\kappa h_n$ with $\bar\kappa = (1 - a_0^2)/(2a_0)$. Replacing $W_n$ by $-W_n$ if necessary, $E(W_n) \ge 0$; let $Y_n = (W_n - 1)/h_n$, so that $-\bar\kappa \le E(Y_n) \le -\kappa$. The law of $T_n = Y_n + Z$ is in $\mathcal B$, with a smooth positive density of maximum $M_n$ and distribution function $F_n$, and $F_n(0) \ge \pr(|W_n + h_nZ| \le 1) \ge q$ while $F_n\{E(T_n)\} \le 1 - e^{-1}$ by the first part. So $q - 1 + e^{-1} \le F_n(0) - F_n\{E(T_n)\} \le M_n \bar\kappa$. For a law in $\mathcal B$ with smooth density $g$, maximum $M$ and median $m$, the hazard $g/(1 - F)$ is nondecreasing, so $g(y) \le 2g(m)\{1 - F(y)\} \le 2g(m)$ for $y \le m$, and $g/F$ is nonincreasing, which gives the same for $y \ge m$; so $g(m) \ge M/2$; the tangent bounds for $\log F$ and $\log(1-F)$ at $m$ give $\pr(|T - m| > y) \le e^{-2g(m)y}$, hence $\var(T) \le 1/\{2g(m)^2\} \le 2/M^2$. Thus $\var(Y_n) \le 2\bar\kappa^2/(q - 1 + e^{-1})^2$, the $Y_n$ are tight and uniformly integrable, and along a subsequence $Y_n \to Y$ in distribution with $Y \in \mathcal B$, possibly a point mass, since $\mathcal B$ is closed under weak convergence \citep{saumard2019}, $E(Y) \le -\kappa$ and $\pr(Y + Z \le 0) = E\{\Phi(-Y)\} \ge q$. On $\{W_n \ge 0\}$, whose probability tends to one, $(|W_n| - 1)/h_n = Y_n$, so $a_0 \le \{Q_q(|W_n|) - 1\}/h_n \to Q_q(Y) \le L_q(\kappa)$ by Lemma~\ref{lem:meanonesided}, where the quantile converges because a law in $\mathcal B$ has a unique $q$-quantile or is a point mass. This contradicts $a_0 > L_q(\kappa)$, so $\limsup_{x\to0} x^{-1/2}\{R^{(b_x)}_{q,q}(x) - 1\} \le a_0$ for every $a_0 \in (L_q(\kappa), 1)$; if $L_q(\kappa) \ge 1$ there is nothing to prove, because \eqref{M-eq:necessary} gives $\Delta < x^{1/2}$.
-\end{proof}
-
-\subsection*{Ranks for Theorem~\ref{M-prop:unknown}}
-
-By Theorem~\ref{M-prop:unknown} the smallest valid rank is the smallest $k$ with $\pr\{{\rm Bin}(K, p) \le k - 1\} \ge 1 - \delta$ at $p = p_{\mathcal E}(q)$, and no rank below the one at $p = \Psi_{\mathcal E}(q)$ is valid. At $q = 0.9$ and $\delta = 0.05$ such a rank exists only if $1 - p^K \ge 0.95$, that is for $K \ge 29$ under Gaussian and symmetric unimodal noise, $K \ge 31$ under mean-zero log-concave noise and $K \ge 59$ at $p = 0.95$. Against the usual rank, with $p = 0.9$, the raise for Gaussian noise is $0$ at $K = 110$, $1$ at $K = 300$ and $10^3$, $3$ at $K = 3000$ and $8$ to $10$ at $K = 10^4$; for $K \le 3000$ these ranks coincide with those of the earlier rule with $p_k \ge 0.901$ and $k \ge Kp_k + 1$, whose side condition never binds there. The function \texttt{certified\_rank} returns this rank. The proof of Theorem~\ref{M-prop:unknown} uses only the one-unit transfer, so with the transfer of Proposition~\ref{M-prop:latentshape}, which needs noisy level $1 - \beta_{\mathcal E}(1 - q)$, that is $(1 + q)/2$ for median-zero noise and $1 - (1 - q)/e$ for mean-zero log-concave noise, it gives the ranks in the last two rows of Table~\ref{M-tab:map}, valid for every latent law; these levels are exact, so the ranks are the smallest valid ones for unimodal latent laws.
-
-\begin{proof}[Proof of Proposition~\ref{M-prop:beta}]
-$\bar F(T) < p_k$ exactly when $N = \#\{i : |V_i| < \bar F^{-1}(p_k)\} \ge k$. $N$ is a sum of independent indicators whose success probabilities average $p_k$, and $k - 1 \ge Kp_k$. By \citet{hoeffding1956}, $\pr(N \le k-1)$ is smallest when all success probabilities are equal. Hence $\pr(N \ge k) \le \pr\{{\rm Bin}(K, p_k) \ge k\} = \pr\{{\rm Beta}(k, K+1-k) \le p_k\} = \delta$.
-\end{proof}
-
-\subsection*{The case $p > q$}
-
-The constant of \S~\ref{M-sec:slack} is
-\[
-C_{p,q} = \sup_{\alpha_L+\alpha_R = 1-p}\ \inf_{\beta_L+\beta_R=1-q} \max(c_{1-\alpha_L,1-\beta_L},\, c_{1-\alpha_R,1-\beta_R}).
-\]
-Here $c_{1,q'} = -\infty$, since no law has noisy coverage one at a single end. Numerically the worst split puts the whole budget on one end, so that $C_{p,q} = c_{p,q}$; this observation is not used. Ball arithmetic gives $-0.0572 \le C_{0.9036,0.9} \le -0.057$, where $0.9036$ is the order-statistic level for $K = 110$, $k = 105$ at $\delta = 0.04$, used in \S~\ref{sec:s-hetero}.
-
-In the proof of the upper bound of Theorem~\ref{M-thm:small}, replace $1 - q$ by $1 - p$ for the noisy budget, choose any split $\beta_L + \beta_R = 1 - q$ of the latent budget, and use $F_Y^{-1}(1-\beta_R) \le c_{1-\alpha_R, 1-\beta_R}$ at each end. Since $c_{p',q'}$ decreases in $p'$, the worst case has $\alpha_L + \alpha_R = 1 - p$, which gives $R_{p,q}(x) \le 1 + C_{p,q}x^{1/2}$ for every $x$, with $C_{p,q}$ nonincreasing in $p$. The proof of the lower bound applies with $b_u(q)$ replaced by $b_u(p)$ and $p' = p + \eta_x$, giving $R_{p,q}(x) \ge 1 + c_{p,q}x^{1/2} - o(x^{1/2})$ for every $p \ge q$. This proves Corollary~\ref{M-cor:slack}, whose numerical intervals are certified in \S~\ref{sec:s-ball}.
-
-\subsection*{Bi-log-concave laws}
-
-\begin{corollary}\label{cor:blc}
-Let $\mathcal B$ be the class of laws that are point masses or have a continuous distribution function $F$ with $\log F$ and $\log(1-F)$ concave \citep{dumbgen2017}; $\LC \subset \mathcal B$. Define $R^{\mathcal B}_{p,q}$ by \eqref{M-eq:R} with $\mathcal B$ in place of $\LC$. Then Lemma~\ref{M-lem:onesided} holds over $\mathcal B$ with the same $c_{p,q}$, and for $p \ge q$ and every $x > 0$, $R^{\mathcal B}_{p,q}(x) \le 1 + C_{p,q}x^{1/2}$, while $R^{\mathcal B}_{q,q}(x) = 1 + c_qx^{1/2} + o(x^{1/2})$ as $x \to 0$. In particular Corollary~\ref{M-cor:slack} holds over $\mathcal B$.
-\end{corollary}
-
-\begin{proof}
-The proof of Lemma~\ref{M-lem:onesided} uses only the concavity of $\log F_Y$ at the $q$-quantile, so its upper bound holds for every $Y$ with $\log F_Y$ concave, and exponential tails are in $\LC$, which gives equality. In the proof of Theorem~\ref{M-thm:small}, $Y = (W - 1)/x^{1/2}$ has $\log F_Y$ concave, and $(-W - 1)/x^{1/2}$ has a concave log distribution function because $\log(1 - F_W)$ is concave and $F_W$ is continuous. The lower bound uses laws in $\LC \subset \mathcal B$.
-\end{proof}
-
-The class $\mathcal B$ contains multimodal laws. Proposition~\ref{M-prop:reduction} and the box-bound upper bounds of \S~\ref{sec:s-cert} use log-concavity of the density; the ball-arithmetic constants do not (Corollary~\ref{cor:blc}). Theorems~\ref{M-thm:mean} and~\ref{M-thm:transition}, Lemma~\ref{lem:meanonesided}, Theorem~\ref{M-prop:unknown} and Corollary~\ref{cor:simple} hold over $\mathcal B$: their proofs use the monotone hazards of $\mathcal B$, the bound $f' \le f^2/F$ of \citet{dumbgen2017}, and the preservation of $\mathcal B$ under convolution with a log-concave law and under weak limits \citep{saumard2019}. Both are elementary. If $\log F_X$ is concave and $g$ is a log-concave density, $(t, y) \mapsto F_X(t - y)g(y)$ is log-concave on $\mathbb R^2$, so $F_{X+Y}(t) = \int F_X(t-y)g(y)\,dy$ is log-concave by the theorem of \citet{prekopa1973}, and likewise $1 - F_{X+Y}$. For weak limits, concavity of $\log F_n$ and $\log(1-F_n)$ passes to the limit at continuity points, and a limit that is not a point mass has no atom, because a concave function is continuous on the interior of its domain.
-
-Symmetry alone does not make noisy calibration conservative in $\mathcal B$. The density $f(w) = \{1 + 0.05\cos(2\pi w)\}/2$ on $(-1, 1)$ is in $\mathcal B$, because $\sup|f'| = 0.05\pi < \inf f^2 = 0.2256$ \citep[][Theorem~1]{dumbgen2017}, but it is not unimodal. At $q = 0.7$, $r_0 = Q_q(|W|) \approx 0.7077$ and $f'(r_0) > 0$; since $f'$ is odd, $\partial_s \pr(|W + s^{1/2}Z| \le r_0) = f'(r_0) > 0$ at $s = 0$, so noise raises the coverage and the noisy quantile falls below $r_0$, to $0.707676$ at $s = 10^{-5}$, against $r_0 = 0.707678$. Anderson's comparison needs unimodality. The bimodal law of Table~\ref{M-tab:synth}, the mixture $\pi N(m_1, s^2) + (1-\pi)N(m_2, s^2)$ with mean zero, variance one and $(m_2 - m_1)/s = 2.5$, is in $\mathcal B$ by the following lemma. With $\pi = 0.4$ the mixture stays in $\mathcal B$ up to a separation of about $2.59$, while bimodality starts at about $2.443$ (numerical). The parameters are $\pi = 0.4$, $m_1 = -0.94868$, $m_2 = 0.63246$ and $s = 0.63246$.
-
-\begin{lemma}\label{lem:bimodal}
-Let $f$ be the density of $\pi N(m_1, s^2) + (1-\pi)N(m_2, s^2)$ with $m_1 < m_2$ and $r = (m_2 - m_1)/s > 2$, let $P(w)$ be the posterior probability of the first component, and let $a < b$ solve $P(a) = \tfrac12 + h$ and $P(b) = \tfrac12 - h$, $h = (1/4 - 1/r^2)^{1/2}$. The mixture is in $\mathcal B$ if $f'F < f^2$ on $[a, m_2]$ and $-f'(1-F) < f^2$ on $[m_1, b]$.
-\end{lemma}
-
-\begin{proof}
-Since $(\log f)'' = -s^{-2} + P(1-P)r^2s^{-2}$ and $P$ decreases, $f$ is log-concave on $(-\infty, a]$ and on $[b, \infty)$. On $(-\infty, a]$, $F(t) = \int 1(y \le t)f(y)1(y \le a)\,dy$ is the marginal of a log-concave function of $(t, y)$, so $\log F$ is concave there \citep{prekopa1973}; likewise $\log(1-F)$ on $[b, \infty)$. Where $f' \le 0$, in particular on $[m_2, \infty)$, $f'F \le f^2$ is trivial, and where $f' \ge 0$, in particular on $(-\infty, m_1]$, so is $-f'(1-F) \le f^2$. With the two hypotheses, $(\log F)'' \le 0$ and $(\log(1-F))'' \le 0$ on the whole line.
-\end{proof}
-
-For the law of Table~\ref{M-tab:synth} the two hypotheses are proved in Arb ball arithmetic on $128$ boxes, with the ends $a$ and $b$ rounded outward (\texttt{uai.interval.bimodal\_blc\_certificate}, test suite); the largest values of $(f'F - f^2)/f^2$ on $[a, m_2]$ and of $\{-f'(1-F) - f^2\}/f^2$ on $[m_1, b]$ are $-0.141$ and $-0.864$. The bound of Theorem~\ref{M-thm:mean} with $E(W) = 0$ holds for this law and its version with the cosine phase-shifted by $\pi/2$ and recentred to mean zero, at $q = 0.3, 0.7, 0.9$ and $s = 10^{-3}, 0.1, 1$ (test suite).
-
-\section{Non-Gaussian noise}\label{sec:s-general}
+This section proves the results of \S~\ref{M-sec:general}: the use of Proposition~\ref{M-prop:general} at both ends of the interval, the three parts of Theorem~\ref{M-thm:classes}, and Proposition~\ref{M-prop:latentshape}.
 
 \subsection*{Proposition~\ref{M-prop:general} at both ends}
 
-For a noise law $\epsilon$ write $c_{p,q}(\epsilon)$ for the constant of Lemma~\ref{M-lem:onesided} with $Z$ replaced by $\epsilon$; the proof of Lemma~\ref{M-lem:onesided} and of the upper bound of Theorem~\ref{M-thm:small} used only that the exponential tail lies stochastically below $Y$, so they hold for any noise independent of $W$, with $c_{p,q}(\epsilon)$ at the right end and $c_{p,q}(-\epsilon)$ at the left. By Proposition~\ref{M-prop:general}, $c_{p',q'}(\epsilon) \le 0$ for every $\epsilon$ in a class $\mathcal E$ closed under scaling and negation whenever $\Psi_{\mathcal E}(q') < p'$. Let $\lambda_{\mathcal E}(p') = \sup\{q' : \Psi_{\mathcal E}(q') < p'\}$, nondecreasing because $\Psi_{\mathcal E}$ increases in $q$, and $\phi(a) = 1 - \lambda_{\mathcal E}(1 - a)$, the latent budget at one end when the noisy budget there is $a$; certificates use computed levels below $\lambda_{\mathcal E}$. If $\phi(a_L) + \phi(a_R) \le 1 - q$ whenever $a_L + a_R \le 1 - p$, then, as in the proof of Corollary~\ref{M-cor:slack}, every $W \in \mathcal B$ with $\pr(|W + e| \le 1) \ge p$ has $\pr(|W| \le 1) \ge q$ for every $e = \sigma\epsilon$, $\epsilon \in \mathcal E$, $\sigma > 0$. In the proof of Theorem~\ref{M-prop:unknown} the noise laws of the areas enter one at a time, so they may differ between areas. Since $\phi$ is nondecreasing it suffices to check finitely many splits, as in \S~\ref{sec:s-ball}. Two-sided levels cannot go below $\Psi_{\mathcal E}(q)$: if $\Psi_{\mathcal E}(q) > p$, take $\epsilon$ with $E\{\min(1, q e^{-\epsilon})\} > p$ and $W = 1 + s(a + \delta - E_1)$ with noise $s\epsilon$, $a = \log(1/q)$; as $s \to 0$ the left end contributes nothing, so the noisy coverage of $[-1, 1]$ tends to $E\{\min(1, q e^{-\delta - \epsilon})\} > p$ for small $\delta > 0$, while the latent coverage tends to $q e^{-\delta} < q$.
+For a noise law $\epsilon$ write $c_{p,q}(\epsilon)$ for the constant of Lemma~\ref{lem:onesided} with $Z$ replaced by $\epsilon$; the proof of Lemma~\ref{lem:onesided} and of the upper bound of Theorem~\ref{M-thm:small} used only that the exponential tail lies stochastically below $Y$, so they hold for any noise independent of $W$, with $c_{p,q}(\epsilon)$ at the right end and $c_{p,q}(-\epsilon)$ at the left. By Proposition~\ref{M-prop:general}, $c_{p',q'}(\epsilon) \le 0$ for every $\epsilon$ in a class $\mathcal E$ closed under scaling and negation whenever $\Psi_{\mathcal E}(q') < p'$.
+
+Let $\lambda_{\mathcal E}(p') = \sup\{q' : \Psi_{\mathcal E}(q') < p'\}$, nondecreasing because $\Psi_{\mathcal E}$ increases in $q$, and $\phi(a) = 1 - \lambda_{\mathcal E}(1 - a)$, the latent budget at one end when the noisy budget there is $a$; certificates use computed levels below $\lambda_{\mathcal E}$. If $\phi(a_L) + \phi(a_R) \le 1 - q$ whenever $a_L + a_R \le 1 - p$, then, as in the proof of Corollary~\ref{M-cor:slack}, every $W \in \mathcal B$ with $\pr(|W + e| \le 1) \ge p$ has $\pr(|W| \le 1) \ge q$ for every $e = \sigma\epsilon$, $\epsilon \in \mathcal E$, $\sigma > 0$. In the proof of Theorem~\ref{M-prop:unknown} the noise laws of the areas enter one at a time, so they may differ between areas. Since $\phi$ is nondecreasing it suffices to check finitely many splits, as in \S~\ref{sec:s-ball}.
+
+Two-sided levels cannot go below $\Psi_{\mathcal E}(q)$: if $\Psi_{\mathcal E}(q) > p$, take $\epsilon$ with $E\{\min(1, q e^{-\epsilon})\} > p$ and $W = 1 + s(a + \delta - E_1)$ with noise $s\epsilon$, $a = \log(1/q)$; as $s \to 0$ the left end contributes nothing, so the noisy coverage of $[-1, 1]$ tends to $E\{\min(1, q e^{-\delta - \epsilon})\} > p$ for small $\delta > 0$, while the latent coverage tends to $q e^{-\delta} < q$.
 
 \subsection*{Proof of Theorem~\ref{M-thm:classes}(i): symmetric unimodal noise}
 
@@ -171,9 +57,11 @@ By the theorem of Khintchine, a law symmetric and unimodal about $0$ is that of 
 \[
 g(r) = q\,\frac{\sinh r}{r}\ (r \le -\ell), \qquad g(r) = \frac{\ell + r + 1 - q e^{-r}}{2r}\ (r \ge -\ell).
 \]
-The first branch increases. On the second, $g'(r)$ has the sign of $d(r) = q e^{-r}(1 + r) - (1 + \ell)$, which decreases, with $d(-\ell) = f(\ell) = e^{2\ell}(1 - \ell) - 1 - \ell > 0$ because $f(0) = f'(0) = 0$ and $f''(\ell) = -4\ell\,e^{2\ell} > 0$ for $\ell < 0$, and $d(r) \to -(1 + \ell) < 0$. So $g$ is maximal at the root $r$ of $d$, where $g(r) = \{1 + q e^{-r}\}/2$. At $q = 0.8$, $0.9$ and $0.95$, $\Psi(q) = 0.80772$, $0.90179$ and $0.95043$. The split certificates of \S~\ref{sec:s-ball}, with $\phi$ bounded through enclosures of $\Psi$, give $p_{\mathcal E} \le 0.8078$, $0.9018$ and $0.9505$, and enclosures give $\Psi(0.8) > 0.8077$, $\Psi(0.9) > 0.9017$ and $\Psi(0.95) > 0.9504$, so these levels cannot be lowered to the next multiple of $10^{-4}$. Noisy level $0.9$ certifies latent level $0.8981$, while $\Psi(0.8982) > 0.9$. Heavy tails are allowed: the $t_3$ and Cauchy laws are symmetric and unimodal, and for them the supremum over the scale is $0.90013$ and $0.9$ at $q = 0.9$ (numerical).
+The first branch increases. On the second, $g'(r)$ has the sign of $d(r) = q e^{-r}(1 + r) - (1 + \ell)$, which decreases, with $d(-\ell) = f(\ell) = e^{2\ell}(1 - \ell) - 1 - \ell > 0$ because $f(0) = f'(0) = 0$ and $f''(\ell) = -4\ell\,e^{2\ell} > 0$ for $\ell < 0$, and $d(r) \to -(1 + \ell) < 0$. So $g$ is maximal at the root $r$ of $d$, where $g(r) = \{1 + q e^{-r}\}/2$.
 
-\subsection*{Symmetric unimodal noise at both ends}
+Heavy tails are allowed: the $t_3$ and Cauchy laws are symmetric and unimodal, and for them the supremum over the scale is $0.90013$ and $0.9$ at $q = 0.9$ (numerical).
+
+\subsection*{Symmetric unimodal noise: the exact two-sided level}
 
 \begin{proposition}\label{prop:su-exact}
 For symmetric unimodal noise, $\Psi = \Psi_{\mathcal E}$ is increasing and strictly convex on $(e^{-1}, 1)$, and for $1/2 < p < 1$ and $e^{-1} < q < 1$ the two-sided level is $p_{\mathcal E}(q) = \Psi(q)$: noisy coverage $p$ guarantees latent coverage $\lambda(p) = \Psi^{-1}(p)$ for every $W \in \mathcal B$ and every symmetric unimodal noise, possibly different between units, and no larger latent level is guaranteed, even for log-concave $W$.
@@ -191,27 +79,40 @@ The inverse $\lambda$ is therefore increasing and concave on $[1/2, 1]$, and $\p
 Conversely, let $p < \Psi(q)$ and let $\epsilon$ be uniform on $[-r, r]$, with $r$ the maximizer. By the converse in Proposition~\ref{M-prop:general} there is an exponential tail $Y = a + \eta - E_1$, $\eta > 0$ small, with $F_Y(0) < q$ and $\pr(Y + \epsilon \le 0) > p$. For $\sigma > 0$ put $W = t + \sigma Y$, which is log-concave, and noise $\sigma\epsilon$. Then $\pr(|W| \le t) \le F_Y(0) < q$, while $\pr(|W + \sigma\epsilon| \le t) = \pr(Y + \epsilon \le 0) - \pr(Y + \epsilon < -2t/\sigma)$, which exceeds $p$ for small $\sigma$, since $\epsilon$ is bounded. The same construction with $q' > \lambda(p)$, for which $\Psi(q') > p$, shows that $\lambda(p)$ cannot be raised.
 \end{proof}
 
-At $q = 0.8$, $0.9$ and $0.95$ the two-sided levels are therefore $\Psi(q) = 0.8077245$, $0.9017873$ and $0.9504311$ (ball arithmetic, enclosures of width below $10^{-15}$), and noisy coverage $0.9$ guarantees exactly latent coverage $\lambda(0.9) = 0.8981432$, with $\Psi(0.8981) < 0.89996$ and $\Psi(0.8982) > 0.90005$. The split certificate of \S~\ref{sec:s-ball} is not needed for this class. The same argument applies to any class $\mathcal E$ closed under scaling and negation whose one-sided function $\Psi_{\mathcal E}$ is convex; for Gaussian and mean-zero log-concave noise convexity is not proved, and the two-sided levels rest on the split certificates.
+At $q = 0.8$, $0.9$ and $0.95$ the two-sided levels are therefore $\Psi(q) = 0.8077245$, $0.9017873$ and $0.9504311$ (ball arithmetic, enclosures of width below $10^{-15}$), and noisy coverage $0.9$ guarantees exactly latent coverage $\lambda(0.9) = 0.8981432$, with $\Psi(0.8981) < 0.89996$ and $\Psi(0.8982) > 0.90005$. The same argument applies to any class $\mathcal E$ closed under scaling and negation whose one-sided function $\Psi_{\mathcal E}$ is convex; for Gaussian and mean-zero log-concave noise convexity is not proved, and the two-sided levels rest on the split certificates.
+
+Before Proposition~\ref{prop:su-exact}, the two-sided levels for this class were certified by the split certificates of \S~\ref{sec:s-ball}, with $\phi$ bounded through enclosures of $\Psi$: they give $p_{\mathcal E} \le 0.8078$, $0.9018$ and $0.9505$ at $q = 0.8$, $0.9$ and $0.95$, and enclosures give $\Psi(0.8) > 0.8077$, $\Psi(0.9) > 0.9017$ and $\Psi(0.95) > 0.9504$. These agree with Proposition~\ref{prop:su-exact}, which makes the split certificate unnecessary for this class (\texttt{split\_certificate\_su} is kept as a check).
 
 \subsection*{Proof of Theorem~\ref{M-thm:classes}(ii): mean-zero log-concave noise}
 
-\emph{Reduction.} Let $h(y) = \min(1, q e^{-y})$, which is continuous, nonincreasing and $1$-Lipschitz. If $\epsilon$ is log-concave with mean zero, conditioning on $|\epsilon| \le M$ and recentring changes $E\{h(\epsilon)\}$ by at most $2\pr(|\epsilon| > M) + |E(\epsilon \mid |\epsilon| \le M)|$, which tends to zero; so it suffices to bound $E\{h(\epsilon)\}$ over log-concave laws on compact intervals with $E(\epsilon) \ge 0$, as $h$ is nonincreasing. By the localization theorem \citep{fradelizi2004} the supremum of this linear functional is attained at a point mass $\delta_x$ with $x \ge 0$, where $h(x) \le q$, or at a law with density proportional to $e^{\beta y}$ on a segment with mean zero. Write the latter as $\epsilon = L(V - \mu_k)$, $V$ on $[0, 1]$ with density proportional to $e^{kv}$, $k = \beta L$, $\mu_k = E(V)$; then
+\emph{Reduction and parametrization.} Let $h(y) = \min(1, q e^{-y})$, which is continuous, nonincreasing and $1$-Lipschitz. If $\epsilon$ is log-concave with mean zero, conditioning on $|\epsilon| \le M$ and recentring changes $E\{h(\epsilon)\}$ by at most $2\pr(|\epsilon| > M) + |E(\epsilon \mid |\epsilon| \le M)|$, which tends to zero; so it suffices to bound $E\{h(\epsilon)\}$ over log-concave laws on compact intervals with $E(\epsilon) \ge 0$, as $h$ is nonincreasing. By the localization theorem \citep{fradelizi2004} the supremum of this linear functional is attained at a point mass $\delta_x$ with $x \ge 0$, where $h(x) \le q$, or at a law with density proportional to $e^{\beta y}$ on a segment with mean zero. Write the latter as $\epsilon = L(V - \mu_k)$, $V$ on $[0, 1]$ with density proportional to $e^{kv}$, $k = \beta L$, $\mu_k = E(V)$; then
 \[
 E\{h(\epsilon)\} = \frac{1}{Z_k}\Big\{\int_0^{v_c} e^{kv}\,dv + q e^{L\mu_k}\int_{v_c}^1 e^{(k - L)v}\,dv\Big\}, \qquad v_c = \min\{1, \max(0, \mu_k + \ell/L)\},
 \]
 with $Z_k = \int_0^1 e^{kv}\,dv$. For $|k| \ge 2$ we use the scale $\sigma = L/|k|$ and the truncated exponential form $\epsilon = \pm\sigma(\tau - m)$, $\tau$ standard exponential truncated to $[0, |k|]$, which includes $|k| = \infty$, the centred exponential laws $\pm\sigma(E - 1)$.
 
-\emph{Certificate.} A branch and bound in Arb ball arithmetic, \texttt{uai.noise\_classes.lc\_certificate\_parallel}, bounds $E\{h(\epsilon)\}$ from above on boxes of $(k, L)$ for $|k| \le 2$ and of $(1/|k|, \sigma)$ for $|k| \ge 2$, splitting until each box is below the target. On a box the bound is $J(u) = \pr(\epsilon \le u) + q E\{e^{-\epsilon}; \epsilon > u\}$ at one cut $u$, the kink $\ell$ of the box centre, since $h(y) \le 1(y \le u) + q e^{-y} 1(y > u)$ for every $u$; this removes the dependence of the kink on the parameters, and $J'(\ell) = 0$ makes the bound tight to second order; $Z_k$ and $\int_0^1 v e^{kv}\,dv$ are evaluated by their series with a remainder bound near $k = 0$. Box ends enter as exact doubles, and derived ends such as $1/|k|$ are rounded outward before they enter the ball computations; at $q = 0.9$ the largest certified bound for the target $0.9052$ is $0.90519999990$, so the margin is about $10^{-10}$. The ends of the scale parameter are closed analytically: for small $L$, $E\{h(\epsilon)\} \le q\,E(e^{-\epsilon}) \le q e^{L^2/24}$: with $K(s) = \log\int_0^1 e^{sv}\,dv$ and $\epsilon = L(V - \mu_k)$, $\log E(e^{-\epsilon}) = K(k - L) - K(k) + LK'(k) = \int_{k-L}^{k} (s - k + L) K''(s)\,ds \le L^2/24$, because $K''(s) = s^{-2} - \{2\sinh(s/2)\}^{-2}$, the variance of the law on $[0, 1]$ with density proportional to $e^{sv}$, is at most its value $1/12$ at $s = 0$, as $x^{-2} - \sinh^{-2}x$ decreases in $|x|$; this improves on the bound $q e^{L^2/8}$ of Hoeffding's lemma; for large $L$, $E\{h(\epsilon)\} \le \pr(\epsilon \le 4) + q e^{-4}$, where $\pr(V \le \mu_k) \le 1 - e^{-1}$ as in the proof of Theorem~\ref{M-thm:transition} and the density of $V$ is at most $2/(1 - e^{-2})$; for small and large $\sigma$ the analogous bounds use $E(e^{-\sigma\tau}) \le 1$, $E(e^{\sigma\tau} \mid \tau \le |k|) \le (1 - \sigma)^{-1}$ and $m \ge 1 - 2/(e^2 - 1)$. At $q = 0.9$ the certificate gives $\Psi_{\mathcal E}(0.9) < 0.9052$, and the centred exponential with $\sigma = 0.11777$ gives $\Psi_{\mathcal E}(0.9) > 0.90517$; it gives $\Psi_{\mathcal E}(0.8942) > 0.9$ at $\sigma = 0.1259$. For the two-sided levels, a partition of the noisy budget $a_L \in [0, (1 - p)/2]$ is proposed from the centred exponential values, so that each interval uses at most half the room, and every node $a$ is certified by the branch and bound at a level $q_a$ below $\lambda_{\mathcal E}(1 - a)$; this certifies the noisy levels $0.9068$ and $0.906$ for latent level $0.9$, with $29$ and $41$ intervals, and noisy level $0.9$ for latent level $0.8935$, with $45$ intervals (\texttt{split\_certificate\_lc}). Numerically the worst split puts the whole budget at one end, as for Gaussian and symmetric unimodal noise, so the two-sided level is $\Psi_{\mathcal E}(0.9) = 0.905176$. Numerically, along truncated exponential laws $\sigma(\tau - m)$ with a long right tail the supremum over the scale increases with the truncation length, to the centred exponential; for the reflected laws it decreases.
+\emph{Upper bound on a box.} A branch and bound in Arb ball arithmetic, \texttt{uai.noise\_classes.lc\_certificate\_parallel}, bounds $E\{h(\epsilon)\}$ from above on boxes of $(k, L)$ for $|k| \le 2$ and of $(1/|k|, \sigma)$ for $|k| \ge 2$, splitting until each box is below the target. On a box the bound is $J(u) = \pr(\epsilon \le u) + q E\{e^{-\epsilon}; \epsilon > u\}$ at one cut $u$, the kink $\ell$ of the box centre, since $h(y) \le 1(y \le u) + q e^{-y} 1(y > u)$ for every $u$; this removes the dependence of the kink on the parameters, and $J'(\ell) = 0$ makes the bound tight to second order; $Z_k$ and $\int_0^1 v e^{kv}\,dv$ are evaluated by their series with a remainder bound near $k = 0$. Box ends enter as exact doubles, and derived ends such as $1/|k|$ are rounded outward before they enter the ball computations.
 
-\emph{Towards an analytic proof.} Since $h(y) = q e^{-\max(y, \ell)}$, with $X = -\epsilon$ and $c = -\ell$,
-\[
-\Psi_{\mathcal E}(q) = q \sup E\{e^{\min(X, c)}\},
-\]
-the supremum over mean-zero log-concave $X$, and the conjectured extremal law is $X = \sigma(1 - E_1)$, with $E_1$ standard exponential. Laws bounded above by $c$ are covered analytically. If $X \le s$ almost surely with $0 < s \le c$, the log-density of $X$ minus the affine log-density of $s(1 - E_1)$ is concave on $(-\infty, s]$, so the difference of densities changes sign at most twice; with equal masses and means, the difference of distribution functions changes sign once, from negative to positive, so $X$ is smaller than $s(1 - E_1)$ in the convex order. As $x \mapsto e^{\min(x, c)}$ is convex on $(-\infty, s]$, $E\{e^{\min(X, c)}\} \le E\{e^{\min(s(1 - E_1), c)}\}$. The open case is a law with mass above $c$, where the objective is not convex; the extremal law lies there, with $\sigma = 0.11777 > c = 0.10536$ at $q = 0.9$, and choosing the scale of the comparison law freely gives crossing patterns from which no sign follows.
+\emph{Ends of the scale parameter.} The ends of the scale parameter are closed analytically.
+\begin{enumerate}
+\item For small $L$, $E\{h(\epsilon)\} \le q\,E(e^{-\epsilon}) \le q e^{L^2/24}$. With $K(s) = \log\int_0^1 e^{sv}\,dv$ and $\epsilon = L(V - \mu_k)$, $\log E(e^{-\epsilon}) = K(k - L) - K(k) + LK'(k) = \int_{k-L}^{k} (s - k + L) K''(s)\,ds \le L^2/24$, because $K''(s) = s^{-2} - \{2\sinh(s/2)\}^{-2}$, the variance of the law on $[0, 1]$ with density proportional to $e^{sv}$, is at most its value $1/12$ at $s = 0$, as $x^{-2} - \sinh^{-2}x$ decreases in $|x|$. This improves on the bound $q e^{L^2/8}$ of Hoeffding's lemma.
+\item For large $L$, $E\{h(\epsilon)\} \le \pr(\epsilon \le 4) + q e^{-4}$, where $\pr(V \le \mu_k) \le 1 - e^{-1}$ as in the proof of Theorem~\ref{M-thm:transition} and the density of $V$ is at most $2/(1 - e^{-2})$.
+\item For small and large $\sigma$, the analogous bounds use $E(e^{-\sigma\tau}) \le 1$, $E(e^{\sigma\tau} \mid \tau \le |k|) \le (1 - \sigma)^{-1}$ and $m \ge 1 - 2/(e^2 - 1)$.
+\end{enumerate}
+
+\emph{Results.} At $q = 0.9$ the certificate gives $\Psi_{\mathcal E}(0.9) < 0.9052$; the largest certified bound for this target is $0.90519999990$, so the margin is about $10^{-10}$. The centred exponential with $\sigma = 0.11777$ gives $\Psi_{\mathcal E}(0.9) > 0.90517$; it gives $\Psi_{\mathcal E}(0.8942) > 0.9$ at $\sigma = 0.1259$.
+
+For the two-sided levels, a partition of the noisy budget $a_L \in [0, (1 - p)/2]$ is proposed from the centred exponential values, so that each interval uses at most half the room, and every node $a$ is certified by the branch and bound at a level $q_a$ below $\lambda_{\mathcal E}(1 - a)$; this certifies the noisy levels $0.9068$ and $0.906$ for latent level $0.9$, with $29$ and $41$ intervals, and noisy level $0.9$ for latent level $0.8935$, with $45$ intervals (\texttt{split\_certificate\_lc}).
+
+Numerically the worst split puts the whole budget at one end, as for Gaussian and symmetric unimodal noise, so the two-sided level is $\Psi_{\mathcal E}(0.9) = 0.905176$. Numerically, along truncated exponential laws $\sigma(\tau - m)$ with a long right tail the supremum over the scale increases with the truncation length, to the centred exponential; for the reflected laws it decreases. These two statements are numerical and are not used.
 
 \subsection*{Proof of Theorem~\ref{M-thm:classes}(iii): mean-zero unimodal noise}
 
 Let $\epsilon$ have density $(1 - \rho)/a$ on $[-a, 0]$ and $\rho/b$ on $(0, b]$ with $b = (1 - \rho)a/\rho$ and $\rho \le 1/2$; it is unimodal with mean zero. Then $E\{h(\epsilon)\} \ge (1 - \rho)(1 + \ell/a)$, which tends to one as $\rho \to 0$ and $a \to \infty$, so $\Psi_{\mathcal E}(q) = 1$ and no noisy level below one transfers to any latent level.
+
+\subsection*{Gaussian noise as a class}
+
+For Gaussian noise $\Psi_{\mathcal E}(q) = \sup_{\sigma} E\{\min(1, q e^{-\sigma Z})\}$, and Proposition~\ref{M-prop:general} recovers the sign of the constants of Lemma~\ref{lem:onesided}: $c_{p,q} \le 0$ if $\Psi_{\mathcal E}(q) < p$ and $c_{p,q} > 0$ if $\Psi_{\mathcal E}(q) > p$. At $q = 0.9$ the supremum is $0.900803$, at $\sigma = 0.0503$, in the slack interval $(0.90079, 0.901]$ of Corollary~\ref{M-cor:slack}.
 
 \subsection*{Proof of Proposition~\ref{M-prop:latentshape}: unimodal latent laws}
 
@@ -221,32 +122,200 @@ For the construction let $\epsilon$ have a law in $\mathcal E$, continuous at $0
 
 The noisy coverage of this law has a closed form: for a piece with uniform density on $[a, b]$, $\int_a^b F(c - w)\,dw = G(c - a) - G(c - b)$, where $F$ is the distribution function of the noise and $G$ an antiderivative, $G(y) = y\Phi(y/\sigma) + \sigma\phi(y/\sigma)$ for Gaussian noise. With $\tau = 10^{-4}$, $\delta = 10^{-3}\sigma$ and the noisy coverage set to $0.9$, the latent coverage is $0.870$, $0.820$, $0.807$ and $0.801$ at $\sigma = 0.1$, $0.03$, $0.01$ and $0.001$ for Gaussian noise, $0.876$, $0.822$, $0.807$ and $0.801$ for uniform noise of standard deviation $\sigma$, and $0.809$, $0.751$, $0.736$ and $0.729$ for the centred exponential noise $\sigma(E_1 - 1)$, against the limits $0.8$, $0.8$ and $1 - e/10 = 0.72817\ldots$ (\texttt{experiments/e42\_unimodal\_boundary.py}).
 
-\subsection*{Gaussian noise}
+\section{Finite-sample ranks}\label{sec:s-ranks}
 
-For Gaussian noise $\Psi_{\mathcal E}(q) = \sup_{\sigma} E\{\min(1, q e^{-\sigma Z})\}$, and Proposition~\ref{M-prop:general} recovers the sign of the constants of Lemma~\ref{M-lem:onesided}: $c_{p,q} \le 0$ if $\Psi_{\mathcal E}(q) < p$ and $c_{p,q} > 0$ if $\Psi_{\mathcal E}(q) > p$. At $q = 0.9$ the supremum is $0.900803$, at $\sigma = 0.0503$, in the slack interval $(0.90079, 0.901]$ of Corollary~\ref{M-cor:slack}.
+This section gives the computations behind Theorem~\ref{M-prop:unknown} and Table~\ref{M-tab:map}, and the order-statistic level used by the rules with known variances.
 
-\section{The shape of the sharp radius}\label{sec:s-shape}
+\subsection*{Smallest valid ranks}
+
+By Theorem~\ref{M-prop:unknown} the smallest valid rank is the smallest $k$ with $\pr\{{\rm Bin}(K, p) \le k - 1\} \ge 1 - \delta$ at $p = p_{\mathcal E}(q)$, and no rank below the one at $p = \Psi_{\mathcal E}(q)$ is valid. At $q = 0.9$ and $\delta = 0.05$ such a rank exists only if $1 - p^K \ge 0.95$, that is for $K \ge 29$ under Gaussian and symmetric unimodal noise, $K \ge 31$ under mean-zero log-concave noise and $K \ge 59$ at $p = 0.95$. Against the usual rank, with $p = 0.9$, the raise for Gaussian noise is $0$ at $K = 110$, $1$ at $K = 300$ and $10^3$, $3$ at $K = 3000$ and $8$ to $10$ at $K = 10^4$; for $K \le 3000$ these ranks coincide with those of the earlier rule with $p_k \ge 0.901$ and $k \ge Kp_k + 1$, whose side condition never binds there. The function \texttt{certified\_rank} returns this rank.
+
+The proof of Theorem~\ref{M-prop:unknown} uses only the one-unit transfer, so with the transfer of Proposition~\ref{M-prop:latentshape}, which needs noisy level $1 - \beta_{\mathcal E}(1 - q)$, that is $(1 + q)/2$ for median-zero noise and $1 - (1 - q)/e$ for mean-zero log-concave noise, it gives the ranks in the last two rows of Table~\ref{M-tab:map}, valid for every latent law; these levels are exact, so the ranks are the smallest valid ones for unimodal latent laws.
+
+Proposition~\ref{M-prop:fail} is illustrated at an extremal law in \S~\ref{sec:s-sim}, with exact reliabilities up to $K = 10^6$.
+
+\subsection*{An order-statistic level for known variances}
+
+The computed radius and the shrunk threshold of \S~\ref{M-sec:hetero} use a level for the average noisy distribution function rather than a bound for each unit. Let $T = |V|_{(k)}$, let $\bar F$ be the average distribution function of the $|V_i|$, assumed continuous, and let $p_k$ be the $\delta$-quantile of the ${\rm Beta}(k, K+1-k)$ distribution.
+
+\begin{proposition}\label{prop:beta}
+If $k \ge Kp_k + 1$ then $\pr\{\bar F(T) \ge p_k\} \ge 1 - \delta$.
+\end{proposition}
+
+\begin{proof}[Proof of Proposition~\ref{prop:beta}]
+$\bar F(T) < p_k$ exactly when $N = \#\{i : |V_i| < \bar F^{-1}(p_k)\} \ge k$. $N$ is a sum of independent indicators whose success probabilities average $p_k$, and $k - 1 \ge Kp_k$. By \citet{hoeffding1956}, $\pr(N \le k-1)$ is smallest when all success probabilities are equal. Hence $\pr(N \ge k) \le \pr\{{\rm Bin}(K, p_k) \ge k\} = \pr\{{\rm Beta}(k, K+1-k) \le p_k\} = \delta$.
+\end{proof}
+
+\section{Gaussian noise: the sharp radius and the location of the mean}\label{sec:s-gauss}
+
+This section proves the results of \S~\ref{M-sec:mean}, for Gaussian noise $e \sim N(0, D)$, after scaling the threshold $t$ to $1$, with $x = D/t^2$ and $R_{p,q}$ defined by \eqref{M-eq:R}.
+
+\subsection*{Reduction to log-affine laws}
+
+Write $g_x(w) = \pr(|w + x^{1/2}Z| \le 1)$, so that the constraint in \eqref{M-eq:R} reads $E\{g_x(W)\} \ge p$, and let $\mathcal F$ be the family of point masses and of laws with density proportional to $e^{\beta w}$ on a segment.
+
+\begin{proposition}\label{prop:reduction}
+$R_{p,q}(x) = \sup\{Q_q(|W|) : W \in \mathcal F,\ E\{g_x(W)\} \ge p\}$. The same holds for any continuous constraint kernel that vanishes at $\pm\infty$, in particular for the average kernel of \S~\ref{M-sec:hetero}.
+\end{proposition}
+
+The proof uses the localization theorem; over $\mathcal F$ the problem is a two-dimensional maximization of closed forms.
+
+\begin{proof}[Proof of Proposition~\ref{prop:reduction}]
+Since $\mathcal F \subset \LC$ it suffices to bound the supremum over $\LC$. Let $W \in \LC$ satisfy $E\{g_x(W)\} \ge p$ and let $s < Q_q(|W|)$, so that $\pr(|W| < s) \le q - \gamma$ for some $\gamma > 0$. Choose $M \ge s$ with $g_x(w) \le p$ for $|w| \ge M$, and let $W_M$ be $W$ conditioned on $|W| \le M$, which is log-concave. With $\varepsilon_M = \pr(|W| > M)$, the conditioning removes only mass on which the kernel is at most $p$, so
+\[
+E\{g_x(W_M)\} \ge \frac{p - p\varepsilon_M}{1 - \varepsilon_M} = p, \qquad \pr(|W_M| < s) \le \frac{q - \gamma}{1-\varepsilon_M} < q
+\]
+for $M$ large. On $[-M, M]$ the constraint function $g_x - p$ is continuous, and $\mu \mapsto -\mu(-s, s)$ is linear and upper semicontinuous for weak convergence because $(-s,s)$ is open. By the localization theorem \citep{kannan1995, fradelizi2004}, the supremum of this functional over the log-concave probability measures on $[-M, M]$ that satisfy $\int(g_x - p)\,d\mu \ge 0$ is attained at a point mass or at a law with log-affine density on a segment. Hence some member of $\mathcal F$ is feasible and has $\pr(|W| < s) < q$, that is, $Q_q(|W|) \ge s$. Since $s < Q_q(|W|)$ was arbitrary the claim follows. Only continuity of the kernel and its decay at infinity were used, so the argument applies to the average kernel $\bar g$ of \S~\ref{M-sec:hetero}.
+\end{proof}
+
+For $\beta > 0$ and $\sigma = x^{1/2}$, integration by parts gives
+\begin{equation}\label{eq:closed}
+\int_a^b e^{\beta w}\Phi\Big(\frac{c-w}{\sigma}\Big)dw = \frac{1}{\beta}\Big[e^{\beta w}\Phi\Big(\frac{c-w}{\sigma}\Big)\Big]_a^b + \frac{e^{\beta c + \beta^2\sigma^2/2}}{\beta}\Big\{\Phi\Big(\frac{b-c-\beta\sigma^2}{\sigma}\Big) - \Phi\Big(\frac{a-c-\beta\sigma^2}{\sigma}\Big)\Big\},
+\end{equation}
+so the constraint is a combination of normal distribution functions. For fixed slope and length, the translations $c$ of a member of $\mathcal F$ that satisfy the constraint form an interval, because $c \mapsto \pr(|W + c + e| \le 1)$ is log-concave \citep{prekopa1973}, and $c \mapsto \pr(|W + c| \le s)$ is log-concave, so $c \mapsto Q_q(|W + c|)$ is quasi-convex and is maximized at an end of that interval. Each end is found by a root-finding in $c$, and the quantile by a second root-finding, using \eqref{eq:closed}.
+
+\subsection*{The one-sided problem}
+
+Near each end of the interval the problem is one-sided. For $u > 0$ let $E_u$ be exponential with rate $u$, independent of $Z$, and for the exponential tail $b - E_u$ let
+\[
+m_u(b) = \pr(b - E_u + Z \le 0) = \Phi(-b) + e^{-ub + u^2/2}\,\Phi(b - u),
+\]
+which is continuous and strictly decreasing in $b$. Let $b_u(p)$ solve $m_u(b) = p$, and write $v_q(u) = b_u(q) - u^{-1}\log(1/q)$ and $k_q(u) = u^{-1} - b_u(q)$; the law $b_u(q) - E_u$ has $q$-quantile $v_q(u)$ and mean $-k_q(u)$.
+
+\begin{lemma}\label{lem:onesided}
+Let $c_{p,q} = \sup\{F_Y^{-1}(q) : Y \in \LC,\ \pr(Y + Z \le 0) \ge p\}$ and $c_q = c_{q,q}$. Then $c_{p,q} = \sup_{u > 0}\{b_u(p) - u^{-1}\log(1/q)\}$, $c_q > 0$, and $q \mapsto c_q$ is nonincreasing. The same holds with $\mathcal B$ in place of $\LC$.
+\end{lemma}
+
+Ball arithmetic gives $c_{0.8} = 0.04607$, $c_{0.9} = 0.01906$ and $c_{0.95} = 0.00841$ (\S~\ref{sec:s-ball}). The proofs of Lemma~\ref{lem:onesided} and of Lemma~\ref{lem:meanonesided} below replace $Y$ by an exponential tail through a supergradient of $\log F_Y$ at its $q$-quantile, which keeps the quantile, the constraint and the bound on the mean.
+
+\begin{proof}[Proof of Lemma~\ref{lem:onesided}]
+Exponential tails are log-concave, which gives one inequality. Conversely, let $Y \in \LC$ with $\pr(Y + Z \le 0) \ge p$. If $Y = y_0$ is a point mass then $y_0 \le -\Phi^{-1}(p) = \lim_{u\to\infty}\{b_u(p) - u^{-1}\log(1/q)\}$. Otherwise $F = F_Y$ is continuous and $\log F$ is concave \citep{prekopa1973}. Let $v = F^{-1}(q)$ and $G(y) = F(v + y)$. The point $0$ is interior to $\{G > 0\}$, so the right derivative $u \ge 0$ of $\log G$ at $0$ is a supergradient, and $G(y) \le q e^{uy}$ for all $y$. If $u = 0$ then $G \le q < 1$, which is impossible, so $u > 0$ and $G(y) \le \min(qe^{uy}, 1)$, which is the distribution function of $b_0 - E_u$ with $b_0 = u^{-1}\log(1/q)$. Hence $Y' = v + b_0 - E_u$ lies stochastically below $Y$ and has $q$-quantile $v$, and
+\[
+p \le \pr(Y + Z \le 0) \le \pr(Y' + Z \le 0) = m_u(v + b_0).
+\]
+Since $m_u$ is decreasing, $v \le b_u(p) - b_0$. For monotonicity, let $q' > q$, let $Y$ be feasible at $(q', q')$ with $v = F_Y^{-1}(q')$, and put $\rho = (q' - q)/(1-q)$. Then $Y$ conditioned on $Y \ge F_Y^{-1}(\rho)$ is log-concave; over $\mathcal B$ it stays in $\mathcal B$, because $\log(F - \rho) = h(\log F)$ with $h(z) = \log(e^z - \rho)$ nondecreasing and concave, and the log survival function of the conditioned law is $\min\{0, \log(1-F) - \log(1-\rho)\}$, a minimum of concave functions. It satisfies the constraint at level $(q' - \rho)/(1-\rho) = q$, because the removed mass has noisy constraint value at most one, and has $q$-quantile $v$. Point masses have value $-\Phi^{-1}(q') < -\Phi^{-1}(q) \le c_q$. Finally, $c_q > 0$ because $v_q(u) = u^{-1}\log\{e^{u^2/2}\Phi(b_u - u) + e^{u b_u}\Phi(-b_u)\} = u/2 + o(u)$ as $u \to 0$, where $b_u = b_u(q)$ and $u b_u \to \log(1/q)$.
+\end{proof}
+
+\subsection*{Theorem~\ref{M-thm:small}: the lower bound}
+
+\begin{proof}[Proof of Theorem~\ref{M-thm:small}, lower bound]
+Fix $\epsilon > 0$ and choose $u$ with $v_q(u) > c_q - \epsilon$. For $p' \in [q, (1+q)/2]$, $b_u(p') \ge b_{\min} > -\infty$. Let $Y = b_u(p') - E_u$ and $W = 1 + x^{1/2}Y$. With $\tau = 2x^{-1/2}$,
+\[
+\pr(|W+x^{1/2}Z| \le 1) = p' - \pr(Y + Z < -\tau) \ge p' - \eta_x, \qquad \eta_x = e^{-u(\tau + b_{\min})/2} + \Phi\{-(\tau + b_{\min})/2\},
+\]
+by splitting the event $Y + Z < -\tau$ according to whether $Z < -(\tau + b_{\min})/2$. Take $p' = q + \eta_x$, which lies in $[q, (1+q)/2]$ for small $x$. Since $\pr(|W| \le s) \le F_W(s)$, $Q_q(|W|) \ge 1 + x^{1/2}\{b_u(q + \eta_x) - u^{-1}\log(1/q)\}$. As $\eta_x \to 0$ and $b_u$ is continuous, $\liminf_{x\to0}\{R_{q,q}(x) - 1\}/x^{1/2} \ge c_q - \epsilon$.
+\end{proof}
+
+\subsection*{A constraint on the mean}
+
+\begin{lemma}\label{lem:meanonesided}
+Let $e^{-1} < q < 1$ and $\kappa \ge 0$. Then
+\[
+\sup\{F_Y^{-1}(q) : Y \in \mathcal B,\ E(Y) \le -\kappa,\ \pr(Y + Z \le 0) \ge q\} = L_q(\kappa) = \sup\{v_q(u) : u > 0,\ k_q(u) \ge \kappa\}.
+\]
+The function $L_q$ is positive and nonincreasing, and, for $q > 1/2$, $L_q(\kappa) = c_q$ for $\kappa \le \kappa^*_q$, where $\kappa^*_q$ is the largest value of $k_q$ on the compact set of maximizers of $v_q$, and $\kappa L_q(\kappa) \to \{1 - \log(1/q)\}/2$ as $\kappa \to \infty$. In double precision $\kappa^*_q = 6.81$, $20.18$ and $50.07$ at $q = 0.8$, $0.9$ and $0.95$.
+\end{lemma}
+
+\begin{proof}[Proof of Lemma~\ref{lem:meanonesided}]
+For $q > 1/2$, $v_q$ is continuous on $(0,\infty)$, tends to $0$ as $u \to 0$ and to $-\Phi^{-1}(q) < 0$ as $u \to \infty$, and is positive somewhere, so its maximizers form a nonempty compact subset of $(0,\infty)$ and $\kappa^*_q$ is well defined. Let $a = \log(1/q)$ and $A = 1 - a > 0$. Let $Y$ be nondegenerate with $q$-quantile $v$. Since $\log F_Y$ is concave, a supergradient $u > 0$ at $v$ gives $F_Y(y) \le \min\{qe^{u(y - v)}, 1\}$, the distribution function of $Y' = v + a/u - E_u$; so $Y'$ lies stochastically below $Y$ and has the same $q$-quantile. Then $E(Y') \le E(Y) \le -\kappa$ and $\pr(Y' + Z \le 0) \ge q$, so the replacement keeps both constraints. For the tail $b - E_u$ the constraints read $b \le b_u(q)$ and $b \le u^{-1} - \kappa$, so the largest quantile is $\min\{v_q(u), A/u - \kappa\}$. If $k_q(u) < \kappa$ this minimum is $A/u - \kappa$; since $k_q$ is continuous and $k_q(s) \to \infty$ as $s \to 0$, some $s < u$ has $k_q(s) = \kappa$, where the value is $A/s - \kappa > A/u - \kappa$. So only $u$ with $k_q(u) \ge \kappa$ matter, and there the value is $v_q(u)$. A point mass $y_0$ satisfying the constraints has $y_0 = E(Y) \le -\kappa \le 0 < L_q(\kappa)$, where positivity holds because $v_q(u) \sim u/2$ and $k_q(u) \sim A/u$ as $u \to 0$. Since $m_u(b) \ge \Phi(-b)$, $b_u(q) \ge -\Phi^{-1}(q)$, so $k_q$ is bounded on $[u_0, \infty)$ for every $u_0 > 0$ and $k_q(u) \ge \kappa$ forces $u \to 0$ as $\kappa \to \infty$; moreover $u b_u(q) \to \log(1/q)$, so $k_q(u) = \{A + o(1)\}/u$, and $v_q(u) = u/2 + o(u)$ as $u \to 0$ (proof of Lemma~\ref{lem:onesided}). These expansions give $\kappa L_q(\kappa) \to A/2$: for large $\kappa$ only small $u$ are feasible, $u \le \{A + o(1)\}/\kappa$, and $v_q(u) \le \{1 + o(1)\}u/2$ with equality at the boundary. Monotonicity is clear, and $L_q(\kappa) = c_q$ while a maximizer of $v_q$ is feasible.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{M-thm:mean}]
+Let $\mu = E(W)$. If $W$ is a point mass, $Q_q(|W|) = |\mu| \le B$. Otherwise, for $s > 0$ the law of $W + s^{1/2}Z$ is in $\mathcal B$ \citep{saumard2019}, with mean $\mu$, distribution function $F_s$ and a positive smooth density $f_s$. For $r > \mu$ let $h = f_s(r)/F_s(r)$. The tangent of $\log F_s$ at $r$ gives $F_s(y) \le \min\{F_s(r)e^{h(y - r)}, 1\}$, the distribution function of an exponential tail with mean $r - \{1 + \log F_s(r)\}/h$ that lies stochastically below $W + s^{1/2}Z$, so $\mu \ge r - \{1 + \log F_s(r)\}/h$ and $h(r - \mu) \le 1$. Laws in $\mathcal B$ satisfy $f_s' \le f_s^2/F_s$ \citep{dumbgen2017}, so $(\log f_s)'(r) \le h \le 1/(r - \mu)$; applied to $-W$ this gives $(\log f_s)'(-r) \ge -1/(r + \mu)$. Hence, for $r > B$,
+\[
+f_s'(r) \le \frac{f_s(r)}{r - B}, \qquad -f_s'(-r) \le \frac{f_s(-r)}{r - B}.
+\]
+Let $H_s(r) = \pr(|W + s^{1/2}Z| \le r)$. By the heat equation $\partial_s f_s = f_s''/2$,
+\[
+\partial_s H_s(r) = \tfrac12\{f_s'(r) - f_s'(-r)\} \le \frac{f_s(r) + f_s(-r)}{2(r - B)} = \frac{\partial_r H_s(r)}{2(r - B)}.
+\]
+The quantile $r(s) = Q_q(|W + s^{1/2}Z|)$ solves $H_s\{r(s)\} = q$ and is continuously differentiable on $s > 0$, with $r'(s) \ge -1/[2\{r(s) - B\}]$ where $r(s) > B$. Hence $\{r(s) - B\}_+^2$ has derivative at least $-1$ almost everywhere, and $\{r(\epsilon) - B\}_+^2 \le \{r(\sigma^2) - B\}_+^2 + \sigma^2 - \epsilon$. As $\epsilon \to 0$, $r(\epsilon) \to Q_q(|W|)$, because a nondegenerate law in $\mathcal B$ has a positive density on the interior of its support \citep{dumbgen2017}, so the distribution function of $|W|$ is continuous and strictly increasing where it lies strictly between $0$ and $1$. Since $r(\sigma^2) \le t$, the first inequality follows, and the second from $(d^2 + \sigma^2)^{1/2} \le d + \sigma^2/(2d)$.
+\end{proof}
+
+\subsection*{Theorem~\ref{M-thm:transition}: the transition}
+
+\begin{proof}[Proof of Theorem~\ref{M-thm:transition}, first part]
+Let $V = W + x^{1/2}Z$ with distribution function $F$. Since $\log F$ and $\log(1 - F)$ are concave and $F(V)$ is uniform, $E\{\log F(V)\} = -1$ and Jensen's inequality gives $F\{E(V)\} \ge e^{-1}$ and likewise $1 - F\{E(V)\} \ge e^{-1}$. If $E(W) \ge 1$ then $\pr(|V| \le 1) \le F\{E(W)\} \le 1 - e^{-1} < q$, and similarly if $E(W) \le -1$; so $|E(W)| < 1$. Theorem~\ref{M-thm:mean} with $B = |E(W)|$ and $t = 1$ gives $\Delta \le (d^2 + x)^{1/2} - d$ with $d = 1 - |E(W)|$, which is \eqref{M-eq:necessary}.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{M-thm:transition}, the limit]
+\emph{Lower bound.} For the lower bound in the limit, take $u$ with $k_q(u) \ge \kappa$ and the law $W = 1 + x^{1/2}\{b_u(q + \eta_x) - E_u\}$ of the lower bound in Theorem~\ref{M-thm:small}. Its mean is $1 + x^{1/2}\{b_u(q + \eta_x) - u^{-1}\} \le 1 - \kappa x^{1/2}$, because $b_u$ decreases in its argument, and it is positive for small $x$; hence $\liminf_{x\to0} x^{-1/2}\{R^{(b_x)}_{q,q}(x) - 1\} \ge v_q(u)$ for every such $u$.
+
+The upper bound is proved by contradiction in four steps.
+
+\emph{Step 1: rescaling near the boundary.} For the upper bound, suppose that $x_n \to 0$, $h_n = x_n^{1/2}$, and that $W_n$ is feasible for $R^{(b_{x_n})}_{q,q}(x_n)$ with $Q_q(|W_n|) - 1 \ge a_0 h_n$, where $L_q(\kappa) < a_0 < 1$. By \eqref{M-eq:necessary}, $\kappa h_n \le 1 - |E(W_n)| \le \bar\kappa h_n$ with $\bar\kappa = (1 - a_0^2)/(2a_0)$. Replacing $W_n$ by $-W_n$ if necessary, $E(W_n) \ge 0$; let $Y_n = (W_n - 1)/h_n$, so that $-\bar\kappa \le E(Y_n) \le -\kappa$.
+
+\emph{Step 2: a variance bound.} The law of $T_n = Y_n + Z$ is in $\mathcal B$, with a smooth positive density of maximum $M_n$ and distribution function $F_n$, and $F_n(0) \ge \pr(|W_n + h_nZ| \le 1) \ge q$ while $F_n\{E(T_n)\} \le 1 - e^{-1}$ by the first part. So $q - 1 + e^{-1} \le F_n(0) - F_n\{E(T_n)\} \le M_n \bar\kappa$. For a law in $\mathcal B$ with smooth density $g$, maximum $M$ and median $m$, the hazard $g/(1 - F)$ is nondecreasing, so $g(y) \le 2g(m)\{1 - F(y)\} \le 2g(m)$ for $y \le m$, and $g/F$ is nonincreasing, which gives the same for $y \ge m$; so $g(m) \ge M/2$; the tangent bounds for $\log F$ and $\log(1-F)$ at $m$ give $\pr(|T - m| > y) \le e^{-2g(m)y}$, hence $\var(T) \le 1/\{2g(m)^2\} \le 2/M^2$. Thus $\var(Y_n) \le 2\bar\kappa^2/(q - 1 + e^{-1})^2$, the $Y_n$ are tight and uniformly integrable.
+
+\emph{Step 3: the limit.} Along a subsequence $Y_n \to Y$ in distribution with $Y \in \mathcal B$, possibly a point mass, since $\mathcal B$ is closed under weak convergence \citep{saumard2019}, $E(Y) \le -\kappa$ and $\pr(Y + Z \le 0) = E\{\Phi(-Y)\} \ge q$.
+
+\emph{Step 4: contradiction with the one-sided optimum.} On $\{W_n \ge 0\}$, whose probability tends to one, $(|W_n| - 1)/h_n = Y_n$, so $a_0 \le \{Q_q(|W_n|) - 1\}/h_n \to Q_q(Y) \le L_q(\kappa)$ by Lemma~\ref{lem:meanonesided}, where the quantile converges because a law in $\mathcal B$ has a unique $q$-quantile or is a point mass. This contradicts $a_0 > L_q(\kappa)$, so $\limsup_{x\to0} x^{-1/2}\{R^{(b_x)}_{q,q}(x) - 1\} \le a_0$ for every $a_0 \in (L_q(\kappa), 1)$; if $L_q(\kappa) \ge 1$ there is nothing to prove, because \eqref{M-eq:necessary} gives $\Delta < x^{1/2}$.
+\end{proof}
+
+\subsection*{Centred laws}
+
+\begin{proposition}\label{prop:centred}
+Let $X$ have density proportional to $e^{\beta x}$ on $[-\ell, 0]$ with $\beta > 0$ and $0 < \ell \le \infty$, let $W = X - E(X)$ and let $r_0 = Q_q(|W|)$. If $\pm r_0$ lie in the interior of the support of $W$, then, after scaling $W$ so that the noisy $q$-quantile of $|W + x^{1/2}Z|$ equals $1$,
+\[
+Q_q(|W|) = 1 + \tfrac{1}{2}\beta r_0\tanh(\beta r_0)\,x + o(x) \quad (x \to 0).
+\]
+For every $q \in (0,1)$ the condition holds for small $\beta\ell$, so $R^{(0)}_{q,q}(x) - 1$ is of exact order $x$.
+\end{proposition}
+
+Numerically the best coefficient in this family is $0.3466$ at $q = 0.8$, for $W = 1 - E_1$, and $0.0747$ at $q = 0.9$.
+
+\begin{proof}[Proof of Proposition~\ref{prop:centred}]
+Near $\pm r_0$ the density $f$ of $W$ is smooth with $f' = \beta f$, and the ends of the support are at positive distance. The jumps of the density at the ends of the support contribute $O\{v^{1/2}\phi(d_0/v^{1/2})\}$ near $\pm r_0$, where $d_0 > 0$ is the distance from $\pm r_0$ to the ends, which is $o(v)$. Hence $H_v(r) = \pr(|W + v^{1/2}Z| \le r) = H_0(r) + v\{f'(r) - f'(-r)\}/2 + o(v)$ uniformly near $r_0$, and the noisy quantile is $t(v) = r_0 - v\,\beta\{f(r_0) - f(-r_0)\}/[2\{f(r_0) + f(-r_0)\}] + o(v) = r_0 - (\beta v/2)\tanh(\beta r_0) + o(v)$. Scaling by $t(v)$ and writing $x = v/t(v)^2$, a continuous and increasing function of $v$ near $0$, gives the expansion. As $\beta\ell \to 0$, $W/\ell$ tends to the uniform law on $[-1/2, 1/2]$, whose $q$-quantile of $|W|/\ell$ is $q/2 < 1/2$.
+\end{proof}
+
+\subsection*{The case $p > q$}
+
+In the constant $C_{p,q}$ of \eqref{M-eq:C}, $c_{1,q'} = -\infty$, since no law has noisy coverage one at a single end. Numerically the worst split puts the whole budget on one end, so that $C_{p,q} = c_{p,q}$; this observation is not used. Ball arithmetic gives $-0.0572 \le C_{0.9036,0.9} \le -0.057$, where $0.9036$ is the order-statistic level for $K = 110$, $k = 105$ at $\delta = 0.04$, used in \S~\ref{sec:s-hetero}.
+
+In the proof of the upper bound of Theorem~\ref{M-thm:small}, replace $1 - q$ by $1 - p$ for the noisy budget, choose any split $\beta_L + \beta_R = 1 - q$ of the latent budget, and use $F_Y^{-1}(1-\beta_R) \le c_{1-\alpha_R, 1-\beta_R}$ at each end. Since $c_{p',q'}$ decreases in $p'$, the worst case has $\alpha_L + \alpha_R = 1 - p$, which gives $R_{p,q}(x) \le 1 + C_{p,q}x^{1/2}$ for every $x$, with $C_{p,q}$ nonincreasing in $p$. The proof of the lower bound applies with $b_u(q)$ replaced by $b_u(p)$ and $p' = p + \eta_x$, giving $R_{p,q}(x) \ge 1 + c_{p,q}x^{1/2} - o(x^{1/2})$ for every $p \ge q$. This proves Corollary~\ref{M-cor:slack}, whose numerical intervals are certified in \S~\ref{sec:s-ball}.
+
+\subsection*{The shape of the sharp radius}\label{sec:s-shape}
 
 Figure~\ref{fig:s-boundary} shows $R_{q,q}(x) - 1$ computed by grid maximization over the extremal family; grid values bound $R_{q,q}$ from below. The levels at which the grid value crosses $1$ are $x^*(q) \approx 0.034$, $0.017$, $0.0062$ and $0.0012$ for $q = 0.8$, $0.85$, $0.9$ and $0.95$, and the largest widening found is $0.37\%$, $0.17\%$, $0.063\%$ and $0.012\%$. At $q = 0.9$ the numerical upper bounds of \S~\ref{sec:s-cert} give $R_{q,q}(x) \le 1$ for $x \ge 0.013$, so Theorem~\ref{M-thm:small} bounds the widening by $c_{0.9}\,0.013^{1/2} < 0.22\%$ at every $x$; this rests on the double-precision bounds, whereas the bound $1.16\%$ of \S~\ref{M-sec:mean} rests only on Theorem~\ref{M-thm:small} and the certified $c_{0.9}$. Below $x^*(q)$ the noisy threshold must be widened; above it, grid values below $1$ do not by themselves show that shrinking is safe, which the numerical upper bounds of \S~\ref{sec:s-cert} do. The exact grid values lie below $1 + c_{0.9}x^{1/2}$ at $x = 10^{-6}, \ldots, 10^{-2}$, as Theorem~\ref{M-thm:small} requires.
 
 \begin{figure}[t]
 \centering
+% Alt text: Line plot of the percentage radius correction against the noise ratio for four coverage levels; each curve is positive for small noise ratios, peaks below half a per cent and turns negative beyond a level-dependent crossing point.
 \includegraphics[width=0.7\textwidth]{fig_boundary.pdf}
-\caption{Sharp latent radius relative to the noisy threshold, $100\{R_{q,q}(x) - 1\}$, for four coverage levels, computed by grid maximization over the extremal family, which bounds $R_{q,q}$ from below.\newline Alt text: Line plot of the percentage radius correction against the noise ratio for four coverage levels; each curve is positive for small noise ratios, peaks below half a per cent and turns negative beyond a level-dependent crossing point.}
+\caption{Sharp latent radius relative to the noisy threshold, $100\{R_{q,q}(x) - 1\}$, for four coverage levels, computed by grid maximization over the extremal family, which bounds $R_{q,q}$ from below.}
 \label{fig:s-boundary}
 \end{figure}
 
-\subsection*{Centred laws and the transition}
+\subsection*{The transition: values}
 
 \begin{figure}[t]
 \centering
+% Alt text: Log-log plot of the leading coefficient against the scaled distance of the mean from the boundary for three levels; each curve is flat up to about 7, 20 and 50, then decays like the reciprocal of the distance, just below a grey upper bound.
 \includegraphics[width=0.9\textwidth]{fig_transition.pdf}
-\caption{Leading coefficient $L_q(\kappa)$ of the worst-case radius correction, times $100$, when the mean lies at distance at least $\kappa x^{1/2}$ from the boundary (Theorem~\ref{M-thm:transition}), for $q = 0.8$ (solid), $0.9$ (dashes) and $0.95$ (dots), with the upper bound $\min\{c_q, (\kappa^2 + 1)^{1/2} - \kappa\}$ from Theorems~\ref{M-thm:small} and~\ref{M-thm:mean} (grey). Both axes are logarithmic.\newline Alt text: Log-log plot of the leading coefficient against the scaled distance of the mean from the boundary for three levels; each curve is flat up to about 7, 20 and 50, then decays like the reciprocal of the distance, just below a grey upper bound.}
+\caption{Leading coefficient $L_q(\kappa)$ of the worst-case radius correction, times $100$, when the mean lies at distance at least $\kappa x^{1/2}$ from the boundary (Theorem~\ref{M-thm:transition}), for $q = 0.8$ (solid), $0.9$ (dashes) and $0.95$ (dots), with the upper bound $\min\{c_q, (\kappa^2 + 1)^{1/2} - \kappa\}$ from Theorems~\ref{M-thm:small} and~\ref{M-thm:mean} (grey). Both axes are logarithmic.}
 \label{fig:s-transition}
 \end{figure}
 
+The following values are computed in double precision by \texttt{experiments/e32\_centering.py} and are not certified. Table~\ref{tab:s-transition} lists, for $q = 0.8$, $0.9$ and $0.95$, the end $\kappa^*_q$ of the flat part of $L_q$ and the maximizer $u^*$ of $v_q$ at which it is attained, the value of $\kappa$ at which the two upper bounds in Fig.~\ref{fig:s-transition} cross, where $L_q/U_q$ is smallest, that smallest ratio, and the limit $1 - \log(1/q)$ of the ratio as $\kappa \to \infty$.
 
-The following values are computed in double precision by \texttt{experiments/e32\_centering.py} and are not certified. For $q = 0.8$, $0.9$ and $0.95$: $\kappa^*_q = 6.8118$, $20.1823$ and $50.0741$, attained at $u^* = 0.11328$, $0.044286$ and $0.018943$. The two upper bounds in Fig.~\ref{fig:s-transition} cross at $\kappa = 10.829$, $26.221$ and $59.466$, where $L_q/U_q$ is smallest, $0.770$, $0.879$ and $0.927$; as $\kappa \to \infty$ the ratio tends to $1 - \log(1/q) = 0.777$, $0.895$ and $0.949$. At $q = 0.9$, $L_q(25) = 0.017393$ and $L_q(50) = 0.0089448$. For the mean-zero laws of Proposition~\ref{prop:centred}, the coefficient with $\beta = 0.2$ and $\ell = 2$ at $q = 0.9$ is $0.0156540$; the expansion is accurate to $6\times10^{-5}$ at $x = 1.3\times10^{-4}$ but fails at $x \approx 1.1\times10^{-3}$, where the noise reaches the end of the support and the threshold may already be shrunk. The bound of Theorem~\ref{M-thm:mean}, including its form with $|E(W)| \le B$, was checked on $642$ laws from the family of Proposition~\ref{prop:centred}, with no violation.
+\begin{table}[h]
+\centering
+\caption{Transition values, double precision (\texttt{experiments/e32\_centering.py})}
+\label{tab:s-transition}
+\begin{tabular}{lccc}
+\toprule
+ & $q = 0.8$ & $q = 0.9$ & $q = 0.95$ \\
+\midrule
+$\kappa^*_q$ & $6.8118$ & $20.1823$ & $50.0741$ \\
+$u^*$ & $0.11328$ & $0.044286$ & $0.018943$ \\
+crossing of the upper bounds, $\kappa$ & $10.829$ & $26.221$ & $59.466$ \\
+smallest $L_q/U_q$ & $0.770$ & $0.879$ & $0.927$ \\
+limit $1 - \log(1/q)$ & $0.777$ & $0.895$ & $0.949$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At $q = 0.9$, $L_q(25) = 0.017393$ and $L_q(50) = 0.0089448$. For the mean-zero laws of Proposition~\ref{prop:centred}, the coefficient with $\beta = 0.2$ and $\ell = 2$ at $q = 0.9$ is $0.0156540$; the expansion is accurate to $6\times10^{-5}$ at $x = 1.3\times10^{-4}$ but fails at $x \approx 1.1\times10^{-3}$, where the noise reaches the end of the support and the threshold may already be shrunk. The bound of Theorem~\ref{M-thm:mean}, including its form with $|E(W)| \le B$, was checked on $642$ laws from the family of Proposition~\ref{prop:centred}, with no violation.
 
 \subsection*{The location of the mean in examples}
 
@@ -254,8 +323,9 @@ Figure~\ref{fig:s-mean} shows the radius correction for laws scaled so that the 
 
 \begin{figure}[t]
 \centering
+% Alt text: Log-log plot of the radius correction against the noise ratio for three laws; the two laws with mean near the boundary follow lines of slope one half and the mean-zero law follows a line of slope one.
 \includegraphics[width=0.6\textwidth]{fig_mean_location.pdf}
-\caption{Radius correction $Q_{0.9}(|W|) - 1$ against $x$ on logarithmic axes, for laws with noisy coverage exactly $0.9$: mean at $20.2\,x^{1/2}$ from the boundary (circles), at $50\,x^{1/2}$ (squares) and mean zero (triangles), with $c_{0.9}x^{1/2}$ (solid), $L_{0.9}(50)x^{1/2}$ (dashes) and $0.024\,x$ (dots). Only positive corrections are shown.\newline Alt text: Log-log plot of the radius correction against the noise ratio for three laws; the two laws with mean near the boundary follow lines of slope one half and the mean-zero law follows a line of slope one.}
+\caption{Radius correction $Q_{0.9}(|W|) - 1$ against $x$ on logarithmic axes, for laws with noisy coverage exactly $0.9$: mean at $20.2\,x^{1/2}$ from the boundary (circles), at $50\,x^{1/2}$ (squares) and mean zero (triangles), with $c_{0.9}x^{1/2}$ (solid), $L_{0.9}(50)x^{1/2}$ (dashes) and $0.024\,x$ (dots). Only positive corrections are shown.}
 \label{fig:s-mean}
 \end{figure}
 
@@ -263,9 +333,45 @@ Figure~\ref{fig:s-mean} shows the radius correction for laws scaled so that the 
 
 The limit in Theorem~\ref{M-thm:transition} is taken with $\kappa$ fixed. Applying the small-$u$ construction to a centred law, that is, $\kappa = x^{-1/2}$, gives in the limit a left exponential tail of rate $1 - \log(1/q)$ whose noise-free central coverage is $q\{1 - e^{-2 + 2\log(1/q)}\}$, $0.750$ at $q = 0.9$, far below the constraint. So $\{1 - \log(1/q)\}/2$ is not a lower bound for the centred coefficient.
 
-\section{Certification}\label{sec:s-cert}
+\subsection*{Bi-log-concave laws}
 
-\subsection*{Box bounds for the radius}
+The main paper states its upper bounds over $\mathcal B$, the class of laws that are point masses or have a continuous distribution function $F$ with $\log F$ and $\log(1-F)$ concave \citep{dumbgen2017}. Lemma~\ref{lem:onesided} holds over $\mathcal B$ with the same $c_{p,q}$, and so do the upper bounds of Theorem~\ref{M-thm:small} and Corollary~\ref{M-cor:slack}: the proof of Lemma~\ref{lem:onesided} uses only the concavity of $\log F_Y$ at the $q$-quantile, so its upper bound holds for every $Y$ with $\log F_Y$ concave, and exponential tails are in $\LC$, which gives equality. In the proof of Theorem~\ref{M-thm:small}, $Y = (W - 1)/x^{1/2}$ has $\log F_Y$ concave, and $(-W - 1)/x^{1/2}$ has a concave log distribution function because $\log(1 - F_W)$ is concave and $F_W$ is continuous. The lower bound uses laws in $\LC \subset \mathcal B$.
+
+The class $\mathcal B$ contains multimodal laws. Proposition~\ref{prop:reduction} and the box-bound upper bounds of \S~\ref{sec:s-cert} use log-concavity of the density; the ball-arithmetic constants do not. Theorems~\ref{M-thm:mean} and~\ref{M-thm:transition}, Lemma~\ref{lem:meanonesided}, Theorem~\ref{M-prop:unknown} and Corollary~\ref{cor:simple} hold over $\mathcal B$: their proofs use the monotone hazards of $\mathcal B$, the bound $f' \le f^2/F$ of \citet{dumbgen2017}, and the preservation of $\mathcal B$ under convolution with a log-concave law and under weak limits \citep{saumard2019}. Both are elementary. If $\log F_X$ is concave and $g$ is a log-concave density, $(t, y) \mapsto F_X(t - y)g(y)$ is log-concave on $\mathbb R^2$, so $F_{X+Y}(t) = \int F_X(t-y)g(y)\,dy$ is log-concave by the theorem of \citet{prekopa1973}, and likewise $1 - F_{X+Y}$. For weak limits, concavity of $\log F_n$ and $\log(1-F_n)$ passes to the limit at continuity points, and a limit that is not a point mass has no atom, because a concave function is continuous on the interior of its domain.
+
+Symmetry alone does not make noisy calibration conservative in $\mathcal B$. The density $f(w) = \{1 + 0.05\cos(2\pi w)\}/2$ on $(-1, 1)$ is in $\mathcal B$, because $\sup|f'| = 0.05\pi < \inf f^2 = 0.2256$ \citep[][Theorem~1]{dumbgen2017}, but it is not unimodal. At $q = 0.7$, $r_0 = Q_q(|W|) \approx 0.7077$ and $f'(r_0) > 0$; since $f'$ is odd, $\partial_s \pr(|W + s^{1/2}Z| \le r_0) = f'(r_0) > 0$ at $s = 0$, so noise raises the coverage and the noisy quantile falls below $r_0$, to $0.707676$ at $s = 10^{-5}$, against $r_0 = 0.707678$. Anderson's comparison needs unimodality. The bimodal law of Table~\ref{tab:synth}, the mixture $\pi N(m_1, s^2) + (1-\pi)N(m_2, s^2)$ with mean zero, variance one and $(m_2 - m_1)/s = 2.5$, is in $\mathcal B$ by the following lemma. With $\pi = 0.4$ the mixture stays in $\mathcal B$ up to a separation of about $2.59$, while bimodality starts at about $2.443$ (numerical). The parameters are $\pi = 0.4$, $m_1 = -0.94868$, $m_2 = 0.63246$ and $s = 0.63246$.
+
+\begin{lemma}\label{lem:bimodal}
+Let $f$ be the density of $\pi N(m_1, s^2) + (1-\pi)N(m_2, s^2)$ with $m_1 < m_2$ and $r = (m_2 - m_1)/s > 2$, let $P(w)$ be the posterior probability of the first component, and let $a < b$ solve $P(a) = \tfrac12 + h$ and $P(b) = \tfrac12 - h$, $h = (1/4 - 1/r^2)^{1/2}$. The mixture is in $\mathcal B$ if $f'F < f^2$ on $[a, m_2]$ and $-f'(1-F) < f^2$ on $[m_1, b]$.
+\end{lemma}
+
+\begin{proof}
+Since $(\log f)'' = -s^{-2} + P(1-P)r^2s^{-2}$ and $P$ decreases, $f$ is log-concave on $(-\infty, a]$ and on $[b, \infty)$. On $(-\infty, a]$, $F(t) = \int 1(y \le t)f(y)1(y \le a)\,dy$ is the marginal of a log-concave function of $(t, y)$, so $\log F$ is concave there \citep{prekopa1973}; likewise $\log(1-F)$ on $[b, \infty)$. Where $f' \le 0$, in particular on $[m_2, \infty)$, $f'F \le f^2$ is trivial, and where $f' \ge 0$, in particular on $(-\infty, m_1]$, so is $-f'(1-F) \le f^2$. With the two hypotheses, $(\log F)'' \le 0$ and $(\log(1-F))'' \le 0$ on the whole line.
+\end{proof}
+
+For the law of Table~\ref{tab:synth} the two hypotheses are proved in Arb ball arithmetic on $128$ boxes, with the ends $a$ and $b$ rounded outward (\texttt{uai.interval.bimodal\_blc\_certificate}, test suite); the largest values of $(f'F - f^2)/f^2$ on $[a, m_2]$ and of $\{-f'(1-F) - f^2\}/f^2$ on $[m_1, b]$ are $-0.141$ and $-0.864$. The bound of Theorem~\ref{M-thm:mean} with $E(W) = 0$ holds for this law and its version with the cosine phase-shifted by $\pi/2$ and recentred to mean zero, at $q = 0.3, 0.7, 0.9$ and $s = 10^{-3}, 0.1, 1$ (test suite).
+
+\section{Numerical support}\label{sec:s-cert}
+
+Three levels of numerical support are used and kept apart. Certificates in Arb ball arithmetic are proofs. Upper bounds evaluated in double precision with a margin are not interval arithmetic and are labelled numerical. Exploratory searches only propose values and are never used as bounds.
+
+\subsection*{Certificates in ball arithmetic}\label{sec:s-ball}
+
+Every deciding inequality is evaluated in Arb ball arithmetic; floating point only proposes points, balls are converted to doubles with outward rounding, and sums of bounds are formed as balls.
+\begin{enumerate}
+\item $m_u(b)$ decreases in $b$, and in $u$ because $E_u$ is stochastically decreasing in its rate. Hence $b_u(p)$ is nonincreasing in $u$, and on $[u_0, u_1]$, $b_u(p) - u^{-1}\log(1/q) \le b_{u_0}(p) - u_1^{-1}\log(1/q)$. A ball with $m_u(b) < p$ proves $b_u(p) < b$.
+\item For $u \ge u_{\max}$ the value is at most $b_{u_{\max}}(p)$. For small $u$, let $b(u) = \{\log(1/p) + u^2/2 - \log(1 - u^3)\}/u$. Then $e^{-ub + u^2/2} = p(1 - u^3)$, and the Mills ratio gives $\Phi(-b) \le pu^3$ whenever $\phi\{\log(1/p)/u\} \le p\,u^2\log(1/p)$. This holds on $(0, u_{\min}]$ once it holds at $u_{\min} \le \log(1/p)/2^{1/2}$, because the left side divided by $u^2$ increases there. So $b_u(p) \le b(u)$, and for $p \ge q$ the resulting bound increases in $u$.
+\item By Lemma~\ref{lem:onesided}, $c_{p',q'} \le \gamma$ if and only if $1 - q' \ge \varphi_\gamma(1 - p')$, where $\varphi_\gamma(a) = \max[0, \sup_u 1 - \exp\{-u(b_u(1-a) - \gamma)\}]$. Hence $C_{p,q} \le \gamma$ if $\varphi_\gamma(a_L) + \varphi_\gamma(a_R) \le 1 - q$ whenever $a_L + a_R = 1 - p$. Since $\varphi_\gamma$ is nondecreasing, it suffices to check this at the ends of an adaptive partition of $a_L$, with $\varphi_\gamma$ bounded above by the same monotone branch and bound in $u$.
+\end{enumerate}
+The certificates give $c_{0.8} \in [0.0460730, 0.0460731]$, $c_{0.9} \in [0.0190618, 0.0190619]$, $c_{0.95} \in [0.0084075, 0.0084077]$ and $c_{0.99} \in [0.0013950, 0.0013958]$, $-0.0571845 \le c_{0.9036,0.9} \le C_{0.9036,0.9} \le -0.057$, $-0.1149813 \le c_{0.9068,0.9} \le C_{0.9068,0.9} \le -0.114$, and $C_{p,q} \le 0$ for $(q, p - q) = (0.8, 0.005)$, $(0.9, 0.001)$ and $(0.95, 0.0002)$. Lower bounds $c_{p,q} > 0$ at $p - q = 0.0043$, $0.00079$ and $0.00015$ come from single points $u$, evaluated in ball arithmetic, and $C_{p,q} \ge c_{p,q}$. Hence the smallest slack in Corollary~\ref{M-cor:slack} lies in $(4.3\times10^{-3}, 5.0\times10^{-3}]$, $(7.9\times10^{-4}, 1.0\times10^{-3}]$ and $(1.5\times10^{-4}, 2.0\times10^{-4}]$ at $q = 0.8$, $0.9$ and $0.95$.
+
+For the coverage form of Corollary~\ref{M-cor:slack}, the same certificates give $C_{0.8,0.795} \le 0$, $C_{0.9,0.8991} \le 0$ and $C_{0.95,0.9498} \le 0$, and enclosures give $c_{0.8,0.7954} \ge 7.0\times10^{-4}$, $c_{0.9,0.8992} \ge 4.2\times10^{-4}$ and $c_{0.95,0.9499} \ge 3.0\times10^{-3}$, so by the lower bound of the case $p \ge q$, $R_{p,q'}(x) > 1$ for small $x$ at these pairs (\texttt{experiments/e37\_coverage\_transfer.py}).
+
+Double-precision root finding puts the smallest slack at $4.4\times10^{-3}$, $8.0\times10^{-4}$ and $1.6\times10^{-4}$. In coverage terms: as $x \to 0$ the boundary-layer laws $1 + x^{1/2}\{b_u(q) - E_u\}$, whose noisy coverage tends to exactly $q$, have latent coverage tending to $e^{-ub_u(q)}$, whose smallest values are $0.79532$, $0.89918$ and $0.94984$ at $q = 0.8$, $0.9$ and $0.95$, attained at $u = 0.140$, $0.0508$ and $0.0210$ (double precision). Calibrating at the noisy level $q$ thus costs at most a few thousandths of latent coverage in these examples, and the certified slack removes the loss. These last values are numerical.
+
+The certificates for the noise classes in \S~\ref{sec:s-general} and for Lemma~\ref{lem:bimodal} follow the same conventions: floating point only proposes points, and every deciding inequality is evaluated on balls with outward rounding.
+
+\subsection*{Numerical upper bounds of the radius in double precision}
 
 By the symmetry $W \mapsto -W$ of the kernel and of $|W|$ it suffices to treat $\beta \ge 0$. Write a member of $\mathcal F$ with $\beta \ge 0$ as $W = b - Y$, where $Y$ has density proportional to $e^{-\beta y}$ on $[0,\ell]$. The ends of the family are included: $\ell = 0$ or $\beta = \infty$ gives a point mass and $\ell = \infty$ an exponential tail. For slopes $\beta' > \beta$ the likelihood ratio $e^{-(\beta'-\beta)y}$ is decreasing, so $Y_{\beta'}$ lies below $Y_\beta$ in likelihood-ratio order, and for lengths $\ell < \ell'$ truncation gives $F_\ell \ge F_{\ell'}$. Thus $W$ is stochastically increasing in $\beta$ and $b$ and decreasing in $\ell$. On a box of parameters let $W_{\rm lo}$ and $W_{\rm hi}$ be the stochastically smallest and largest corners. Since $\pr(W + e \le \pm 1)$ and $\pr(W \le y)$ are expectations of decreasing functions of $W$, every law in the box satisfies
 \[
@@ -281,24 +387,23 @@ For all $x, h \ge 0$, $R_{p,q}(x + h) \le R_{p,q}(x) + c_q h^{1/2}$.
 If $W$ is feasible at noise level $x + h$, then $W + h^{1/2}Z'$, with $Z' \sim N(0,1)$ independent of $(W, Z)$, is log-concave and feasible at level $x$. So $s = Q_q(|W + h^{1/2}Z'|) \le R_{p,q}(x)$, and Theorem~\ref{M-thm:small} at scale $s$ gives $Q_q(|W|) \le s + c_q h^{1/2}$.
 \end{proof}
 
-We computed numerical upper bounds of $R_{p,0.9}$ for $p = 0.9$, $0.9036$ and $0.9068$ on $0.002 \le x \le 0.366$ with step $5\times10^{-4}$, using Proposition~\ref{prop:continuity} between grid points. Here $0.9068$ and $0.9036$ are the order-statistic levels $p_k$ of $K = 110$, $k = 105$ at $\delta = 0.05$ and $\delta = 0.04$; the latter is used in \S~\ref{sec:s-hetero}. The closed forms agree with $30$-digit quadrature to within $10^{-11}$ at random points with $10^{-4} \le x \le 1.5$, $10^{-4} \le \ell \le 20$ or $\ell = \infty$ and $10^{-3} \le \beta\ell \le 10^{3}$, which cover the ranges in which boxes are evaluated after outward rounding, including the mixture kernels of Table~\ref{M-tab:synth}, whose largest ratio $D_i/T^2$ is about $1.25$ (test suite; the largest error found was $1.1\times10^{-12}$ for $x \le 0.37$ and $2.5\times10^{-11}$ above), and boxes are cleared with a margin of $10^{-9}$; the bounds therefore rest on double-precision evaluation of the closed forms and are not interval arithmetic. For $0.05 \le x \le 0.3$ the bound exceeds a feasible value by at most a relative $3\times10^{-4}$ for $p = 0.9$ and $10^{-3}$ for $p = 0.9068$. The branch and bound fails only just before the feasibility edges, near $x = 0.370$ for $p = 0.9$, on $0.3585 \le x \le 0.3615$ for $p = 0.9036$ and on $0.352 \le x \le 0.3545$ for $p = 0.9068$; there Proposition~\ref{prop:continuity} from the last grid point gives $R_{0.9,0.9}(x) \le 0.132$. Below $x = 0.01$ the lookup also uses Theorem~\ref{M-thm:small} and its $p \ge q$ form, which are within $0.3\%$ of a feasible value there (Fig.~\ref{fig:s-certified}). At $q = 0.9$ the numerical bounds fall below $1$ from $x = 0.013$ on, with the continuity margin $c_{0.9}(5\times10^{-4})^{1/2} \approx 4.3\times10^{-4}$ keeping them below $1$ between grid points, and reach $0.973$ at $x = 0.05$. A differential-evolution search over the three-parameter family, which evaluates the constraint by Gauss--Legendre quadrature, returned $1.027$ at $x = 0.001$, above the bound $1.0006$ of Theorem~\ref{M-thm:small}: the quadrature is inaccurate for steep slopes at small $x$. That search is therefore used only for $x \ge 0.006$, and the legacy table \texttt{results/r\_table.json} built with it is not used in the paper.
+We computed numerical upper bounds of $R_{p,0.9}$ for $p = 0.9$, $0.9036$ and $0.9068$ on $0.002 \le x \le 0.366$ with step $5\times10^{-4}$, using Proposition~\ref{prop:continuity} between grid points. Here $0.9068$ and $0.9036$ are the order-statistic levels $p_k$ of $K = 110$, $k = 105$ at $\delta = 0.05$ and $\delta = 0.04$; the latter is used in \S~\ref{sec:s-hetero}.
+
+The closed forms agree with $30$-digit quadrature to within $10^{-11}$ at random points with $10^{-4} \le x \le 1.5$, $10^{-4} \le \ell \le 20$ or $\ell = \infty$ and $10^{-3} \le \beta\ell \le 10^{3}$, which cover the ranges in which boxes are evaluated after outward rounding, including the mixture kernels of Table~\ref{tab:synth}, whose largest ratio $D_i/T^2$ is about $1.25$ (test suite; the largest error found was $1.1\times10^{-12}$ for $x \le 0.37$ and $2.5\times10^{-11}$ above), and boxes are cleared with a margin of $10^{-9}$; the bounds therefore rest on double-precision evaluation of the closed forms and are not interval arithmetic.
+
+For $0.05 \le x \le 0.3$ the bound exceeds a feasible value by at most a relative $3\times10^{-4}$ for $p = 0.9$ and $10^{-3}$ for $p = 0.9068$. The branch and bound fails only just before the feasibility edges, near $x = 0.370$ for $p = 0.9$, on $0.3585 \le x \le 0.3615$ for $p = 0.9036$ and on $0.352 \le x \le 0.3545$ for $p = 0.9068$; there Proposition~\ref{prop:continuity} from the last grid point gives $R_{0.9,0.9}(x) \le 0.132$. Below $x = 0.01$ the lookup also uses Theorem~\ref{M-thm:small} and its $p \ge q$ form, which are within $0.3\%$ of a feasible value there (Fig.~\ref{fig:s-certified}). At $q = 0.9$ the numerical bounds fall below $1$ from $x = 0.013$ on, with the continuity margin $c_{0.9}(5\times10^{-4})^{1/2} \approx 4.3\times10^{-4}$ keeping them below $1$ between grid points, and reach $0.973$ at $x = 0.05$.
 
 \begin{figure}[t]
 \centering
+% Alt text: Line plot of numerical upper bounds of the sharp radius against the noise ratio; the bounds lie above one only for small noise ratios and fall well below the shape-free bound.
 \includegraphics[width=0.7\textwidth]{fig_certified.pdf}
-\caption{Numerical upper bound of the sharp radius $R_{p,0.9}(x)$ for $p = 0.9$ and for the order-statistic level $p = 0.9036$ ($\delta = 0.04$), with the small-noise bound of Theorem~\ref{M-thm:small} and the shape-free bound $1 + x^{1/2}z_{1-(p-q)/2}$, which follows from $|W| \le |V| + |e|$.\newline Alt text: Line plot of numerical upper bounds of the sharp radius against the noise ratio; the bounds lie above one only for small noise ratios and fall well below the shape-free bound.}
+\caption{Numerical upper bound of the sharp radius $R_{p,0.9}(x)$ for $p = 0.9$ and for the order-statistic level $p = 0.9036$ ($\delta = 0.04$), with the small-noise bound of Theorem~\ref{M-thm:small} and the shape-free bound $1 + x^{1/2}z_{1-(p-q)/2}$, which follows from $|W| \le |V| + |e|$.}
 \label{fig:s-certified}
 \end{figure}
 
-\subsection*{Ball-arithmetic certificates for the constants}\label{sec:s-ball}
+\subsection*{Exploratory searches}
 
-Every deciding inequality is evaluated in Arb ball arithmetic; floating point only proposes points, balls are converted to doubles with outward rounding, and sums of bounds are formed as balls.
-\begin{enumerate}
-\item $m_u(b)$ decreases in $b$, and in $u$ because $E_u$ is stochastically decreasing in its rate. Hence $b_u(p)$ is nonincreasing in $u$, and on $[u_0, u_1]$, $b_u(p) - u^{-1}\log(1/q) \le b_{u_0}(p) - u_1^{-1}\log(1/q)$. A ball with $m_u(b) < p$ proves $b_u(p) < b$.
-\item For $u \ge u_{\max}$ the value is at most $b_{u_{\max}}(p)$. For small $u$, let $b(u) = \{\log(1/p) + u^2/2 - \log(1 - u^3)\}/u$. Then $e^{-ub + u^2/2} = p(1 - u^3)$, and the Mills ratio gives $\Phi(-b) \le pu^3$ whenever $\phi\{\log(1/p)/u\} \le p\,u^2\log(1/p)$. This holds on $(0, u_{\min}]$ once it holds at $u_{\min} \le \log(1/p)/2^{1/2}$, because the left side divided by $u^2$ increases there. So $b_u(p) \le b(u)$, and for $p \ge q$ the resulting bound increases in $u$.
-\item By Lemma~\ref{M-lem:onesided}, $c_{p',q'} \le \gamma$ if and only if $1 - q' \ge \varphi_\gamma(1 - p')$, where $\varphi_\gamma(a) = \max[0, \sup_u 1 - \exp\{-u(b_u(1-a) - \gamma)\}]$. Hence $C_{p,q} \le \gamma$ if $\varphi_\gamma(a_L) + \varphi_\gamma(a_R) \le 1 - q$ whenever $a_L + a_R = 1 - p$. Since $\varphi_\gamma$ is nondecreasing, it suffices to check this at the ends of an adaptive partition of $a_L$, with $\varphi_\gamma$ bounded above by the same monotone branch and bound in $u$.
-\end{enumerate}
-The certificates give $c_{0.8} \in [0.0460730, 0.0460731]$, $c_{0.9} \in [0.0190618, 0.0190619]$, $c_{0.95} \in [0.0084075, 0.0084077]$ and $c_{0.99} \in [0.0013950, 0.0013958]$, $-0.0571845 \le c_{0.9036,0.9} \le C_{0.9036,0.9} \le -0.057$, $-0.1149813 \le c_{0.9068,0.9} \le C_{0.9068,0.9} \le -0.114$, and $C_{p,q} \le 0$ for $(q, p - q) = (0.8, 0.005)$, $(0.9, 0.001)$ and $(0.95, 0.0002)$. Lower bounds $c_{p,q} > 0$ at $p - q = 0.0043$, $0.00079$ and $0.00015$ come from single points $u$, evaluated in ball arithmetic, and $C_{p,q} \ge c_{p,q}$. Hence the smallest slack in Corollary~\ref{M-cor:slack} lies in $(4.3\times10^{-3}, 5.0\times10^{-3}]$, $(7.9\times10^{-4}, 1.0\times10^{-3}]$ and $(1.5\times10^{-4}, 2.0\times10^{-4}]$ at $q = 0.8$, $0.9$ and $0.95$. For the coverage form of Corollary~\ref{M-cor:slack}, the same certificates give $C_{0.8,0.795} \le 0$, $C_{0.9,0.8991} \le 0$ and $C_{0.95,0.9498} \le 0$, and enclosures give $c_{0.8,0.7954} \ge 7.0\times10^{-4}$, $c_{0.9,0.8992} \ge 4.2\times10^{-4}$ and $c_{0.95,0.9499} \ge 3.0\times10^{-3}$, so by the lower bound of the case $p \ge q$, $R_{p,q'}(x) > 1$ for small $x$ at these pairs (\texttt{experiments/e37\_coverage\_transfer.py}). Double-precision root finding puts the smallest slack at $4.4\times10^{-3}$, $8.0\times10^{-4}$ and $1.6\times10^{-4}$. In coverage terms: as $x \to 0$ the boundary-layer laws $1 + x^{1/2}\{b_u(q) - E_u\}$, whose noisy coverage tends to exactly $q$, have latent coverage tending to $e^{-ub_u(q)}$, whose smallest values are $0.79532$, $0.89918$ and $0.94984$ at $q = 0.8$, $0.9$ and $0.95$, attained at $u = 0.140$, $0.0508$ and $0.0210$ (double precision). Calibrating at the noisy level $q$ thus costs at most a few thousandths of latent coverage in these examples, and the certified slack removes the loss.
+Grid maximization over the extremal family, as in Fig.~\ref{fig:s-boundary}, gives lower bounds of $R_{q,q}$; grid values below $1$ do not show that shrinking is safe. This two-dimensional computation over slope and length, and an independent differential-evolution search over the three-parameter family, agree to $1.5\times10^{-13}$ at all $73$ tabulated values of $x \ge 0.006$ (numerical). The search is used only for $x \ge 0.006$, for the reason given in \S~\ref{sec:s-code}.
 
 \section{Heterogeneous and estimated noise variances}\label{sec:s-hetero}
 
@@ -315,21 +420,21 @@ Let $G \in \mathcal B$ and $k \ge Kp_k + 1$. If $D_i \ge D_{\min}$ for all $i$ a
 \end{corollary}
 
 \begin{proof}
-On the event of Proposition~\ref{M-prop:beta}, some $i$ has $\pr(|W + e_i| \le T) \ge p_k \ge p'$, and the bound of \S~\ref{M-sec:slack} at $x = D_i/T^2$ gives $Q_q(|W|) \le T + C_{p',q}D_i^{1/2} \le T + C_{p',q}D_{\min}^{1/2}$.
+On the event of Proposition~\ref{prop:beta}, some $i$ has $\pr(|W + e_i| \le T) \ge p_k \ge p'$, and the bound of \S~\ref{M-sec:slack} at $x = D_i/T^2$ gives $Q_q(|W|) \le T + C_{p',q}D_i^{1/2} \le T + C_{p',q}D_{\min}^{1/2}$.
 \end{proof}
 
-At $q = 0.9$, $K = 110$ and $\delta = 0.05$, where $p_k = 0.906806$, ball arithmetic gives $C_{0.9068,0.9} \le -0.114$, hence $s = T - 0.114 D_{\min}^{1/2}$, the shrunk threshold of Table~\ref{M-tab:synth}.
+At $q = 0.9$, $K = 110$ and $\delta = 0.05$, where $p_k = 0.906806$, ball arithmetic gives $C_{0.9068,0.9} \le -0.114$, hence $s = T - 0.114 D_{\min}^{1/2}$, the shrunk threshold of Table~\ref{tab:synth}.
 
 \subsection*{Estimated variances}
 
-Suppose the $D_i$ are unknown and estimates $\hat D_i$ are available that are independent of the scores, as for the sample means and variances of normal unit data. The order-statistic event of Proposition~\ref{M-prop:beta} involves the scores only. Let $\mathcal E_\eta$ be an event determined by the $\hat D_i$ with $\pr(\mathcal E_\eta) \ge 1 - \eta$.
+Suppose the $D_i$ are unknown and estimates $\hat D_i$ are available that are independent of the scores, as for the sample means and variances of normal unit data. The order-statistic event of Proposition~\ref{prop:beta} involves the scores only. Let $\mathcal E_\eta$ be an event determined by the $\hat D_i$ with $\pr(\mathcal E_\eta) \ge 1 - \eta$.
 
 \begin{lemma}\label{lem:dominate}
 Let $G \in \LC$. Suppose that on $\mathcal E_\eta$ a continuous kernel $u_t$, vanishing at $\pm\infty$, satisfies $u_t \ge \bar g_{D,t}$ pointwise for every $t > 0$. Then $s = T\,R_{p_k,q}[u_T]$, the radius \eqref{M-eq:R} with kernel $u_T$, covers a new latent residual with probability at least $q$, conditionally on the data, with probability at least $1 - \delta - \eta$. If $\mathcal D_\eta$ is a confidence set with $\pr(D \in \mathcal D_\eta) \ge 1 - \eta$, the same holds for $s = T\sup_{d \in \mathcal D_\eta} R^{\rm mix}_{p_k,q}(d/T^2)$. With a compressed kernel, $p_k$ is replaced by $p_k - \omega$ as in \S~\ref{M-sec:hetero}.
 \end{lemma}
 
 \begin{proof}
-On both events, $\int u_T\,dG \ge \int \bar g_{D,T}\,dG \ge p_k$, and Proposition~\ref{M-prop:reduction} applies to $u_T$. The union bound gives $1 - \delta - \eta$, with no independence between the two events needed.
+On both events, $\int u_T\,dG \ge \int \bar g_{D,T}\,dG \ge p_k$, and Proposition~\ref{prop:reduction} applies to $u_T$. The union bound gives $1 - \delta - \eta$, with no independence between the two events needed.
 \end{proof}
 
 \begin{lemma}\label{lem:scale}
@@ -364,7 +469,7 @@ Let $\bar g$ be a kernel that is symmetric, continuous, strictly decreasing in $
 Let $\tau = (p - qm)/(1-q) \in (0, m)$. Since $m - \bar g(W) \ge 0$, Markov's inequality gives $\pr\{\bar g(W) < \tau\} \le \{m - p\}/(m - \tau) = 1 - q$, and $\bar g(W) < \tau$ exactly when $|W| > r$, so $Q_q(|W|) \le r$. Conversely, for small $\epsilon > 0$ put mass $q - \epsilon$ at $0$ and mass $1 - q + \epsilon$ at the point $w_\epsilon > 0$ with $\bar g(w_\epsilon) = \{p - (q - \epsilon)m\}/(1 - q + \epsilon)$. This law meets the constraint with equality, has $Q_q(|W|) = w_\epsilon$, and $w_\epsilon \to r$ as $\epsilon \to 0$.
 \end{proof}
 
-The average kernel of \S~\ref{M-sec:hetero} satisfies these conditions, so for a fixed rank the shape-free rule of Table~\ref{M-tab:synth} is the smallest radius that the single order-statistic constraint allows without a shape assumption. With $1$ in place of $\bar g(0)$ it contains the bound of \citet{guille2024}. It is not a bound on procedures that use several thresholds or tune the rank on independent data, as LatentCP \citep{zheng2026} can.
+The average kernel of \S~\ref{M-sec:hetero} satisfies these conditions, so for a fixed rank the shape-free rule of Table~\ref{tab:synth} is the smallest radius that the single order-statistic constraint allows without a shape assumption. With $1$ in place of $\bar g(0)$ it contains the bound of \citet{guille2024}. It is not a bound on procedures that use several thresholds or tune the rank on independent data, as LatentCP \citep{zheng2026} can.
 
 \section{A shifted new residual}\label{sec:s-shift}
 
@@ -378,19 +483,20 @@ A shift by $\Delta > 0$ moves the window $[-t, t]$ to $[-t - \Delta, t - \Delta]
 
 At $q = 0.9$ the guaranteed latent coverage of noisy coverage $0.9$ under symmetric unimodal noise is thus between $0.8881$ and $0.8892$ for $\rho = 0.01$, and between $0.798$ and $0.813$ for $\rho = 0.1$, in line with the stress test below. Measured relative to $t$ rather than to $\varsigma$, a shift has no nontrivial bound: point masses just inside the threshold satisfy every noisy constraint.
 
-\section{Simulation details and an application}\label{sec:s-sim}
+\section{Simulations and an application}\label{sec:s-sim}
 
-\subsection*{Table 1}
+The simulations are ordered by the claim they support: the width of the guaranteed rules when the noise is unknown, the need for the raised rank, the rules that use known variances, and robustness.
 
-Conditional coverage is computed from closed-form latent distribution functions. With $150$ data sets the binomial standard error of a reliability is $0.018$ at $0.95$ and at most $0.029$ at the lowest reliability observed, $0.847$; for instance $145/150 = 0.967$ has the $95\%$ binomial interval $[0.924, 0.989]$. The computed radius uses the order-statistic level $p_k = 0.9068$ of $\delta = 0.05$. The branch and bound returned a numerical upper bound of $R^{\rm mix}$ for every one of the $1050$ data sets, at relative tolerance $10^{-3}$ in $671$, $3\times10^{-3}$ in $363$ and $10^{-2}$ in $16$, so the shape-free fallback was never used. With the mean variance in a single Gaussian kernel, which is not a valid plug-in, the numerical radius at level $p_k$ is $2.9$--$3.2\%$ shorter than at level $p = q$ (\texttt{LDC\_cert\_pk} against \texttt{LDC\_PAC} in \texttt{results/hetldc\_synth\_summary.csv}), so most of the gain over a $p = q$ calibration comes from the order-statistic level. The shape-free rule was run at every fixed rank $106$--$110$ and all results are stored; rank $107$ is reported because it is best on average over the first four laws, which favours the comparison rule. The Fay--Herriot interval falls short of the target under the Laplace law by about $1.3$ standard errors, under the truncated exponential law, with reliability $0.947$, by $0.2$, and under the truncated Laplace law, with reliability $0.847$, by about $5.8$. The Fay--Herriot tolerance interval is our adaptation of the parametric bootstrap of \citet{chatterjee2008} to an intercept-only model: the bootstrap $(1-\delta)$-quantile of the multiplier each refit needs to cover $N(\hat\mu, \hat A)$ with probability $0.9$. The latent residuals are drawn directly, with no fitted centre, and the mean noise variance $0.577$ matches the ratio of design to model variance in the application below.
+\subsection*{Rules with the same information}
 
-\subsection*{Reliability of the analytic rules with $2000$ data sets}
-
-The noisy threshold, Corollary~\ref{cor:simple} and the Markov rule need no numerical optimization, so \texttt{experiments/e36\_analytic\_reliability.py} reran them on $2000$ fresh data sets for each of the seven laws of Table~\ref{M-tab:synth}. Every rule reached conditional coverage $0.9$ in all $2000$ data sets for every law, so each reliability has Clopper--Pearson $95\%$ interval $[0.998, 1]$, including the $t_3$ law, outside $\mathcal B$. Mean conditional coverage was $0.969$--$0.992$ for the noisy threshold, $0.968$--$0.991$ for Corollary~\ref{cor:simple} and $0.984$--$0.998$ for the Markov rule, and the $5\%$ quantile of conditional coverage was at least $0.947$, $0.945$ and $0.968$. The guarantees are therefore conservative in these designs: the latent laws are far from the extremal laws of \S~\ref{M-sec:mean}.
+This experiment supports the comparison of \S~\ref{M-sec:numerical}: how much wider the thresholds of Theorem~\ref{M-prop:unknown} are for each noise class when no rule is told the noise law or the variances.
+Table~\ref{M-tab:sameinfo} compares noisy conformal thresholds whose ranks are given by Theorem~\ref{M-prop:unknown} for different noise classes; none uses the noise law or the variances (\texttt{experiments/e43\_same\_information.py}). The latent laws are the normal, Laplace, centred gamma and truncated exponential laws of Table~\ref{tab:synth}, the noise variances are as there, and the noise is Gaussian, uniform, Laplace, $t_3$ or centred exponential, scaled to variance $D_i$; latent coverage given the data is exact, with $2000$ data sets per setting. A rule covers a setting when the noise is in its class; reliability and extra width are taken over the settings a rule covers, and for the usual rank, which covers none, over all $20$ settings.
 
 \subsection*{A stress test at the extremal law}
 
-The laws of Table~\ref{M-tab:synth} are far from extremal, so \texttt{experiments/e38\_stress.py} uses the boundary-layer law $W = \theta - x^{1/2}E_u$ with $u = 0.0508$, the minimizer of the limiting latent coverage $e^{-ub_u(q)}$ at $q = 0.9$ (not the radius maximizer $u^*$ of \S~\ref{sec:s-shape}), $x = 10^{-4}$, and $\theta$ solving the population noisy coverage $\pr(|W + e| \le 1) = 0.9$, with equal variances or with the lognormal variances of Table~\ref{M-tab:synth} scaled to mean $x$. The population latent coverage is then $0.89918$ with equal variances, within $10^{-4}$ of the certified bound $0.8991$ of Corollary~\ref{M-cor:slack}, so the worst case at this noise level lies in $[0.8991, 0.89918]$, and $0.89959$ with unequal ones. Conditional latent coverage is exact; $\delta = 0.05$; $20000$ data sets for $K = 110$ and $1000$ and $10000$ for $K = 10^4$.
+This experiment supports Proposition~\ref{M-prop:fail}: near an extremal law the usual rank loses its latent guarantee as $K$ grows, and the rank of Theorem~\ref{M-prop:unknown} keeps it.
+
+The laws of Table~\ref{tab:synth} are far from extremal, so \texttt{experiments/e38\_stress.py} uses the boundary-layer law $W = \theta - x^{1/2}E_u$ with $u = 0.0508$, the minimizer of the limiting latent coverage $e^{-ub_u(q)}$ at $q = 0.9$ (not the radius maximizer $u^*$ of \S~\ref{sec:s-shape}), $x = 10^{-4}$, and $\theta$ solving the population noisy coverage $\pr(|W + e| \le 1) = 0.9$, with equal variances or with the lognormal variances of Table~\ref{tab:synth} scaled to mean $x$. The population latent coverage is then $0.89918$ with equal variances, within $10^{-4}$ of the certified bound $0.8991$ of Corollary~\ref{M-cor:slack}, so the worst case at this noise level lies in $[0.8991, 0.89918]$, and $0.89959$ with unequal ones. Conditional latent coverage is exact; $\delta = 0.05$; $20000$ data sets for $K = 110$ and $1000$ and $10000$ for $K = 10^4$.
 
 \begin{table}[h]
 \centering
@@ -416,16 +522,58 @@ The usual rank keeps its noisy guarantee, with noisy reliability $0.952$ and $0.
 
 \begin{figure}[t]
 \centering
+% Alt text: Line plot of latent reliability against calibration sample size on a logarithmic axis; the certified rank stays near or above 0.95 throughout, the usual rank declines from about 0.95 to 0.15 at one million, and the marginal rank declines from about 0.55 to near zero.
 \includegraphics[width=0.8\textwidth]{fig_reliability.pdf}
-\caption{Exact latent reliability at the boundary-layer law of the stress test, equal variances with standard deviation $1\%$ of the threshold, for the certified rank of Theorem~\ref{M-prop:unknown} (solid), the usual high-probability rank (dashes) and the marginal rank (dots), $\delta = 0.05$; grey, the target $0.95$.\newline Alt text: Line plot of latent reliability against calibration sample size on a logarithmic axis; the certified rank stays near or above 0.95 throughout, the usual rank declines from about 0.95 to 0.15 at one million, and the marginal rank declines from about 0.55 to near zero.}
+\caption{Exact latent reliability at the boundary-layer law of the stress test, equal variances with standard deviation $1\%$ of the threshold, for the certified rank of Theorem~\ref{M-prop:unknown} (solid), the usual high-probability rank (dashes) and the marginal rank (dots), $\delta = 0.05$; grey, the target $0.95$.}
 \label{fig:s-reliability}
 \end{figure}
 
-So the slack is not an artefact of the proofs: without it the latent guarantee fails at this law once the calibration sample is large enough for the order statistic to resolve a coverage difference of $10^{-3}$. The effect needs small noise and a latent law with a sharp edge just beyond the threshold, here $2\%$ beyond it; for the laws of Table~\ref{M-tab:synth} the guarantees are conservative.
+So the slack is not an artefact of the proofs: without it the latent guarantee fails at this law once the calibration sample is large enough for the order statistic to resolve a coverage difference of $10^{-3}$. The effect needs small noise and a latent law with a sharp edge just beyond the threshold, here $2\%$ beyond it; for the laws of Table~\ref{tab:synth} the guarantees are conservative.
+
+\subsection*{Rules with known variances}
+
+This experiment compares the rules of \S~\ref{M-sec:hetero}, which use the known noise variances, with the noisy threshold, a Fay--Herriot interval and a shape-free rule. The target is $\pr_{\mathcal D}\{\pr(W_{\rm new} \in C \mid \mathcal D) \ge 0.9\} \ge 0.95$, with $K = 110$, $\var(W) = 1$ and Gaussian noise with heterogeneous variances $D_i = 0.577\,L_i/E(L_i)$, $L_i$ lognormal with log-scale $0.7$. Latent residuals, all with mean zero, are drawn directly; conditional coverage given each data set is exact, and reliability is estimated from $150$ data sets per law. Besides four standard log-concave laws we use a truncated exponential law in $\mathcal F$, a bimodal law in $\mathcal B$ but not in $\LC$, and a $t_3$ law outside $\mathcal B$. We compare the noisy threshold at rank $105$, the shrunk threshold and the computed radius of \S~\ref{M-sec:hetero}, a Fay--Herriot tolerance interval adapted from \citet{chatterjee2008}, and the Markov rule, the radius $r$ with $\bar g(r) = \{p_k - q\bar g(0)\}/(1 - q)$, the smallest the single constraint allows without a shape assumption (\S~\ref{sec:s-shapefree}), at its best rank, $107$.
+
+\begin{table}[h]
+\centering
+\caption{Rules with known variances: reliability, times $100$, and mean width (in parentheses); target $95$}
+\label{tab:synth}
+\small
+\begin{tabular}{lccccc}
+\toprule
+latent law & Markov & Fay--Herriot & noisy threshold & shrunk & computed \\
+\midrule
+normal & 100 (5.92) & 96 (3.93) & 100 (4.96) & 100 (4.90) & 98 (4.45) \\
+Laplace & 100 (6.29) & 93 (3.96) & 100 (5.15) & 100 (5.09) & 99 (4.66) \\
+centred gamma & 100 (6.16) & 100 (3.95) & 100 (4.97) & 100 (4.90) & 100 (4.45) \\
+truncated Laplace & 100 (5.89) & 85 (3.89) & 100 (4.93) & 100 (4.87) & 97 (4.42) \\
+truncated exponential & 100 (6.17) & 95 (3.93) & 100 (5.06) & 100 (4.99) & 100 (4.55) \\
+bimodal ($\mathcal B$ only) & 100 (5.77) & 100 (4.01) & 100 (4.87) & 100 (4.81) & 99 (4.35) \\
+$t_3$ (outside $\mathcal B$) & 100 (5.70) & 97 (3.80) & 100 (4.66) & 100 (4.60) & 98 (4.09) \\
+\bottomrule
+\end{tabular}
+
+\medskip
+\parbox{0.95\textwidth}{\footnotesize Noisy threshold, $T$ at rank $105$; shrunk, $\max\{0, T - 0.114D_{\min}^{1/2}\}$ with $D_{\min} = \min_i D_i$; computed, $T R^{\rm mix}$; centred gamma with shape $2$; truncated exponential, density proportional to $e^{4w}$ on $[0,1]$, standardized; bimodal, the mixture of Lemma~\ref{lem:bimodal}; widths are full widths. The Markov rule is guaranteed for every law; under the bimodal law the noisy and shrunk thresholds are guaranteed and the computed radius is exploratory; under $t_3$ the noisy threshold is guaranteed by Anderson's theorem. Standard errors are at most $2.9$ for reliabilities and $0.08$ for widths.}
+\end{table}
+
+The rules with a guarantee reached the target for every law in their class, and the computed radius did so also under the bimodal and $t_3$ laws, for which it has none. The computed radius was $9.5$--$12\%$ shorter than the noisy threshold and $24$--$28\%$ shorter than the Markov rule. The Fay--Herriot interval was $7$--$15\%$ shorter than the computed radius but missed the target under the truncated Laplace law by $5.8$ standard errors.
+
+Conditional coverage is computed from closed-form latent distribution functions. With $150$ data sets the binomial standard error of a reliability is $0.018$ at $0.95$ and at most $0.029$ at the lowest reliability observed, $0.847$; for instance $145/150 = 0.967$ has the $95\%$ binomial interval $[0.924, 0.989]$. The computed radius uses the order-statistic level $p_k = 0.9068$ of $\delta = 0.05$. The branch and bound returned a numerical upper bound of $R^{\rm mix}$ for every one of the $1050$ data sets, at relative tolerance $10^{-3}$ in $671$, $3\times10^{-3}$ in $363$ and $10^{-2}$ in $16$, so the shape-free fallback was never used. With the mean variance in a single Gaussian kernel, which is not a valid plug-in, the numerical radius at level $p_k$ is $2.9$--$3.2\%$ shorter than at level $p = q$ (\texttt{LDC\_cert\_pk} against \texttt{LDC\_PAC} in \texttt{results/hetldc\_synth\_summary.csv}), so most of the gain over a $p = q$ calibration comes from the order-statistic level.
+
+The shape-free rule was run at every fixed rank $106$--$110$ and all results are stored; rank $107$ is reported because it is best on average over the first four laws, which favours the comparison rule.
+
+The Fay--Herriot interval falls short of the target under the Laplace law by about $1.3$ standard errors, under the truncated exponential law, with reliability $0.947$, by $0.2$, and under the truncated Laplace law, with reliability $0.847$, by about $5.8$. The Fay--Herriot tolerance interval is our adaptation of the parametric bootstrap of \citet{chatterjee2008} to an intercept-only model: the bootstrap $(1-\delta)$-quantile of the multiplier each refit needs to cover $N(\hat\mu, \hat A)$ with probability $0.9$. The latent residuals are drawn directly, with no fitted centre, and the mean noise variance $0.577$ matches the ratio of design to model variance in the application below.
+
+\subsection*{Reliability of the analytic rules with $2000$ data sets}
+
+This experiment checks how conservative the guarantees are for laws far from the extremal ones.
+The noisy threshold, Corollary~\ref{cor:simple} and the Markov rule need no numerical optimization, so \texttt{experiments/e36\_analytic\_reliability.py} reran them on $2000$ fresh data sets for each of the seven laws of Table~\ref{tab:synth}. Every rule reached conditional coverage $0.9$ in all $2000$ data sets for every law, so each reliability has Clopper--Pearson $95\%$ interval $[0.998, 1]$, including the $t_3$ law, outside $\mathcal B$. Mean conditional coverage was $0.969$--$0.992$ for the noisy threshold, $0.968$--$0.991$ for Corollary~\ref{cor:simple} and $0.984$--$0.998$ for the Markov rule, and the $5\%$ quantile of conditional coverage was at least $0.947$, $0.945$ and $0.968$. The guarantees are therefore conservative in these designs: the latent laws are far from the extremal laws of \S~\ref{M-sec:mean}.
 
 \subsection*{Sensitivity to a shared latent law}
 
-Theorem~\ref{M-prop:unknown} assumes that the calibration residuals and the new one share a law $G$, independent of the noise variances. \texttt{experiments/e39\_sensitivity.py} uses the design of Table~\ref{M-tab:synth} with $2000$ data sets for the normal, centred gamma and truncated exponential laws and two kinds of departure: residual standard deviation proportional to $D_i^{1/2}$ or $D_i^{-1/2}$, standardized to variance one, with the new area drawing its variance from the same population; and a new area whose residual is shifted by $\pm0.2$ or $\pm0.5$ latent standard deviations.
+This experiment supports the Discussion of the main paper: the guarantees need one latent law shared by the calibration units and the new one.
+Theorem~\ref{M-prop:unknown} assumes that the calibration residuals and the new one share a law $G$, independent of the noise variances. \texttt{experiments/e39\_sensitivity.py} uses the design of Table~\ref{tab:synth} with $2000$ data sets for the normal, centred gamma and truncated exponential laws and two kinds of departure: residual standard deviation proportional to $D_i^{1/2}$ or $D_i^{-1/2}$, standardized to variance one, with the new area drawing its variance from the same population; and a new area whose residual is shifted by $\pm0.2$ or $\pm0.5$ latent standard deviations.
 \begin{enumerate}
 \item Averaged over the new area's variance, the dispersion departures left the reliability of the noisy threshold and of Corollary~\ref{cor:simple} at $1$, with mean coverage $0.967$--$0.976$, against $0.968$--$0.984$ without departure. Conditionally on the new area's variance this fails: at the $10\%$ quantile of the variances, when dispersion falls with the variance, and at the $90\%$ quantile, when it rises, mean coverage was $0.918$--$0.942$ and reliability as low as $0.75$. Neither case is covered by Theorem~\ref{M-prop:unknown}, which assumes one law independent of the variances: averaged over new areas the reliability was kept in these designs, but not given a new area's variance.
 \item Shifts of $\pm0.2$ changed mean coverage by at most $0.010$, with reliability $1$; shifts of $\pm0.5$ lowered it by up to $0.027$, to $0.941$ under the truncated exponential law, with reliability at least $0.977$ and $5\%$ quantile of conditional coverage $0.908$.
@@ -435,35 +583,13 @@ The robustness in the first two items comes from the distance of these laws from
 
 \subsection*{Oracle-matched widths}
 
+This experiment separates the width needed for a guarantee from the shape of the interval.
 In a larger experiment with seven latent shapes, common and heterogeneous noise and $2000$ data sets per setting, each rule's width was rescaled by a single factor, chosen with knowledge of the latent law, to reach reliability $0.95$ exactly. At matched reliability, marginal noisy conformal calibration was shortest in $12$ of the $14$ settings and the Fay--Herriot tolerance interval in the other $2$; relative to noisy conformal calibration the Fay--Herriot tolerance interval was $3.1\%$ shorter to $12.1\%$ longer and the log-concave rule $4.5$--$11.5\%$ longer (\texttt{results/conditional\_synth\_exact\_matched.csv}). The log-concave rule with its guarantee was a median $15\%$ (range $9$--$33\%$) wider than its own oracle-matched width, and the Fay--Herriot tolerance interval a median $6\%$ (range $-3$ to $16\%$). So the advantage of the log-concave rule over noisy conformal calibration lies in obtaining a latent guarantee cheaply, not in a better interval shape.
-
-\subsection*{Rules with the same information}
-
-Table~\ref{tab:sameinfo} compares noisy conformal thresholds whose ranks are given by Theorem~\ref{M-prop:unknown} for different noise classes; none uses the noise law or the variances (\texttt{experiments/e43\_same\_information.py}). The latent laws are the normal, Laplace, centred gamma and truncated exponential laws of Table~\ref{M-tab:synth}, the noise variances are as there, and the noise is Gaussian, uniform, Laplace, $t_3$ or centred exponential, scaled to variance $D_i$; latent coverage given the data is exact, with $2000$ data sets per setting.
-
-\begin{table}[h]
-\centering
-\caption{Rules with the same information: rank $k$, smallest reliability over the settings a rule covers, and range of the extra width relative to the usual rank, over the same settings}
-\label{tab:sameinfo}
-\small
-\begin{tabular}{lcccccc}
- & \multicolumn{3}{c}{$K = 110$} & \multicolumn{3}{c}{$K = 1000$} \\
-rule (noisy level) & $k$ & reliability & extra width ($\%$) & $k$ & reliability & extra width ($\%$) \\
-usual ($0.9$) & 105 & -- & 0 & 916 & -- & 0 \\
-Gaussian ($0.901$) & 105 & 0.999 & 0 & 917 & 1.000 & 0.3--0.4 \\
-symmetric unimodal ($0.90179$) & 105 & 0.998 & 0 & 918 & 1.000 & 0.6--1.0 \\
-mean-zero log-concave ($0.906$) & 105 & 0.999 & 0 & 922 & 1.000 & 2.0--2.9 \\
-shape-free, median zero ($0.95$) & 109 & 1.000 & 25--49 & 962 & 1.000 & 20--33 \\
-shape-free, log-concave ($1 - 0.1/e$) & 110 & 1.000 & 42--94 & 974 & 1.000 & 28--54 \\
-\end{tabular}
-
-\medskip
-\parbox{0.95\textwidth}{\footnotesize A rule covers a setting when the noise is in its class: the first three shape-constrained rules cover Gaussian noise, symmetric unimodal noise (Gaussian, uniform, Laplace, $t_3$) and mean-zero log-concave noise (Gaussian, uniform, Laplace, centred exponential), respectively, and need a bi-log-concave latent law. The usual rank covers no setting; its row is over all $20$ settings, where its reliability was at least $0.998$, as the laws are far from the extremal ones (Theorem~\ref{M-prop:unknown}).}
-\end{table}
 
 \subsection*{Comparison with LatentCP and deconvolution}
 
-\texttt{experiments/e34\_competitors.py} runs the following rules on the $600$ data sets of the first four laws of Table~\ref{M-tab:synth}; widths are relative to the computed radius. For the other three laws only the two analytic rules were run.
+This experiment compares the rules with known variances with the methods of \citet{zheng2026} and \citet{cohen2025} discussed in \S~\ref{M-sec:intro}.
+\texttt{experiments/e34\_competitors.py} runs the following rules on the $600$ data sets of the first four laws of Table~\ref{tab:synth}; widths are relative to the computed radius. For the other three laws only the two analytic rules were run.
 \begin{enumerate}
 \item LatentCP \citep{zheng2026}, single level with $\gamma = \alpha/2$, has a marginal guarantee. Its latent set depends on the new unit's noise variance, which an unsampled area does not have; we draw it from the distribution that generated the $D_i$, $400$ draws per data set, and average coverage and width over the draws. It was $16$--$18\%$ longer, with mean coverage $0.976$--$0.990$ and reliability $1.0$. The tuned single-level and two-level versions, tuned on half the data, were $15$--$25\%$ longer. A PAC version with a binomial rank, our adaptation, was $39$--$58\%$ longer.
 \item The deconvolution threshold of \citet{cohen2025}, with the mixture kernel in place of their homoscedastic kernel, collapses at $K = 110$ with their bin width $0.01$: most bins are empty and the masked fit gives mean coverage $0.32$--$0.44$. With bin width $0.2$ and the empty bins fitted as zeros it had mean coverage $0.88$--$0.90$, reliability $0.45$--$0.67$ and width $22$--$30\%$ shorter; it has no latent guarantee.
@@ -473,11 +599,58 @@ The tuning grids of LatentCP and the scan step $0.01$ of the deconvolution thres
 
 \subsection*{School districts}
 
+This application uses real survey data, with estimated design variances that no guarantee covers.
 In the finite population \texttt{apipop} \citep{lumley2004}, $110$ of $325$ school districts are used for training and $110$ for calibration, with $2$ or $3$ schools sampled per district. Coverage is the share of the remaining $105$ districts that are covered. Design variances are estimated with $1$--$2$ degrees of freedom and plugged in as known by every rule, a case that no guarantee covers. Over four conditions of $120$ replications, the reliability of the heterogeneous rule was $0.942$--$0.992$, of the mean-variance rule $0.983$--$1.000$ and of the Fay--Herriot interval $0.908$--$0.992$, below target in two conditions. The heterogeneous rule at level $p_k$ was $0.8$--$5.2\%$ shorter than the mean-variance rule with the $p = q$ table, mostly because of the level, and $10$--$16\%$ longer than the Fay--Herriot interval.
 
 \section{Reproducibility}\label{sec:s-code}
 
-All computations are in the public repository \texttt{https://github.com/kunhailP/latent-coverage-noisy-thresholds}; the submitted version is the tag \texttt{biometrika-submission}. The core routines are in \texttt{src/uai}: closed forms and the transition coefficient in \texttt{extremal.py}, the box certificates in \texttt{certify.py}, ball arithmetic in \texttt{interval.py}, and the procedures in \texttt{procedures.py} and \texttt{estimated.py}. The test suite, run by \texttt{make test}, checks the constants, the counterexamples and the centring bounds, and the \texttt{Makefile} lists the command that produces each group of results. The experiments are numbered scripts in \texttt{experiments}; \texttt{e27} produces the ball-arithmetic certificates, \texttt{e24} and \texttt{e25} the certified tables, \texttt{e20} Table~\ref{M-tab:synth}, \texttt{e29} and \texttt{e30} the estimated-variance results, \texttt{e31} the shape-free rule, \texttt{e32} the centring and transition values, \texttt{e34} the comparison with LatentCP and deconvolution, \texttt{e35} and \texttt{fig\_mean\_location.py} Fig.~\ref{fig:s-mean}, \texttt{fig\_transition.py} Fig.~\ref{fig:s-transition}, \texttt{e37} the coverage form of Corollary~\ref{M-cor:slack}, \texttt{e38} the stress test, \texttt{e39} the sensitivity analysis and \texttt{e40} the exact reliability of Proposition~\ref{M-prop:fail} and Fig.~\ref{fig:s-reliability}; \texttt{uai.interval.bimodal\_blc\_certificate} checks Lemma~\ref{lem:bimodal}. The analytic rules of Theorem~\ref{M-prop:unknown} and Corollary~\ref{cor:simple} are \texttt{noisy\_threshold\_halfwidth} and \texttt{simple\_shrink\_halfwidth} in \texttt{procedures.py}; \texttt{hetldc\_certified} gives the computed radius, while \texttt{hetldc\_halfwidth} returns a grid value, a lower bound of $R^{\rm mix}$, and is not a guaranteed radius.
+All computations are in the public repository \url{https://github.com/kunhailP/latent-coverage-noisy-thresholds}; the submitted version is the tag \texttt{biometrika-submission}. The core routines are in \texttt{src/uai}: closed forms and the transition coefficient in \texttt{extremal.py}, the box bounds in \texttt{certify.py}, ball arithmetic in \texttt{interval.py}, the noise-class constants and certificates in \texttt{noise\_classes.py}, and the procedures in \texttt{procedures.py} and \texttt{estimated.py}. The test suite, run by \texttt{make test}, checks the constants, the counterexamples, the centring bounds, the convexity of $\Psi$ for symmetric unimodal noise and the closed forms of Proposition~\ref{M-prop:latentshape}, and the \texttt{Makefile} lists the command that produces each group of results. Table~\ref{tab:s-code} maps results to scripts in \texttt{experiments} and to output files in \texttt{results}.
+
+\begin{table}[h]
+\centering
+\caption{Results, scripts and output files}
+\label{tab:s-code}
+\footnotesize
+\begin{tabular}{p{0.40\textwidth}p{0.25\textwidth}p{0.29\textwidth}}
+\toprule
+result & script & output \\
+\midrule
+Theorem~\ref{M-thm:classes}, noise classes & \texttt{e41\_noise\_classes.py} & \texttt{noise\_classes.json} \\
+Proposition~\ref{M-prop:latentshape}, unimodal latent laws & \texttt{e42\_unimodal\_boundary.py} & printed \\
+Table~\ref{M-tab:sameinfo}, rules with the same information & \texttt{e43\_same\_information.py} & \texttt{same\_information.csv} \\
+Lemma~\ref{lem:onesided}, Corollary~\ref{M-cor:slack}: $c_{p,q}$, $C_{p,q}$, slack & \texttt{e27\_interval\_constants.py} & \texttt{interval\_constants.json} \\
+Coverage form of Corollary~\ref{M-cor:slack} & \texttt{e37\_coverage\_transfer.py} & \texttt{coverage\_transfer.json} \\
+Numerical upper bounds of the radius & \texttt{e24\_certified\_table.py}, \texttt{e25\_certified\_ldc.py} & \texttt{certified\_R.csv}, \texttt{certified\_ldc\_summary.csv} \\
+Centring and transition values, Fig.~\ref{fig:s-transition} & \texttt{e32\_centering.py}, \texttt{fig\_transition.py} & \texttt{centering.json} \\
+Location of the mean, Fig.~\ref{fig:s-mean} & \texttt{e35\_mean\_location.py}, \texttt{fig\_mean\_location.py} & \texttt{mean\_location.csv} \\
+Table~\ref{tab:synth}, rules with known variances & \texttt{e20\_hetldc\_synth.py}, \texttt{e31\_shape\_free.py} & \texttt{hetldc\_synth\_summary.csv}, \texttt{shape\_free\_summary.csv} \\
+Analytic rules, $2000$ data sets & \texttt{e36\_analytic\_reliability.py} & \texttt{analytic\_reliability\_summary.csv} \\
+Stress test, Table~\ref{tab:s-stress} & \texttt{e38\_stress.py} & \texttt{stress\_summary.csv} \\
+Proposition~\ref{M-prop:fail}, Fig.~\ref{fig:s-reliability} & \texttt{e40\_exact\_reliability.py} & \texttt{exact\_reliability.csv} \\
+Sensitivity to a shared latent law & \texttt{e39\_sensitivity.py} & \texttt{sensitivity\_summary.csv}, \texttt{sensitivity\_stress.csv} \\
+Oracle-matched widths & \texttt{e15\_e12\_exact.py} & \texttt{conditional\_synth\_exact\_matched.csv} \\
+LatentCP and deconvolution & \texttt{e34\_competitors.py} & \texttt{competitors\_summary.csv} \\
+Estimated variances & \texttt{e29\_estimated\_scale.py}, \texttt{e30\_areawise\_variance.py} & \texttt{estimated\_scale\_summary.csv}, \texttt{areawise\_variance\_summary.csv} \\
+School districts & \texttt{e21\_hetldc\_apipop.py} & \texttt{hetldc\_apipop\_summary.csv} \\
+Shape-free rule & \texttt{e31\_shape\_free.py} & \texttt{shape\_free\_summary.csv} \\
+Lemma~\ref{lem:bimodal}, bimodal law & \texttt{uai.interval.bimodal\_blc\_certificate} & test suite \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The analytic rules of Theorem~\ref{M-prop:unknown} and Corollary~\ref{cor:simple} are \texttt{noisy\_threshold\_halfwidth} and \texttt{simple\_shrink\_halfwidth} in \texttt{procedures.py}, and \texttt{certified\_rank} returns the rank for Gaussian noise; \texttt{hetldc\_certified} gives the computed radius, while \texttt{hetldc\_halfwidth} returns a grid value, a lower bound of $R^{\rm mix}$, and is not a guaranteed radius.
+
+\emph{Earlier computations.} A differential-evolution search over the three-parameter family, which evaluates the constraint by Gauss--Legendre quadrature, returned $1.027$ at $x = 0.001$, above the bound $1.0006$ of Theorem~\ref{M-thm:small}: the quadrature is inaccurate for steep slopes at small $x$. That search is therefore used only for $x \ge 0.006$, and the legacy table \texttt{results/r\_table.json} built with it is not used in the paper.
+
+\section{An open problem: the extremal log-concave noise law}\label{sec:s-open}
+
+This section is not used by any result. It records a partial argument towards the conjecture that the centred exponential law attains $\Psi_{\mathcal E}$ for mean-zero log-concave noise, which Theorem~\ref{M-thm:classes}(ii) leaves open; the certified bounds there do not depend on it.
+
+Since $h(y) = q e^{-\max(y, \ell)}$, with $X = -\epsilon$ and $c = -\ell$,
+\[
+\Psi_{\mathcal E}(q) = q \sup E\{e^{\min(X, c)}\},
+\]
+the supremum over mean-zero log-concave $X$, and the conjectured extremal law is $X = \sigma(1 - E_1)$, with $E_1$ standard exponential. Laws bounded above by $c$ are covered analytically. If $X \le s$ almost surely with $0 < s \le c$, the log-density of $X$ minus the affine log-density of $s(1 - E_1)$ is concave on $(-\infty, s]$, so the difference of densities changes sign at most twice; with equal masses and means, the difference of distribution functions changes sign once, from negative to positive, so $X$ is smaller than $s(1 - E_1)$ in the convex order. As $x \mapsto e^{\min(x, c)}$ is convex on $(-\infty, s]$, $E\{e^{\min(X, c)}\} \le E\{e^{\min(s(1 - E_1), c)}\}$. The open case is a law with mass above $c$, where the objective is not convex; the extremal law lies there, with $\sigma = 0.11777 > c = 0.10536$ at $q = 0.9$, and choosing the scale of the comparison law freely gives crossing patterns from which no sign follows.
 
 \bibliographystyle{biometrika}
 \bibliography{refs}

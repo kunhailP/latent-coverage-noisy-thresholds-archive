@@ -1,6 +1,6 @@
-# Latent coverage of noisy calibration thresholds
+# Latent coverage from noisy calibration
 
-Code, results and manuscript for the paper *Latent coverage of noisy calibration thresholds* by Kun Woo Park (in preparation for *Biometrika*). Every number in the paper and its Supplementary Material can be regenerated from this repository.
+Code, results and manuscript for the paper *Latent coverage from noisy calibration* by Kun Woo Park (in preparation for *Biometrika*). Every number in the paper and its Supplementary Material can be regenerated from this repository.
 
 ## The question
 
@@ -25,7 +25,7 @@ A prediction interval for a latent quantity, such as the true mean of an area th
 3. **Smallest valid rank** (Theorem 2). With independent noise whose laws (in the class) and scales differ between units and are unknown, the noisy threshold at rank `k` has latent reliability at least `P{Bin(K, p_E) <= k - 1}`, and ranks below the one given by `Psi_E(q)` fail for some log-concave law; the smallest rank is exact for symmetric unimodal noise and bracketed for Gaussian and log-concave noise. With the same information (no rule told the noise law or variances), over the settings each rule covers, the shape-constrained ranks cost 0.3-2.9% of width over the usual rank at `K = 1000`, the shape-free ranks 20-54% (`experiments/e43_same_information.py`). At `q = 0.9`, `delta = 0.05` a valid rank exists for `K >= 29` (Gaussian, symmetric unimodal), `K >= 31` (log-concave noise), `K >= 59` (no latent shape). `certified_rank` returns the Gaussian rank.
 4. **Without the raise** (Proposition 3). For some log-concave laws the latent reliability of the usual and the marginal rank tends to zero as `K` grows: 0.918 at `K = 10^4` and 0.151 at `K = 10^6` against 0.958 and 0.989 for the raised rank, while the latent coverage tends to 0.89918 (`e40_exact_reliability.py`).
 5. **Gaussian noise: the radius and the location of the mean** (Proposition 4, Lemma 1, Theorems 3-5, Corollary 1). The sharp radius `t R_{p,q}(D/t^2)` is a supremum over point masses and log-affine laws on a segment. Without a restriction on the mean the widening is at most `c_q D^{1/2}` (`c_0.9` in `[0.0190618, 0.0190619]`), sharp as `D -> 0`; with the mean at distance `d` from the boundary it is at most `D/(2d)`, an order attained by mean-zero asymmetric laws; the order `D^{1/2}` needs the mean within `O(D^{1/2})` of the boundary, with limiting coefficient `L_q(kappa)`. These are worst-case statements. A slack of `10^{-3}` at `q = 0.9` removes the widening at every noise level.
-6. **Known variances** (Proposition 5). The average-kernel radius `T R^mix` shortens the noisy threshold by about 10% in Table 2; the implementation returns a numerically computed upper bound (see Precision). A known lower bound `D_min` gives the analytic shrinkage `T - 0.114 D_min^{1/2}`.
+6. **Known variances** (Proposition 5). The average-kernel radius `T R^mix` shortens the noisy threshold by about 10% in the known-variance comparison of the Supplementary Material; the implementation returns a numerically computed upper bound (see Precision). A known lower bound `D_min` gives the analytic shrinkage `T - 0.114 D_min^{1/2}`.
 7. **A shifted new residual** (Supplement). For a log-concave latent law a shift of `rho` latent standard deviations costs at most `rho` in coverage, and `q(1 - e^{-rho})` for some laws, so the linear order cannot be improved; the shared latent law, not the noise, is the substantive assumption.
 
 `e33_edge.py` studies a regime that is not in the manuscript: near the feasibility edge `x_p`, `R_{p,q}(x) ~ M_q (x_p - x)^{1/2}`, with `M_q = sup Q_q(|W|)/E(W²)^{1/2}` over log-concave laws (`M_0.9 = 1.8532`, computed, not certified).
@@ -64,21 +64,21 @@ make test
 | Edge constants `M_q` (not in the manuscript) | `make edge` | `results/edge.json` |
 | Radius correction by location of the mean (Supplement S2) | `make quick figures` | `results/mean_location.csv`, `paper/fig_mean_location.pdf` |
 | Certified `R_{p,q}`, boundary map (Supplement S2–S3) | `make certified` | `results/certified_R.csv`, `results/boundary_map.csv` |
-| Table 2: computed radius, shape-free rule | `make simulations` | `results/hetldc_synth_summary.csv`, `results/shape_free_summary.csv` |
-| Table 2: noisy and shrunk thresholds; comparison with LatentCP and deconvolution | `make comparison` | `results/competitors_summary.csv` |
+| Known-variance comparison (Supplementary table): computed radius, shape-free rule | `make simulations` | `results/hetldc_synth_summary.csv`, `results/shape_free_summary.csv` |
+| Known-variance comparison: noisy and shrunk thresholds; comparison with LatentCP and deconvolution | `make comparison` | `results/competitors_summary.csv` |
 | Reliability of the analytic rules with 2000 data sets per law (Supplement S6) | `make comparison` | `results/analytic_reliability_summary.csv` |
 | Stress test at the extremal law, K up to 10^4 (Supplement S6) | `make comparison` | `results/stress_summary.csv` |
 | Exact latent reliability without the slack, K up to 10^6 (Proposition 3, Supplement S6) | `make comparison` | `results/exact_reliability.csv`, `paper/fig_reliability.pdf` |
 | Sensitivity to a shared latent law (Supplement S6) | `make comparison` | `results/sensitivity_summary.csv`, `results/sensitivity_stress.csv` |
-| Table 2, last three laws only (truncated exponential, bimodal bi-log-concave, `t_3`) | `make table1-extra-laws` | merged into the files above |
+| Known-variance comparison, last three laws only (truncated exponential, bimodal bi-log-concave, `t_3`) | `make table1-extra-laws` | merged into the files above |
 | Estimated variances (Supplement S4) | `make estimated` | `results/estimated_scale_summary.csv`, `results/areawise_variance_summary.csv` |
 | School-district application | `make apipop` | `results/hetldc_apipop_summary.csv` |
 | Plug-in counterexamples, oracle-matched widths | `make supplement-extras` | `results/hetero_kernel.csv`, `results/conditional_synth_exact_*.csv` |
 | Unimodal latent laws (Proposition 2) | `python experiments/e42_unimodal_boundary.py` | printed |
-| Rules with the same information (Supplement S6) | `cd experiments && python e43_same_information.py` | `results/same_information.csv` |
+| Table 2: rules with the same information | `cd experiments && python e43_same_information.py` | `results/same_information.csv` |
 | Manuscript and supplement | `make paper` | `paper/main.pdf`, `paper/supplement.pdf` |
 
-`make certified`, `make simulations` and `make table1-extra-laws` take hours on a few cores (about 2.5 minutes of one core per data set of Table 2 for the branch and bound of the computed radius; the estimated-variance rerun of Supplement S4 needs about 3.6 minutes per data set), `make constants` about 15 minutes on 4 cores and `make edge` more than 25 minutes; the other targets take minutes.
+`make certified`, `make simulations` and `make table1-extra-laws` take hours on a few cores (about 2.5 minutes of one core per data set of the known-variance comparison for the branch and bound of the computed radius; the estimated-variance rerun of Supplement S4 needs about 3.6 minutes per data set), `make constants` about 15 minutes on 4 cores and `make edge` more than 25 minutes; the other targets take minutes.
 
 ## Precision
 
@@ -87,7 +87,7 @@ Three levels of support are distinguished throughout.
 | What | Status |
 |---|---|
 | Theorem 2 and the shrunk threshold (`noisy_threshold_halfwidth`, `simple_shrink_halfwidth`, `certified_rank`) | Proofs plus constants `c_q`, `C_{p,q}` and slack intervals certified in Arb ball arithmetic with outward rounding (`uai.interval`, `make constants`) |
-| Bi-log-concavity of the bimodal law of Table 2 (`bimodal_blc_certificate`) | Proof (Supplementary Lemma S1) plus a ball-arithmetic check on two compact intervals |
+| Bi-log-concavity of the bimodal law of the known-variance comparison (`bimodal_blc_certificate`) | Proof (Supplementary Lemma S1) plus a ball-arithmetic check on two compact intervals |
 | The computed radius `T R^mix` with the exact `R^mix` | A valid procedure for log-concave latent laws (Propositions 4 and 5) |
 | Values returned by `hetldc_certified` and `CertifiedShrinkTable` | Numerically computed upper bounds of `R^mix` and `R_{p,q}`: a branch and bound whose closed forms are evaluated in double precision, boxes cleared at a margin of `10^{-9}`; not interval arithmetic |
 
