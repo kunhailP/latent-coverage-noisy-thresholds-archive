@@ -451,16 +451,19 @@ def split_certificate_lc(p, q, keep=0.5, share=0.45, procs=60, pieces=24, verbos
     phi nondecreasing. Each node a gets phi(a) <= 1 - q_a, q_a = lambda_exp(1 - a) - delta_a, with
     Psi_LC(q_a) < 1 - a certified by branch and bound; delta_a is `share` of the smallest slack
     of the intervals using a. The sums are checked in ball arithmetic. phi(0) = 0 in the limit."""
-    T, B = 1 - float(p), 1 - float(q)
+    # T bounds the noisy budget 1 - p from above (outward), and the grid is closed at T/2, so
+    # the intervals cover every split a_L + a_R <= 1 - p; partners T - a0 are rounded up.
+    T, B = fup(1 - A(p)), 1 - float(q)
     grid = greedy_split_grid(p, q, keep=keep)
+    grid[-1] = max(grid[-1], T / 2)
+    partner = lambda a0: fup(A(T) - A(a0)) if a0 > 0 else T
     ph = {}
-    for f in grid:
-        for a in (f, T - f):
-            ph[a] = 1 - lambda_exp_float(1 - a) if a > 0 else 0.0
+    for a in grid[1:] + [partner(a0) for a0 in grid[:-1]]:
+        ph[a] = 1 - lambda_exp_float(1 - a) if a > 0 else 0.0
     delta = {a: math.inf for a in ph if a > 0}
     for a0, a1 in zip(grid[:-1], grid[1:]):
-        slack = B - ph[a1] - ph[T - a0]
-        for a in (a1, T - a0):
+        slack = B - ph[a1] - ph[partner(a0)]
+        for a in (a1, partner(a0)):
             if a > 0:
                 delta[a] = min(delta[a], share * slack)
     phi, certs = {0.0: 0.0}, {}
@@ -473,7 +476,7 @@ def split_certificate_lc(p, q, keep=0.5, share=0.45, procs=60, pieces=24, verbos
         phi[a] = fup(1 - A(qa)) if ok else 1.0
     worst = -math.inf
     for a0, a1 in zip(grid[:-1], grid[1:]):
-        s = A(phi[a1]) + A(phi[T - a0])
+        s = A(phi[a1]) + A(phi[partner(a0)])
         worst = max(worst, fup(s))
     budget = fdown(1 - A(q))
     ok = worst <= budget and all(c['ok'] for c in certs.values())

@@ -49,20 +49,34 @@ def test_su_exact_level_at_09():
 
 def _load_e42():
     path = Path(__file__).resolve().parents[1] / 'experiments' / 'e42_unimodal_boundary.py'
-    src = path.read_text().split('fam = {')[0]
-    ns = {}
-    exec(compile(src, str(path), 'exec'), ns)
-    return ns
+    spec = importlib.util.spec_from_file_location('e42', path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 
-def test_unimodal_latent_reaches_shape_free_bound():
-    ns = _load_e42()
-    m, s, A = ns['worst'](0.9, lambda sg: stats.norm(0, sg), 0.01, delta=1e-5, tau=1e-4)
-    pieces, m2, _ = ns['build'](s, 1e-4, 1e-5)
-    assert ns['noisy_cov'](pieces, stats.norm(0, 0.01)) == pytest.approx(0.9, abs=1e-8)
-    assert 0.8 < m < 0.81                       # latent coverage close to 2p - 1
-    mean = sum(mass * (a + b) / 2 for a, b, mass in pieces)
-    assert abs(mean) < 1e-9
+def test_e42_closed_form_matches_quadrature():
+    e = _load_e42()
+    pieces = e.build(0.2, 1e-4, 1e-5)[0]
+    for G, F in ((e.G_gauss, lambda y: stats.norm.cdf(y / 0.01)),
+                 (e.G_cexp, lambda y: 0.0 if y < -0.01 else 1 - math.exp(-(y / 0.01 + 1)))):
+        closed = e.noisy_cov(pieces, G, 0.01)
+        quad = 0.0
+        for a, b, mass in pieces:
+            pts = sorted({a, b, *[x for x in (1 - 0.05, 1 + 0.05, -1 - 0.05, -1 + 0.05, 1.01, 0.99, -0.99, -1.01, -1.5, -3) if a < x < b]})
+            quad += mass / (b - a) * float(mp.quad(lambda w: F(float(1 - w)) - F(float(-1 - w)), pts))
+        assert closed == pytest.approx(quad, abs=1e-9)
+
+
+@pytest.mark.parametrize('name, limit', [('Gaussian', 0.8), ('uniform', 0.8),
+                                         ('centred exponential', 1 - math.e / 10)])
+def test_unimodal_latent_reaches_shape_free_bound(name, limit):
+    e = _load_e42()
+    m, s, A, nc = e.worst(0.9, e.NOISE[name], 0.001, delta=1e-6, tau=1e-4)
+    assert nc == pytest.approx(0.9, abs=1e-12)
+    assert limit < m < limit + 0.002
+    pieces = e.build(s, 1e-4, 1e-6)[0]
+    assert abs(sum(mass * (a + b) / 2 for a, b, mass in pieces)) < 1e-9
 
 
 def _binom_rank(K, p, delta=0.05):
