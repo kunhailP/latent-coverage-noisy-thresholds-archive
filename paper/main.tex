@@ -33,7 +33,7 @@
 \maketitle
 
 \begin{abstract}
-Prediction intervals for a latent quantity, such as the mean of an unsampled area or a response measured with error, are often calibrated on noisy proxies of that quantity. We ask what latent coverage a threshold calibrated on noisy scores guarantees when the law and the variance of the noise are unknown. If the latent distribution is bi-log-concave, a condition that allows asymmetry and some multimodality, noisy coverage $0.9$ guarantees latent coverage $0.8991$ under Gaussian noise, $0.8981$ under symmetric unimodal noise and $0.8935$ under mean-zero log-concave noise; without a shape assumption, median-zero noise guarantees only $0.8$. A unimodal latent distribution gives no more than the shape-free guarantee, and mean-zero unimodal noise allows no guarantee. When the noise laws and variances differ between units and are unknown, slightly raising the rank of the noisy conformal threshold gives latent coverage with prescribed probability over calibration samples; we characterize the smallest such rank, exactly for symmetric unimodal noise. Without the raise this probability can tend to zero as the calibration sample grows. Under Gaussian noise of known variance, the location of the latent mean determines whether the required widening of the radius is of the order of the noise variance or of its standard deviation.
+Prediction intervals for a latent quantity, such as the mean of an unsampled area or a response measured with error, are often calibrated on noisy proxies. We ask what latent coverage a threshold calibrated on noisy scores guarantees when the law and the variance of the noise are unknown. Without a shape assumption the loss is large: with median-zero noise, noisy coverage $0.9$ guarantees only $0.8$, even for unimodal latent laws. If the latent law is bi-log-concave, which allows asymmetry and some multimodality, the loss is small; under Gaussian noise, noisy coverage $0.9$ guarantees $0.8991$. When the noise laws and variances differ between units and are unknown, slightly raising the rank of the noisy conformal threshold gives latent coverage with prescribed probability over calibration samples, and we characterize the smallest such rank; without the raise this probability can tend to zero. In simulations the raise cost at most $3\%$ of width, and the intervals were $16$--$48\%$ shorter than those with the same guarantee and no shape assumption. Under Gaussian noise of known variance, the location of the latent mean decides whether the required widening is of the order of the noise variance or of its standard deviation.
 \end{abstract}
 
 \begin{keywords}
@@ -48,7 +48,7 @@ Two answers are known. If $W$ and $e$ are both symmetric and unimodal, the theor
 
 Related methods target different quantities. LatentCP \citep{zheng2026} gives a marginal latent guarantee through a known forward model; \citet{cohen2025} deconvolve without a latent guarantee; conformal intervals for small areas cover observable responses \citep{bersson2024} or the expectations of sampled units \citep{zhang2026}. Empirical Bayes and parametric small-area intervals \citep{armstrong2022, ignatiadis2022, hallmaiti2006, yoshimori2014} concern sampled units or rely on a model for the latent effects.
 
-We assume instead that the latent distribution is bi-log-concave \citep{dumbgen2017}. This class contains the log-concave laws and some multimodal ones, and does not require symmetry. Under it the loss in latent coverage is small, and we bound it for each class of noise laws (\S~\ref{sec:general}, Table~\ref{tab:map}). Unimodality of the latent law does not suffice, and neither does mean-zero unimodality of the noise. When the noise laws and variances differ between units and are unknown, the noisy conformal threshold at a slightly raised rank covers the latent target, and we characterize the smallest such rank (\S~\ref{sec:procedure}). For Gaussian noise of known variance, \S~\ref{sec:mean} shows that the location of the latent mean decides whether the required widening is of the order of the noise variance, as for a fixed smooth law \citep{jochmans2024}, or of its standard deviation.
+We assume instead that the latent distribution is bi-log-concave \citep{dumbgen2017}. This class contains the log-concave laws and some multimodal ones, and does not require symmetry. Residuals of area means of skewed outcomes, such as incomes, are asymmetric, and a mixture of two types of area can be bimodal and still bi-log-concave (Supplementary Lemma~\ref{S-lem:bimodal}); Anderson's theorem covers neither. Under it the loss in latent coverage is small, and we bound it for each class of noise laws (\S~\ref{sec:general}, Table~\ref{tab:map}). Unimodality of the latent law does not suffice, and neither does mean-zero unimodality of the noise. When the noise laws and variances differ between units and are unknown, the noisy conformal threshold at a slightly raised rank covers the latent target, and we characterize the smallest such rank (\S~\ref{sec:procedure}). The guarantee is cheap and the shape assumption pays for itself: in the simulations of \S~\ref{sec:numerical} the raise cost at most $3\%$ of width over the usual rank, and the intervals were $16$--$48\%$ shorter than those with the same guarantee and no latent shape assumption. For Gaussian noise of known variance, \S~\ref{sec:mean} shows that the location of the latent mean decides whether the required widening is of the order of the noise variance, as for a fixed smooth law \citep{jochmans2024}, or of its standard deviation.
 
 \section{Coverage transfer}\label{sec:general}
 
@@ -87,7 +87,7 @@ Noisy coverage above $p_{\mathcal E}(q)$ at threshold $t$ then gives latent cove
 \begin{theorem}\label{thm:classes}
 Let $q > \mathrm{e}^{-1}$.
 \par\noindent (i) For symmetric unimodal noise, $\Psi_{\mathcal E}(q) = (1 + q \mathrm{e}^{-r})/2$, where $r > 0$ solves $(1 + r)\mathrm{e}^{-r} = (1 + \log q)/q$, attained by uniform noise; $\Psi_{\mathcal E}$ is strictly convex, so $\phi_{\mathcal E}$ is convex and $p_{\mathcal E}(q) = \Psi_{\mathcal E}(q)$.
-\par\noindent (ii) For mean-zero log-concave noise, $\Psi_{\mathcal E}(q)$ is the supremum over centred log-affine laws on segments, and at $q = 0.9$ it lies in $(0.90517, 0.9052)$, the lower bound given by the centred exponential law.
+\par\noindent (ii) For mean-zero log-concave noise, $\Psi_{\mathcal E}(q)$ is the supremum over centred log-affine laws on segments, and at $q = 0.9$ it lies in $(0.90517, 0.9052)$, the lower end from the centred exponential.
 \par\noindent (iii) For mean-zero unimodal noise, $\Psi_{\mathcal E}(q) = 1$.
 \end{theorem}
 
@@ -143,19 +143,19 @@ Let $Q_q$ denote the lower $q$-quantile and $r = Q_q(|W|)$ for $W \sim G$. With 
 Conversely, for $p < \Psi_{\mathcal E}(q)$ the one-ended laws of \S~\ref{sec:general} give a log-concave $G$ and a noise with $\pr(|V_i| < r) \ge \pr(|V_i| \le 1) > p$ and $r > 1$, so the left side is at most $\pr\{{\rm Bin}(K, p) \le k - 1\}$, which tends to $\pr\{{\rm Bin}(K, \Psi_{\mathcal E}(q)) \le k - 1\}$ as $p \uparrow \Psi_{\mathcal E}(q)$.
 \end{proof}
 
-The bound is applied to each unit separately, so the noise laws and variances need not be known or shared.
+The bound holds unit by unit, so the noise laws and variances need not be known or shared.
 
-To use Theorem~\ref{prop:unknown}, choose the noise class, take its certified sufficient level from Table~\ref{tab:map}, the upper end where the table gives an interval, for instance $0.901$ for Gaussian noise, and take as $k$ the smallest rank with $\pr\{{\rm Bin}(K, \text{level}) \le k - 1\} \ge 1 - \delta$. At $q = 0.9$ and $\delta = 0.05$ a valid rank exists for $K \ge 29$ under Gaussian or symmetric unimodal noise and for $K \ge 31$ under mean-zero log-concave noise; without a latent shape assumption and with median-zero noise it needs $K \ge 59$. For $K = 110$ all three bi-log-concave rows of Table~\ref{tab:map} give $k = 105$, the usual high-probability rank, against $109$ and $110$ without a shape assumption, with median-zero and log-concave noise, and the marginal rank $\lceil 0.9(K+1)\rceil = 100$ is not valid. The raise grows with $K$: the required level exceeds $q$ by a fixed amount, while consecutive ranks differ in level by about $1/K$. It cannot be dropped:
+To use Theorem~\ref{prop:unknown}, choose the noise class, take its certified sufficient level from Table~\ref{tab:map}, the upper end where the table gives an interval, for instance $0.901$ for Gaussian noise, and take as $k$ the smallest rank with $\pr\{{\rm Bin}(K, \text{level}) \le k - 1\} \ge 1 - \delta$. At $q = 0.9$ and $\delta = 0.05$ a valid rank exists for $K \ge 29$ under Gaussian or symmetric unimodal noise and for $K \ge 31$ under mean-zero log-concave noise; without a latent shape assumption it needs $K \ge 59$ with median-zero noise and $K \ge 80$ with mean-zero log-concave noise. For $K = 110$ all three bi-log-concave rows of Table~\ref{tab:map} give $k = 105$, the usual high-probability rank, against $109$ and $110$ without a shape assumption, with median-zero and log-concave noise, and the marginal rank $\lceil 0.9(K+1)\rceil = 100$ is not valid. The raise grows with $K$: the required level exceeds $q$ by a fixed amount, while consecutive ranks differ in level by about $1/K$. It cannot be dropped:
 
 \begin{proposition}\label{prop:fail}
-Let $q \in (0,1)$. There are a log-concave law $G$ and $D > 0$ such that, with $e_i \sim N(0, D)$ for all $i$, $\pr_{\mathcal D}\{\pr(|W_{\rm new}| \le |V|_{(k_K)} \mid \mathcal D) \ge q\} \to 0$ as $K \to \infty$ for every sequence of ranks with $k_K/K \to q$, such as the marginal rank and, for any fixed $\delta$, the usual high-probability rank.
+Let $q \in (0,1)$. There are a log-concave law $G$ and $D > 0$ such that, with $e_i \sim N(0, D)$ for all $i$, $\pr_{\mathcal D}\{\pr(|W_{\rm new}| \le |V|_{(k_K)} \mid \mathcal D) \ge q\} \to 0$ as $K \to \infty$ for every sequence of ranks with $k_K/K \to q$, such as the marginal and, for fixed $\delta$, the usual high-probability rank.
 \end{proposition}
 
 \begin{proof}
 By Theorem~\ref{thm:small} of \S~\ref{sec:mean}, whose constant $c_q$ is positive, some log-concave $W$ has $H(1) \ge q$ and $r_q = Q_q(|W|) > 1$, where $H$ is the distribution function of $|W + D^{1/2}Z|$, $Z \sim N(0, 1)$. As in the proof of Theorem~\ref{prop:unknown}, the latent reliability of rank $k$ is $\pr\{{\rm Bin}(K, H(r_q-)) \le k - 1\}$, and $H(r_q-) > H(1) \ge q$ as $H$ is strictly increasing, so it tends to zero by the law of large numbers.
 \end{proof}
 
-A coverage shortfall of $10^{-3}$ can thus drive the reliability towards zero. At a log-concave exponential tail whose end lies just beyond the threshold, with $D^{1/2}$ equal to $1\%$ of the noisy $q$-quantile (Supplementary Material), the latent coverage tends to $0.89918$. The usual rank has latent reliability $0.943$, $0.918$ and $0.151$ at $K = 10^3$, $10^4$ and $10^6$, against $0.954$, $0.958$ and $0.989$ for the rank of Theorem~\ref{prop:unknown} with Gaussian noise. For $29 \le K \le 300$ the usual rank's reliability falls short of $0.95$ by less than $0.005$, so the raise matters most for large calibration sets.
+The latent coverage itself barely moves: at a log-concave exponential tail whose end lies just beyond the threshold, with $D^{1/2}$ equal to $1\%$ of the noisy $q$-quantile (Supplementary Material), it tends to $0.89918$, a shortfall of $0.00082$. What fails is the guarantee: once $K$ is large enough for the order statistic to resolve this shortfall, the probability of latent coverage $q$ tends to zero. The usual rank has latent reliability $0.943$, $0.918$ and $0.151$ at $K = 10^3$, $10^4$ and $10^6$, against $0.954$, $0.958$ and $0.989$ for the rank of Theorem~\ref{prop:unknown} with Gaussian noise. For $29 \le K \le 300$ the usual rank's reliability falls short of $0.95$ by less than $0.005$, so the raise matters most for large $K$.
 
 \section{Gaussian noise and the location of the mean}\label{sec:mean}
 
@@ -171,7 +171,7 @@ The behaviour of $R_{p,q}$ for small $x$ is governed by a one-sided constant,
 \[
 c_{p,q} = \sup\{F_Y^{-1}(q) : Y \in \LC,\ \pr(Y + Z \le 0) \ge p\}, \qquad c_q = c_{q,q},
 \]
-which is attained along exponential tails and is the same over $\mathcal B$ (Supplementary Lemma~\ref{S-lem:onesided}). Ball-arithmetic enclosures give $c_{0.8} = 0.04607$, $c_{0.9} = 0.01906$ and $c_{0.95} = 0.00841$ to the digits shown.
+which is attained along exponential tails and is the same over $\mathcal B$ (Supplementary Lemma~\ref{S-lem:onesided}). Ball arithmetic gives $c_{0.8} = 0.04607$, $c_{0.9} = 0.01906$ and $c_{0.95} = 0.00841$ to the digits shown.
 
 \subsection{Three regimes}
 
@@ -197,7 +197,7 @@ Q_q(|W|) \le M + \{(t - M)^2 + \sigma^2\}^{1/2} \le t + \frac{\sigma^2}{2(t - M)
 In particular $R^{(b)}_{p,q}(x) \le 1 + x/\{2(1 - b)\}$ for all $p \ge q$ and $x > 0$.
 \end{theorem}
 
-Here $\sigma^2 = D$ in the original units. A mean far from an end of the interval caps how steeply the density can rise towards it; the proof makes this precise with the heat equation for quantiles \citep{steinbrecher2008}. The order $x$ cannot be improved, even for mean-zero laws: centred log-affine laws on a segment attain it (Supplementary Proposition~\ref{S-prop:centred}), so centring does not replace symmetry.
+Here $\sigma^2 = D$ in the original units. A mean far from an end of the interval caps how steeply the density can rise towards it; the proof makes this precise with the heat equation for quantiles \citep{steinbrecher2008}. The order $x$ cannot be improved, even for mean-zero laws: centred log-affine laws attain it (Supplementary Proposition~\ref{S-prop:centred}), so centring does not replace symmetry.
 
 The order $x^{1/2}$ returns only when the mean is within a bounded number of noise standard deviations of the boundary. With $b_x = 1 - \kappa x^{1/2}$, the constraint $|E(W)| \le b_x$ places the mean at least $\kappa$ noise standard deviations, $\kappa D^{1/2}$, inside the nearer end of the interval. Let
 \[
@@ -216,41 +216,41 @@ Moreover, for every $\kappa \ge 0$,
 and the same limit holds with $\LC$ replaced by $\mathcal B$ in the definition of $R^{(b)}$.
 \end{theorem}
 
-Inequality~\eqref{eq:necessary} is Theorem~\ref{thm:mean} with $t = 1$; at $1 - |E(W)| = \kappa x^{1/2}$ it gives $\Delta \le \{(\kappa^2 + 1)^{1/2} - \kappa\}x^{1/2}$, and the limit gives the exact constant. The condition $q > 1 - \mathrm{e}^{-1}$ gives $|E(W)| < 1$, since a law in $\mathcal B$ has at least mass $\mathrm{e}^{-1}$ on each side of its mean. The function $L_q$ equals $c_q$ up to a value $\kappa^*_q$, about $20$ at $q = 0.9$, and then decays like $\{1 - \log(1/q)\}/(2\kappa)$ (Supplementary Lemma~\ref{S-lem:meanonesided}).
+Inequality~\eqref{eq:necessary} is Theorem~\ref{thm:mean} with $t = 1$; at $1 - |E(W)| = \kappa x^{1/2}$ it gives $\Delta \le \{(\kappa^2 + 1)^{1/2} - \kappa\}x^{1/2}$, and the limit gives the exact constant. The condition $q > 1 - \mathrm{e}^{-1}$ gives $|E(W)| < 1$, since a law in $\mathcal B$ has at least mass $\mathrm{e}^{-1}$ on each side of its mean. The function $L_q$ equals $c_q$ up to $\kappa \approx 20$ at $q = 0.9$ and then decays like $1/\kappa$ (Supplementary Lemma~\ref{S-lem:meanonesided}).
 
 \subsection{Slack}\label{sec:slack}
 
 Theorem~\ref{thm:small} gives a positive widening because $c_q > 0$: at the extremal exponential tail, noisy coverage $q$ leaves latent coverage just below $q$. A noisy level slightly above $q$ removes the widening at every noise level. Splitting both the noisy and the latent failure probabilities between the two ends gives $Q_q(|W|) \le 1 + C_{p,q}x^{1/2}$ for every $x$ and every $W \in \mathcal B$ feasible at level $p \ge q$, with a constant $C_{p,q} \ge c_{p,q}$ defined and certified in the Supplementary Material.
 
 \begin{corollary}\label{cor:slack}
-Let $q = 0.9$. If $p \ge 0.901$, then $R^{\mathcal B}_{p,q}(x) \le 1$ for every $x > 0$; if $p \le 0.90079$, then $R_{p,q}(x) > 1$ for all small $x$. Hence for Gaussian noise $p_{\mathcal E}(0.9) \in (0.90079, 0.901]$, the Gaussian row of Table~\ref{tab:map}, with both ends certified in ball arithmetic. The same certificates with $p = 0.9$ fixed and $q$ varying (Supplementary \S~\ref{S-sec:s-ball}) show that noisy coverage $0.9$ gives latent coverage $0.8991$ for every $W \in \mathcal B$ and every noise variance, while $0.8992$ fails for some log-concave laws.
+Let $q = 0.9$. If $p \ge 0.901$, then $R^{\mathcal B}_{p,q}(x) \le 1$ for every $x > 0$; if $p \le 0.90079$, then $R_{p,q}(x) > 1$ for all small $x$. Hence for Gaussian noise $p_{\mathcal E}(0.9) \in (0.90079, 0.901]$, the Gaussian row of Table~\ref{tab:map}, with both ends certified in ball arithmetic. The same certificates with $p = 0.9$ fixed and $q$ varying (Supplementary \S~\ref{S-sec:s-ball}) show that noisy coverage $0.9$ gives latent coverage $0.8991$ for every $W \in \mathcal B$ and every noise variance, while $0.8992$ fails for some $W \in \LC$.
 \end{corollary}
 
 \label{sec:hetero}Known variances allow shorter intervals: a computed radius for log-concave latent laws, and a shrunk threshold that needs only a lower bound on the variances (Supplementary \S~\ref{S-sec:s-hetero}). In simulations the computed radius, evaluated as a numerical upper bound, was $9.5$--$12\%$ shorter than the noisy threshold (Supplementary Table~\ref{S-tab:synth}).
 
 \section{Numerical illustration}\label{sec:numerical}
 
-Table~\ref{tab:sameinfo} shows how much wider the noisy threshold must be to carry a latent guarantee when only the class of the noise is known. It compares the ranks of Theorem~\ref{prop:unknown} for several noise classes; no rule is told the noise law within its class or the variances. There are four standardized log-concave latent laws, normal, Laplace, centred gamma with shape $2$ and truncated exponential, and five noise laws, Gaussian, uniform, Laplace, $t_3$ and centred exponential, with heterogeneous variances; latent coverage given each data set is exact, with $2000$ data sets in each of the $20$ settings (Supplementary Material).
+Table~\ref{tab:sameinfo} shows what a latent guarantee costs, and what the latent shape assumption saves, when only the class of the noise is known. It compares the ranks of Theorem~\ref{prop:unknown} for several noise classes; no rule is told the noise law within its class or the variances. There are four standardized log-concave latent laws, normal, Laplace, centred gamma with shape $2$ and truncated exponential, and five noise laws, Gaussian, uniform, Laplace, $t_3$ and centred exponential, with heterogeneous variances; latent coverage given each data set is exact, with $2000$ data sets per setting (Supplementary Material).
 
 \begin{table}
-\tbl{Rules with the same information: rank $k$, smallest reliability over the settings a rule covers, and extra width over the usual rank, $100(\text{mean width}/\text{mean width of the usual rank} - 1)$, over the same settings; target reliability $0.95$}
+\tbl{Rules with the same information: rank $k$ and mean width over the settings a rule covers, in percent above the usual rank and below the rule for the same noise class without a latent shape assumption; ranges, with medians in parentheses; target reliability $0.95$}
 {\begin{tabular}{lcccccc}
  & \multicolumn{3}{c}{$K = 110$} & \multicolumn{3}{c}{$K = 1000$} \\
-rule & $k$ & reliability & extra width (\%) & $k$ & reliability & extra width (\%) \\
-usual & 105 & -- & 0 & 916 & -- & 0 \\
-Gaussian & 105 & 0.999 & 0 & 917 & 1.000 & 0.3--0.4 \\
-symmetric unimodal & 105 & 0.998 & 0 & 918 & 1.000 & 0.6--1.0 \\
-mean-zero log-concave & 105 & 0.999 & 0 & 922 & 1.000 & 2.0--2.9 \\
-no latent shape, median-zero noise & 109 & 1.000 & 25--49 & 962 & 1.000 & 20--33 \\
-no latent shape, log-concave noise & 110 & 1.000 & 42--94 & 974 & 1.000 & 28--54 \\
+rule & $k$ & above usual & below no shape & $k$ & above usual & below no shape \\
+usual & 105 & 0 & -- & 916 & 0 & -- \\
+Gaussian & 105 & 0 & 22--29 (26) & 917 & 0.3--0.4 & 17--21 (21) \\
+symmetric unimodal & 105 & 0 & 20--33 (27) & 918 & 0.6--1.0 & 16--24 (21) \\
+mean-zero log-concave & 105 & 0 & 30--48 (39) & 922 & 2.0--2.9 & 21--33 (26) \\
+no latent shape, median-zero noise & 109 & 25--49 & -- & 962 & 20--33 & -- \\
+no latent shape, log-concave noise & 110 & 42--94 & -- & 974 & 28--54 & -- \\
 \end{tabular}}
 \label{tab:sameinfo}
 \begin{tabnote}
-Noisy levels $0.9$, $0.901$, $\Psi_{\mathcal E}(0.9)$, $0.906$, $0.95$ and $1 - 0.1/\mathrm{e}$. A rule covers a setting when the noise is in its class: Gaussian; symmetric unimodal (Gaussian, uniform, Laplace, $t_3$); mean-zero log-concave (Gaussian, uniform, Laplace, centred exponential); the first three need a bi-log-concave latent law. The usual rank has no guarantee uniform over bi-log-concave latent laws; Anderson's theorem covers it only for symmetric unimodal latent laws and noise. Its reliability over all $20$ settings was at least $0.998$.
+Noisy levels $0.9$, $0.901$, $\Psi_{\mathcal E}(0.9)$, $0.906$, $0.95$ and $1 - 0.1/\mathrm{e}$. A rule covers a setting when the noise is in its class: Gaussian; symmetric unimodal (Gaussian, uniform, Laplace, $t_3$); mean-zero log-concave (Gaussian, uniform, Laplace, centred exponential); the first three need a bi-log-concave latent law. The Gaussian and symmetric unimodal rules are compared with the median-zero rule, the log-concave rule with the log-concave one. The usual rank has no guarantee uniform over bi-log-concave latent laws; Anderson's theorem covers it only for symmetric unimodal laws.
 \end{tabnote}
 \end{table}
 
-Every rule attained the target where its class applies, and so did the usual rank, as these laws are far from the extremal ones of Proposition~\ref{prop:fail}. At $K = 1000$ the shape-constrained ranks were at most $0.4\%$, $1.0\%$ and $2.9\%$ wider than the usual rank, and at $K = 110$ they coincide. Without a latent shape assumption the intervals were $20$--$54\%$ wider at $K = 1000$ and $25$--$94\%$ at $K = 110$.
+Every rule had reliability at least $0.998$ where its class applies, and so did the usual rank in all $20$ settings, as these laws are far from the extremal ones of Proposition~\ref{prop:fail}. The guarantee is therefore cheap: at $K = 1000$ the shape-constrained ranks were at most $0.4\%$, $1.0\%$ and $2.9\%$ wider than the usual rank, and at $K = 110$ they coincide with it. The shape assumption is what makes it cheap: without it, the noisy levels $0.95$ and $1 - 0.1/\mathrm{e}$ cannot be lowered, by Proposition~\ref{prop:latentshape}, and the shape-constrained intervals were $16$--$33\%$ shorter at $K = 1000$ and $20$--$48\%$ shorter at $K = 110$.
 
 \section{Discussion}\label{sec:discussion}
 
