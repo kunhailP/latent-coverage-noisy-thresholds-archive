@@ -1,4 +1,4 @@
-"""E30. Area-wise estimated variances without pooling: model H (Supplementary Material, Section S4).
+"""E30. Area-wise estimated variances without pooling: model H (Supplementary Material, Section S6).
 
 Heterogeneous within-area variances (as E29 n23_het: sigma_i^2 lognormal(0, .5), n_i on {2, 3},
 mean D = .577), but every area's variance is estimated from nu i.i.d. normal units of its own,

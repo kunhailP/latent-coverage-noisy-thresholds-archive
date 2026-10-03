@@ -27,7 +27,7 @@ def tidy(ax):
     ax.grid(True, which='major', color=GRID, lw=.5)
 
 
-# Figure 1: R_{q,q}(x) - 1 in percent
+# Supplementary Figure S1: R_{q,q}(x) - 1 in percent
 d = pd.read_csv(RESULTS / 'boundary_map.csv')
 fig, ax = plt.subplots(figsize=(5.2, 3.0))
 ax.axhline(0, color='#8a8983', lw=.8)
@@ -39,7 +39,7 @@ ax.set_xlabel(r'$x = D/t^2$'); ax.set_ylabel(r'$100\{R_{q,q}(x) - 1\}$')
 tidy(ax); ax.legend(frameon=False, loc='lower left')
 fig.tight_layout(); fig.savefig(OUT / 'fig_boundary.pdf')
 
-# Figure 2: numerical upper bounds of R over the whole range
+# Supplementary Figure S4: numerical upper bounds of R over the whole range
 c = pd.read_csv(RESULTS / 'certified_R.csv')
 fig, ax = plt.subplots(figsize=(5.2, 3.0))
 x = np.linspace(1e-4, 0.37, 400)

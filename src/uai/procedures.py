@@ -21,7 +21,7 @@ class ShrinkTable:
     CertifiedShrinkTable (numerically computed upper bounds, double precision).
 
     Other alphas read results/r_table.json (E04, differential evolution with Gauss-Legendre
-    quadrature), whose values at x = 0.001 exceed the bound of Theorem 1 because the quadrature
+    quadrature), whose values at x = 0.001 exceed the bound of Theorem 3 because the quadrature
     is inaccurate there; they are not used in the paper and a warning is issued.
 
     alpha = '0.1' uses the exact two-dimensional reduction (results/r_exact_p0.9_q0.9.csv, E16,
@@ -44,7 +44,7 @@ class ShrinkTable:
         else:
             import warnings
             warnings.warn('ShrinkTable: r_table.json (E04) is inaccurate at small x and exceeds '
-                          'Theorem 1 at x = 0.001; not a valid radius', stacklevel=2)
+                          'Theorem 3 at x = 0.001; not a valid radius', stacklevel=2)
             tab = json.load(open(path))[alpha]
             self.x = np.array(sorted(float(k) for k in tab))
             self.r = np.array([tab[str(k)] for k in self.x])
@@ -65,12 +65,12 @@ class CertifiedShrinkTable:
     double-precision branch and bound, not interval arithmetic (see README, Precision).
 
     Grid points x_i >= .002 carry branch-and-bound certificates U_i (`uai.certify`). For any x
-    the lookup returns min over x_i <= x of U_i + c_q sqrt(x - x_i) (Supplementary Proposition S2),
-    together with the closed bound of Theorem 1 (p = q: 1 + c_q sqrt x) or the p >= q bound of Section 4.1
+    the lookup returns min over x_i <= x of U_i + c_q sqrt(x - x_i) (Supplementary Proposition S5),
+    together with the closed bound of Theorem 3 (p = q: 1 + c_q sqrt x) or the p >= q bound of Section 4.3
     (p = .9036, .9068: 1 + C sqrt x, C = -.057, -.114). The constants are proved upper bounds in ball
     arithmetic (E27, `uai.interval`). Above the feasibility
     edge (P(|e| <= 1) < p) the data contradict the noise level and 1 is returned, as in
-    ShrinkTable. Certificates rest on Proposition 1 (extremal family) and double-precision
+    ShrinkTable. Certificates rest on Supplementary Proposition S3 (extremal family) and double-precision
     closed forms with a 1e-9 margin.
     """
     C_Q = 0.019062                       # c_.9 in [0.01906181, 0.01906188] (E27)
@@ -98,7 +98,7 @@ class CertifiedShrinkTable:
         """Certified upper bound of sup{R(x) : x_low <= x < x_edge}, for use when only a lower
         bound x_low of the scaled noise variance is known. R is not monotone in x (it rises for
         small x when p = q), so the value at x_low alone is not enough. Between grid points
-        Supplementary Proposition S2 gives R(x) <= U_j + c_q sqrt(x_{j+1} - x_j) on [x_j, x_{j+1}], and below the
+        Supplementary Proposition S5 gives R(x) <= U_j + c_q sqrt(x_{j+1} - x_j) on [x_j, x_{j+1}], and below the
         first grid point the closed bound 1 + C sqrt(x) is monotone, so its ends suffice."""
         if x_low >= self.x_edge:
             return 1.0
@@ -157,7 +157,7 @@ def pac_rank(K, level=0.90, delta=0.05):
     """Smallest k with P(Beta(k, K+1-k) >= level) >= 1 - delta. For K i.i.d. scores with a
     continuous law, the k-th order statistic then has coverage >= level for a new independent
     score, conditionally on the calibration sample, with probability >= 1 - delta. (With
-    independent non-identical scores see Proposition 2 / `hetldc_parts`, which needs
+    independent non-identical scores see Supplementary Proposition S2 / `hetldc_parts`, which needs
     k >= K p + 1; exchangeability alone gives only the marginal guarantee.)"""
     for k in range(1, K + 1):
         if stats.beta.sf(level, k, K + 1 - k) >= 1 - delta:
@@ -278,7 +278,7 @@ def hetldc_parts(V, D, k=None, q=0.90, delta=0.05, n_pts=32):
     k = pac_rank(K, q, delta) if k is None else k
     p_k = float(stats.beta.ppf(delta, k, K + 1 - k))
     if k < K * p_k + 1:
-        raise ValueError('Hoeffding comparison (Proposition 2) needs k >= K p_k + 1')
+        raise ValueError('Hoeffding comparison (Supplementary Proposition S2) needs k >= K p_k + 1')
     T = np.sort(np.abs(V))[k - 1]
     (pts, wts), eps = quantised_kernel(D / T**2, n_pts)
     return T, p_k, eps, (pts, wts), shrink_mix(p_k - eps, q, pts, wts=wts)
@@ -315,7 +315,7 @@ def shape_free_markov(V, D, k, q=0.90, delta=0.05):
     K = len(V)
     p_k = stats.beta.ppf(delta, k, K + 1 - k)
     if k < K * p_k + 1 or p_k <= q:
-        raise ValueError('needs k >= K p_k + 1 (Proposition 2) and p_k > q')
+        raise ValueError('needs k >= K p_k + 1 (Supplementary Proposition S2) and p_k > q')
     T = np.sort(np.abs(V))[k - 1]
     sd = np.sqrt(D) / T
     gbar = lambda w: np.mean(ndtr((1 - w) / sd) - ndtr((-1 - w) / sd))
@@ -328,8 +328,8 @@ def shape_free_markov(V, D, k, q=0.90, delta=0.05):
 
 
 # ---------------------------------------------------------------------------------------------
-# Analytic rules for heterogeneous, possibly unknown, Gaussian noise variances (Proposition 3 and
-# Corollary 2 of the paper). Both rest only on the order-statistic event of Proposition 2 and on
+# Analytic rules for heterogeneous, possibly unknown, Gaussian noise variances (Theorem 2 and
+# Supplementary Corollary S1 of the paper). Both rest only on the order-statistic event of Supplementary Proposition S2 and on
 # ball-arithmetic certificates of the one-sided constants (results/interval_constants.json).
 # ---------------------------------------------------------------------------------------------
 
@@ -343,7 +343,7 @@ CERTIFIED_SHRINK = {0.9: [(0.9036, -0.057), (0.9068, -0.114)]}
 def certified_rank(K, q=0.90, delta=0.05, level=None):
     """Smallest rank k whose order-statistic level p_k (the delta-quantile of Beta(k, K + 1 - k))
     reaches `level` (default: the certified slack level CERTIFIED_SLACK_LEVEL[q]) and satisfies
-    the Hoeffding condition k >= K p_k + 1 of Proposition 2. None if no rank qualifies (for
+    the Hoeffding condition k >= K p_k + 1 of Supplementary Proposition S2. None if no rank qualifies (for
     q = .9 and delta = .05 this happens exactly when K <= 28). The usual PAC rank
     (`pac_rank`, level q) can fall short: K = 46 gives rank 45 with p_k = .90098 < .901."""
     if level is None:
@@ -359,7 +359,7 @@ def certified_rank(K, q=0.90, delta=0.05, level=None):
 
 def _order_statistic_level(V, k, delta):
     """(T, p_k) for T = |V|_(k), or (T, nan) if k violates the Hoeffding condition
-    k >= K p_k + 1 of Proposition 2 (then no level is guaranteed)."""
+    k >= K p_k + 1 of Supplementary Proposition S2 (then no level is guaranteed)."""
     V = np.asarray(V)
     K = len(V)
     if not 1 <= k <= K:
@@ -371,9 +371,9 @@ def _order_statistic_level(V, k, delta):
 
 def noisy_threshold_halfwidth(V, k=None, q=0.90, delta=0.05):
     """The noisy threshold T = |V|_(k) itself, valid for the latent target when the noise
-    variances are heterogeneous and unknown (Proposition 3).
+    variances are heterogeneous and unknown (Theorem 2).
 
-    On the event of Proposition 2, the average over i of pr(|W + e_i| <= T) is at least p_k. If
+    On the event of Supplementary Proposition S2, the average over i of pr(|W + e_i| <= T) is at least p_k. If
     pr(|W| <= T) < q, Corollary 1 (C_{p,q} <= 0 at p = CERTIFIED_SLACK_LEVEL[q]) forces every
     term below that level, hence their average too. So p_k >= that level gives
     pr_D{pr(|W_new| <= T | D) >= q} >= 1 - delta for every bi-log-concave G, whatever the D_i.
@@ -388,8 +388,8 @@ def noisy_threshold_halfwidth(V, k=None, q=0.90, delta=0.05):
 
 
 def simple_shrink_halfwidth(V, D_min, k=None, q=0.90, delta=0.05):
-    """max{0, T + C sqrt(D_min)} (Corollary 2) with the certified C = C_{p', q} < 0 for the
-    largest certified p' <= p_k. On the event of Proposition 2 some area i has
+    """max{0, T + C sqrt(D_min)} (Supplementary Corollary S1) with the certified C = C_{p', q} < 0 for the
+    largest certified p' <= p_k. On the event of Supplementary Proposition S2 some area i has
     pr(|W + e_i| <= T) >= p_k >= p', so the transfer bound R_{p',q}(x) <= 1 + C x^{1/2} gives
     Q_q(|W|) <= T + C D_i^{1/2} <= T + C D_min^{1/2}, as C < 0. D_min is a known lower bound on
     the D_i. The default rank is `certified_rank`; falls back to `noisy_threshold_halfwidth`

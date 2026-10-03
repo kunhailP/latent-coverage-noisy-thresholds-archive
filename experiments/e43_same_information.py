@@ -1,4 +1,4 @@
-"""E43: rules with the same information (Supplementary Material, S6).
+"""E43: rules with the same information (Supplementary Material, S9; Table 2).
 
 No rule is told the noise law or the noise variances: each is the noisy conformal threshold
 T = |V|_(k) at the rank of Theorem 2 for a stated noise class, at q = 0.9, delta = 0.05. The
@@ -12,7 +12,7 @@ ranks differ only through the noisy level they need:
   shape-free LC   1 - 0.1/e           any latent law, mean-zero log-concave noise
 
 Latent residuals have variance 1; noise variances D_i = 0.577 L_i / E(L_i), L_i lognormal with
-log-scale 0.7, as in Table 2, and the noise law is one of Gaussian, uniform, Laplace, t_3 (all
+log-scale 0.7, as in Supplementary Table S5, and the noise law is one of Gaussian, uniform, Laplace, t_3 (all
 symmetric unimodal) or the centred exponential (mean-zero log-concave, skewed), scaled to
 variance D_i. The latent coverage given the data, P(|W| <= T), is computed exactly from the
 latent distribution function; reliability is the fraction of data sets with coverage >= 0.9.

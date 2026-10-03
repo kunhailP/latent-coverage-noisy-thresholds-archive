@@ -1,4 +1,4 @@
-"""E41: coverage transfer for non-Gaussian noise (Proposition 5, Theorem 4, Supplement S2).
+"""E41: coverage transfer for non-Gaussian noise (Proposition 1, Theorem 1, Supplement S2).
 
   python experiments/e41_noise_classes.py [procs] [--no-splits]
 Writes results/noise_classes.json:
@@ -7,7 +7,7 @@ Writes results/noise_classes.json:
   log_concave         branch-and-bound certificates Psi_LC(q) < target, the centred-exponential
                       lower bound, and two-sided split certificates;
   gaussian            sup over the scale of E min(1, q e^{-sigma Z}) (double precision);
-  unimodal            the counterexample of Theorem 4(iii) (double precision).
+  unimodal            the counterexample of Theorem 1(iii) (double precision).
 """
 import json
 import math

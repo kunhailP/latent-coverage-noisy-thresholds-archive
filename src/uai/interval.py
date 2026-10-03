@@ -6,7 +6,7 @@ with outward rounding (`fup`, `fdown`), sums of bounds are formed as balls, and 
 are exactly u_min and u_max. The results therefore do not rest on
 the double-precision closed forms used elsewhere.
 
-One-sided problem (Lemma 1). For the exponential tail Y = b - E, E ~ Exp(u), Z ~ N(0, 1),
+One-sided problem (Supplementary Lemma S1). For the exponential tail Y = b - E, E ~ Exp(u), Z ~ N(0, 1),
 
     kappa_u(b) = P(Y + Z <= 0) = Phi(-b) + exp(-u b + u^2/2) Phi(b - u),
 
@@ -28,7 +28,7 @@ increases on (0, L/sqrt(2)), so checking the inequality at u_min <= L_p/sqrt(2) 
 (0, u_min]. For p >= q the resulting bound on v_u is increasing in u, so its value at u_min
 bounds the whole end.
 
-Split constant (the p >= q bound of Section 4.1). c_{p',q'} <= g iff q' <= exp(-u (b_u(p') - g)) for every u > 0,
+Split constant (the p >= q bound of Section 4.3; Supplementary equation (S2)). c_{p',q'} <= g iff q' <= exp(-u (b_u(p') - g)) for every u > 0,
 iff 1 - q' >= phi_g(1 - p') where
 
     phi_g(a) = max(0, sup_u 1 - exp(-G_u)),   G_u = u (b_u(1 - a) - g).
@@ -257,7 +257,7 @@ def split_certificate(p, q, g, n0=16, max_rounds=40, pool=None, tol=1e-7):
 
 def bimodal_blc_certificate(p, m1, m2, s, n0=64, max_boxes=200000):
     """Ball-arithmetic proof that the mixture p N(m1, s^2) + (1 - p) N(m2, s^2), m1 < m2, is
-    bi-log-concave (Supplementary Lemma S1).
+    bi-log-concave (Supplementary Lemma S3).
 
     With P(w) the posterior weight of the first component, (log f)'' = -1/s^2 + P(1 - P) r^2/s^2,
     r = (m2 - m1)/s, and P decreases in w. So f is log-concave on (-inf, a] and [b, inf), where

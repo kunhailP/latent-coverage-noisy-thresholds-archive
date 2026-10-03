@@ -1,10 +1,10 @@
 """E40: exact latent reliability of the noisy threshold at the boundary-layer law of E38
-(equal variances, x = 1e-4), Proposition 4 and Supplementary Material, S6.
+(equal variances, x = 1e-4), Proposition 3 and Supplementary Material, S9.
 
 With r_q = Q_q(|W|) and H the distribution function of |V|, the latent coverage at T = |V|_(k)
 is at least q iff T >= r_q, iff fewer than k of the |V_i| fall below r_q, so the latent
 reliability is pr{Bin(K, H(r_q)) <= k - 1}, with no Monte Carlo error. Ranks: marginal
-ceil(q (K + 1)), usual high-probability (p_k >= q), certified (Proposition 3), delta = 0.05.
+ceil(q (K + 1)), usual high-probability (p_k >= q), certified (Theorem 2), delta = 0.05.
 
   python experiments/e40_exact_reliability.py   -> results/exact_reliability.csv,
                                                     paper/fig_reliability.pdf

@@ -91,7 +91,7 @@ def test_latent_laws_match_e12_draws():
 
 
 def test_small_noise_upper_bound_all_x():
-    """Theorem 1: R_{q,q}(x) <= 1 + c_q sqrt(x); grid values of R are lower bounds of R."""
+    """Theorem 3: R_{q,q}(x) <= 1 + c_q sqrt(x); grid values of R are lower bounds of R."""
     from uai.extremal import R_grid, one_sided_constant
     cq = one_sided_constant(.9, .9)
     assert abs(cq - 0.0190618) < 1e-6
@@ -102,7 +102,7 @@ def test_small_noise_upper_bound_all_x():
 
 
 def test_box_bounds_are_sound():
-    """Box bounds of Supplementary Section S3: every law inside a box obeys the box's noisy upper / latent lower bound."""
+    """Box bounds of Supplementary Section S5: every law inside a box obeys the box's noisy upper / latent lower bound."""
     from uai.certify import _cdf_latent, _cdf_noisy, box_status
     rng = np.random.default_rng(3)
     for _ in range(300):
@@ -224,7 +224,7 @@ def test_quantised_kernel_merges_equal_variances():
 
 
 def test_scale_lemma_on_grid_values():
-    """Supplementary Lemma S3: R(lambda x) <= sqrt(lambda) R(x), checked on converged grid values."""
+    """Supplementary Lemma S5: R(lambda x) <= sqrt(lambda) R(x), checked on converged grid values."""
     from uai.procedures import shrink_mix
     xs, w = np.array([.05, .15]), np.array([.5, .5])
     r1 = shrink_mix(.9036, .9, xs, wts=w)
@@ -375,7 +375,7 @@ def _exp_tail_noisy_cdf(y, b, u, sigma):
 
 
 def test_noisy_threshold_valid_for_unknown_variances_population():
-    """Proposition 3 at population level: take the boundary-layer law that needs widening at
+    """Theorem 2 at population level: take the boundary-layer law that needs widening at
     x = 1e-4 (latent coverage of [-1, 1] below 0.9, noisy coverage 0.9). Its noisy coverage must
     stay below the certified level 0.901 for every Gaussian noise variance, so no mixture of
     variances can reach 0.901 either."""
@@ -425,7 +425,7 @@ def test_certified_rank_and_analytic_rule_defaults():
 
 
 def test_bimodal_simulation_law_is_bilogconcave_not_logconcave():
-    """The Table 1 law `bimodal_blc`: two modes, f' F <= f^2 and -f' (1 - F) <= f^2 (bi-log-
+    """The Supplementary Table S5 law `bimodal_blc`: two modes, f' F <= f^2 and -f' (1 - F) <= f^2 (bi-log-
     concavity, Duembgen et al. 2017), and log f not concave."""
     from scipy.stats import norm
     from uai.latent_laws import BIMODAL, cdf
@@ -442,7 +442,7 @@ def test_bimodal_simulation_law_is_bilogconcave_not_logconcave():
 
 
 def test_bimodal_bilogconcavity_certificate():
-    """Lemma S1: the ball-arithmetic certificate proves the Table 1 law bi-log-concave on the whole
+    """Supplementary Lemma S3: the ball-arithmetic certificate proves the Supplementary Table S5 law bi-log-concave on the whole
     line; beyond the edge of bi-log-concavity near separation 2.59 it does not succeed."""
     from uai.interval import bimodal_blc_certificate
     from uai.latent_laws import BIMODAL, _bimodal_params
@@ -454,7 +454,7 @@ def test_bimodal_bilogconcavity_certificate():
 def test_closed_forms_match_high_precision_quadrature():
     """Double-precision closed forms of the box bounds (uai.certify._cdf_noisy) against 30-digit
     quadrature, on the ranges used after outward rounding: 1e-4 <= x <= 1.5, which covers the
-    largest compressed mixture-kernel ratio D_i/T^2 of Table 1 (about 1.245), 1e-4 <= ell <= 20
+    largest compressed mixture-kernel ratio D_i/T^2 of Supplementary Table S5 (about 1.245), 1e-4 <= ell <= 20
     (and ell = inf), 1e-3 <= beta ell <= 1e3."""
     import mpmath as mp
     from uai.certify import _cdf_noisy
@@ -489,7 +489,7 @@ def test_analytic_rules_input_checks():
 
 
 def test_exact_reliability_matches_stress_simulation():
-    """Proposition 4: the exact latent reliability pr{Bin(K, H(r_q)) <= k - 1} (E40) agrees with
+    """Proposition 3: the exact latent reliability pr{Bin(K, H(r_q)) <= k - 1} (E40) agrees with
     the simulated reliability of E38 within 3.5 Monte Carlo standard errors, and the usual rank
     falls below 1 - delta for large K while the certified rank does not."""
     import pandas as pd
@@ -516,7 +516,7 @@ def _eh_true(q, k, L):
 
 
 def test_noise_class_symmetric_unimodal_closed_form():
-    """Theorem 4(i): the closed form of Psi_SU matches a direct maximization over the scale of
+    """Theorem 1(i): the closed form of Psi_SU matches a direct maximization over the scale of
     uniform noise, and the two-sided split certificate holds at (0.9018, 0.9) and (0.9, 0.8981)."""
     from scipy.optimize import minimize_scalar
     from uai.noise_classes import psi_su_enclosure, split_certificate_su
@@ -561,7 +561,7 @@ def test_noise_class_log_concave_enclosures_are_sound():
 
 
 def test_noise_classes_results_file():
-    """Every certificate behind Theorem 4 and the levels quoted in the paper holds in
+    """Every certificate behind Theorem 1 and the levels quoted in the paper holds in
     results/noise_classes.json (E41)."""
     import json
     d = json.loads((ROOT / 'results' / 'noise_classes.json').read_text())

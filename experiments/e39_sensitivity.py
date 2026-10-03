@@ -1,7 +1,7 @@
 """E39: sensitivity of the analytic rules to the assumption that the latent residuals share one
-law G, independent of the noise variances (Supplementary Material, S6).
+law G, independent of the noise variances (Supplementary Material, S9).
 
-Part 1, the design of Table 1 (K = 110, mean D = 0.577, lognormal spread 0.7), with
+Part 1, the design of Supplementary Table S5 (K = 110, mean D = 0.577, lognormal spread 0.7), with
   scale_up / scale_down  W_i = sigma(D_i) X_i, sigma(d) proportional to d^{+-1/2}, var W = 1:
                          residual dispersion rises or falls with the noise variance; the new
                          area draws (D_new, W_new) from the same population;
@@ -9,7 +9,7 @@ Part 1, the design of Table 1 (K = 110, mean D = 0.577, lognormal spread 0.7), w
                          many latent standard deviations (a systematically different area).
 Latent coverage of the new area is computed from closed-form distribution functions, averaged
 over D_new and also conditional on D_new at its 10% and 90% quantiles. Rules: noisy threshold at
-the certified rank (Proposition 3) and Corollary 2.
+the certified rank (Theorem 2) and Supplementary Corollary S1.
 
 Part 2, the boundary-layer law of E38 (K = 110, equal variances x = 1e-4), with the new area
 shifted by +-0.1 and +-0.25 latent standard deviations; noisy threshold at the certified rank.

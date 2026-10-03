@@ -287,8 +287,8 @@ def shape_values(p, q, beta, ells, xs, w=None, m=256, iters=55):
 
 # ---------------------------------------------------------------------------------------------
 # Scaled one-sided problem c_{p,q} = sup{ F_Y^{-1}(q) : Y log-concave, P(Y + Z <= 0) >= p }.
-# Lemma 1: the sup is over exponential tails Y = b - E, E ~ Exp(u). Theorem 1: for every x,
-# R_{q,q}(x) <= 1 + c_q sqrt(x); the p >= q bound of Section 4.1: R_{p,q}(x) <= 1 + C_{p,q} sqrt(x).
+# Supplementary Lemma S1: the sup is over exponential tails Y = b - E, E ~ Exp(u). Theorem 3: for every x,
+# R_{q,q}(x) <= 1 + c_q sqrt(x); the p >= q bound of Section 4.3: R_{p,q}(x) <= 1 + C_{p,q} sqrt(x).
 # ---------------------------------------------------------------------------------------------
 
 def exp_tail_mass(b, u):
@@ -307,7 +307,7 @@ def exp_tail_value(p, q, u):
 
 
 def one_sided_constant(p, q, log_u=np.linspace(np.log(1e-3), np.log(200), 160)):
-    """c_{p,q} by Lemma 1: a scan over the rate u, polished around the best grid point.
+    """c_{p,q} by Supplementary Lemma S1: a scan over the rate u, polished around the best grid point.
     The u -> infinity end is the point mass, value -Phi^{-1}(p)."""
     if p >= 1:
         return -np.inf
@@ -323,7 +323,7 @@ def one_sided_constant(p, q, log_u=np.linspace(np.log(1e-3), np.log(200), 160)):
 
 
 def split_constant(p, q, n=21):
-    """C_{p,q} of the p >= q bound of Section 4.1: worst split of the noisy failure 1 - p between the two ends,
+    """C_{p,q} of the p >= q bound of Section 4.3 (Supplementary equation (S2)): worst split of the noisy failure 1 - p between the two ends,
     best split of the latent failure 1 - q. Symmetric in the two ends."""
     worst = -np.inf
     for a_r in np.linspace(0, (1 - p) / 2, n):
@@ -337,7 +337,7 @@ def split_constant(p, q, n=21):
 
 
 # ---------------------------------------------------------------------------------------------
-# Centring (Theorems 2 and 3 and Lemma 2 of the paper). If |EW| <= 1 - kappa sqrt(x) and q > 1 - 1/e,
+# Centring (Theorems 4 and 5 and Supplementary Lemma S2 of the paper). If |EW| <= 1 - kappa sqrt(x) and q > 1 - 1/e,
 #   lim_{x -> 0} {R_q^(kappa)(x) - 1} / sqrt(x) = L_q(kappa) = sup{ v(u) : k(u) >= kappa },
 #   v(u) = b_u - log(1/q)/u,  k(u) = 1/u - b_u,  b_u = b_u(q).
 # The exponential tail b_u - E, E ~ Exp(u), has mean -k(u); L_q(0) = c_q.
@@ -374,7 +374,7 @@ def transition_constant(q, kappa, log_u=np.linspace(np.log(1e-6), np.log(50), 40
 
 
 def transition_upper(q, kappa):
-    """U_q(kappa) = min{c_q, sqrt(kappa^2 + 1) - kappa}: Theorem 1 and the mean-offset bound."""
+    """U_q(kappa) = min{c_q, sqrt(kappa^2 + 1) - kappa}: Theorem 3 and the mean-offset bound of Theorem 4."""
     return min(tail_optimum(q)[1], np.sqrt(kappa * kappa + 1) - kappa)
 
 

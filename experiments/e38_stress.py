@@ -1,11 +1,11 @@
-"""E38: stress test at the extremal boundary-layer law (Supplementary Material, S6).
+"""E38: stress test at the extremal boundary-layer law (Supplementary Material, S9).
 
 The latent residual W = A - s E, E ~ Exp(u), with s = x^{1/2} and u = 0.0508, the minimizer of
 latent coverage in the small-noise limit at q = 0.9; A solves the population noisy coverage
 pr(|W + e| <= 1) = 0.9, averaged over the noise variances. For calibration sizes K, data sets
 are drawn and the exact conditional latent coverage pr(|W_new| <= T | data) is recorded for the
 noisy threshold T at three ranks: the marginal split-conformal rank ceil(0.9 (K + 1)), the usual
-high-probability rank (p_k >= 0.9) and the certified rank of Proposition 3 (p_k >= 0.901 and
+high-probability rank (p_k >= 0.9) and the certified rank of Theorem 2 (p_k >= 0.901 and
 k >= K p_k + 1), delta = 0.05.
 
   python experiments/e38_stress.py

@@ -1,8 +1,8 @@
 """Coverage transfer for classes of noise laws (Section on general noise in the paper).
 
 For a class E of noise laws closed under scaling, a latent residual W in B, and noise e ~ some law
-in E independent of W, write Psi_E(q) = sup_{eps in E} E min(1, q exp(-eps)). By Lemma 1 (whose
-proof does not use the noise law) and scaling, the one-sided constant c_{p,q}(eps) is <= 0 for
+in E independent of W, write Psi_E(q) = sup_{eps in E} E min(1, q exp(-eps)). By Proposition 1 (the one-sided argument of
+Supplementary Lemma S1, whose proof does not use the noise law) and scaling, the one-sided constant c_{p,q}(eps) is <= 0 for
 every eps in E and every scale if Psi_E(q) < p, and fails for some law and scale if Psi_E(q) > p.
 
 Symmetric unimodal noise. By Khintchine's theorem eps = R U with U uniform on [-1, 1] independent
@@ -298,8 +298,8 @@ def _bb(f, box, target, max_boxes, min_width):
 def lc_certificate(q, p, max_boxes=2_000_000, min_width=1e-7, verbose=False):
     """Certify Psi_LC(q) < p (one-sided, every mean-zero log-concave noise law, every scale).
     Analytic ends (see the paper's supplement):
-      region I,  L <= L_small: E h <= q e^{L^2/8} (Hoeffding's lemma, eps in an interval of
-                 length L with mean 0); L >= L_big: E h <= P(V <= mu + z/L) + q e^{-z} with
+      region I,  L <= L_small: E h <= q e^{L^2/24} (variance of a log-affine law on [0, 1] at most 1/12;
+                 sharper than Hoeffding's e^{L^2/8}); L >= L_big: E h <= P(V <= mu + z/L) + q e^{-z} with
                  P(V <= mu) <= 1 - 1/e (Grunbaum) and density of V <= 2/(1 - e^{-2});
       region II, sigma <= s_small: E h <= q e^{sigma m} <= q e^{sigma}; sigma >= s_big:
                  E h <= (1 - e^{-1 - z/sigma})/(1 - e^{-2}) + q e^{-z};

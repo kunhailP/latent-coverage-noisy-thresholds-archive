@@ -1,4 +1,4 @@
-"""Figure 1 of the manuscript: the transition coefficient L_q(kappa) (Theorem 3) and the upper
+"""Supplementary Figure S2: the transition coefficient L_q(kappa) (Theorem 5) and the upper
 bound min{c_q, (kappa^2 + 1)^{1/2} - kappa}, q = 0.8, 0.9, 0.95.
 
   python experiments/fig_transition.py      -> paper/fig_transition.pdf

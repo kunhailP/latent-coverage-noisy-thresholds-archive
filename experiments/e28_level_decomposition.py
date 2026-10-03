@@ -1,7 +1,7 @@
 """E28: split the HetLDC width gain in E20 into the order-statistic level effect (p_k at delta = .04
-vs .05) and the exact-kernel effect at a matched level (Supplementary Material, Section S6). Grid values, ~70 min on 14 cores.
+vs .05) and the exact-kernel effect at a matched level (not in the manuscript; context: Supplementary Material, Section S6). Grid values, ~70 min on 14 cores.
   python experiments/e28_level_decomposition.py
-Prints the per-shape ratios reported in the Supplementary Material.
+Prints the per-shape ratios (not reported in the current manuscript).
 """
 from multiprocessing import Pool
 

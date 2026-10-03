@@ -1,4 +1,4 @@
-"""Latent-coverage radii when the noise variances are estimated (Supplementary Material, Section S4).
+"""Latent-coverage radii when the noise variances are estimated (Supplementary Material, Section S6).
 
 Structured model S: D_i = sigma^2 a_i with known a_i > 0 and one unknown scale sigma^2, estimated
 by a pooled variance with nu degrees of freedom (nu sigma_hat^2 / sigma^2 ~ chi2_nu, independent
@@ -7,9 +7,9 @@ order-statistic event (>= 1 - delta), the radius
 
     s = T sup_{sigma^2 in [lo, hi]} R^mix_{p_k - eps, q}(sigma^2 a / T^2)
 
-covers a new latent residual with probability >= q (Supplementary Lemma S2); reliability >= 1 - delta - eta.
+covers a new latent residual with probability >= q (Supplementary Lemma S4); reliability >= 1 - delta - eta.
 
-The supremum is covered by finitely many points with Supplementary Lemma S3, R(lambda x) <= sqrt(lambda) R(x)
+The supremum is covered by finitely many points with Supplementary Lemma S5, R(lambda x) <= sqrt(lambda) R(x)
 for lambda >= 1 (all variances scaled together):
 
     sup_{[s_j, s_{j+1}]} R <= sqrt(s_{j+1} / s_j) U(s_j),
@@ -41,7 +41,7 @@ def radius_at(p, q, xs, n_pts=32, certify=False, tols=(1e-3, 3e-3, 1e-2, 3e-2, 1
 
 
 def sup_scale_radius(p, q, a, T, lo, hi, r0=1.004, max_cells=60, certify=False):
-    """Bound on sup_{s in [lo, hi]} R^mix_{p - eps, q}(s a / T^2) by Supplementary Lemma S3 on an adaptive grid.
+    """Bound on sup_{s in [lo, hi]} R^mix_{p - eps, q}(s a / T^2) by Supplementary Lemma S5 on an adaptive grid.
     Returns (bound, cells) with cells = [(s_j, s_{j+1}, U(s_j))]."""
     a = np.asarray(a, dtype=float)
     U0 = radius_at(p, q, lo * a / T**2, certify=certify)[0]
@@ -59,7 +59,7 @@ def sup_scale_radius(p, q, a, T, lo, hi, r0=1.004, max_cells=60, certify=False):
             U = radius_at(p, q, s * a / T**2, certify=certify)[0]
             if not np.isfinite(U):
                 return np.inf, cells
-    if s < hi:                               # ran out of cells: close with Supplementary Lemma S3 in one step
+    if s < hi:                               # ran out of cells: close with Supplementary Lemma S5 in one step
         bound = max(bound, np.sqrt(hi / s) * U)
     return bound, cells
 
@@ -73,7 +73,7 @@ def s_rule(V, a, s2_hat, nu, q=0.90, delta=0.04, eta_lo=0.009, eta_hi=0.001, k=N
     k = pac_rank(K, q, delta) if k is None else k
     p_k = stats.beta.ppf(delta, k, K + 1 - k)
     if k < K * p_k + 1:
-        raise ValueError('Hoeffding comparison (Proposition 2) needs k >= K p_k + 1')
+        raise ValueError('Hoeffding comparison (Supplementary Proposition S2) needs k >= K p_k + 1')
     T = np.sort(np.abs(V))[k - 1]
     lo, hi = scale_interval(s2_hat, nu, eta_lo, eta_hi)
     bound, cells = sup_scale_radius(p_k, q, a, T, lo, hi, certify=certify)
@@ -81,7 +81,7 @@ def s_rule(V, a, s2_hat, nu, q=0.90, delta=0.04, eta_lo=0.009, eta_hi=0.001, k=N
 
 
 # ---------------------------------------------------------------------------------------------
-# Model H: area-wise variances, no pooling (Supplementary Material, Section S4). Exploratory numerics only:
+# Model H: area-wise variances, no pooling (Supplementary Material, Section S6). Exploratory numerics only:
 # the envelope kernel is tabulated on a grid and R[u] is maximised over a (slope, length, shift)
 # grid, so the radius is a converging lower value of R[u], not a certified bound.
 # ---------------------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ def kernel_envelope(w, h0=0.05):
     g_x(w) = P(a/s <= Z <= b/s) with a = |w| - 1, b = |w| + 1, s = sqrt(x); its only critical
     point is s^2 = (b^2 - a^2) / (2 log(b/a)) = 2|w| / log((|w|+1)/(|w|-1)), and M(w) <= 1/2.
     M jumps from 1 to 1/2 at |w| = 1, so a ramp of width h0 is added to keep the majorant
-    continuous (Supplementary Lemma S2 asks for a continuous kernel)."""
+    continuous (Supplementary Lemma S4 asks for a continuous kernel)."""
     from scipy.special import ndtr
     w = np.abs(np.asarray(w, dtype=float))
     out = np.ones_like(w)

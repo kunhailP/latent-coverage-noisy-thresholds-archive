@@ -30,7 +30,7 @@ def _bimodal_params(p=0.4, ratio=2.5):
     """Mixture p N(m1, s^2) + (1 - p) N(m2, s^2) with mean 0, variance 1 and separation
     (m2 - m1)/s = ratio. For p = 0.4 it is bimodal for ratio above about 2.443 and bi-log-concave
     up to about 2.59; it is not log-concave. Bi-log-concavity at ratio 2.5 is proved by
-    uai.interval.bimodal_blc_certificate (Supplementary Lemma S1); the interior maxima of
+    uai.interval.bimodal_blc_certificate (Supplementary Lemma S3); the interior maxima of
     (f'F - f^2)/f^2 and {-f'(1 - F) - f^2}/f^2 are -0.141 and -0.864."""
     d = ratio / np.sqrt(1 + p * (1 - p) * ratio**2)          # m2 - m1 after standardisation
     s = d / ratio

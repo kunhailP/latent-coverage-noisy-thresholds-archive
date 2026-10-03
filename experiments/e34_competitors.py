@@ -1,4 +1,4 @@
-"""E34: head-to-head with the closest methods on the data of Table 1 (E20 seeds).
+"""E34: head-to-head with the closest methods on the data of Supplementary Table S5 (E20 seeds).
 
 Setting: K = 110, var W = 1, heterogeneous known D_i = 0.577 lognormal(0, 0.7)/mean, four latent
 laws, 150 data sets each. Every rule outputs a symmetric latent interval [-s, s]; conditional
@@ -30,7 +30,7 @@ read from results/hetldc_synth.csv and results/shape_free.csv):
                then pr(W_new not in U | data) <= alpha on that event (our adaptation, not in the
                paper). gamma = 0.05.
   noisy_threshold, simple_shrink
-               the analytic rules of Proposition 3 and Corollary 2 (uai.procedures): the noisy
+               the analytic rules of Theorem 2 and Supplementary Corollary S1 (uai.procedures): the noisy
                threshold at rank 105, valid for unknown heterogeneous variances, and
                max{0, T - 0.114 D_min^{1/2}}.
 

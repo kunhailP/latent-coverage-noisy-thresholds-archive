@@ -1,4 +1,4 @@
-"""E32: centring and the boundary-distance transition (Theorems 2 and 3, Supplementary Proposition S1 and Lemma 2 of the paper).
+"""E32: centring and the boundary-distance transition (Theorems 4 and 5, Supplementary Proposition S4 and Supplementary Lemma S2 of the paper).
 
   python experiments/e32_centering.py
 Writes results/centering.json:

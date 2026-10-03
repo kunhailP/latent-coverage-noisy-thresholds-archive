@@ -1,6 +1,6 @@
 """Certified upper bounds for R_{p,q}(x) by monotone branch and bound.
 
-Family (Proposition 1, beta >= 0 by the symmetry W -> -W): W = b - Y, where Y has density
+Family (Supplementary Proposition S3, beta >= 0 by the symmetry W -> -W): W = b - Y, where Y has density
 proportional to exp(-beta y) on [0, ell]. The ends are included: ell = 0 or beta = inf is a
 point mass at b, ell = inf is an exponential tail, beta = 0 is uniform.
 

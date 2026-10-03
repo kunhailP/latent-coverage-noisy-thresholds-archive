@@ -1,13 +1,13 @@
-"""E35: the radius correction under different locations of the mean (Theorems 1-3, Supplementary Proposition S1).
+"""E35: the radius correction under different locations of the mean (Theorems 3-5, Supplementary Proposition S4).
 
 For q = 0.9 and noise-to-threshold variance ratios x from 1e-7 to 1e-2, each law is scaled so
 that the noisy coverage pr(|W + x^{1/2} Z| <= 1) is exactly q, and the radius correction
 delta = Q_q(|W|) - 1 is computed from closed forms.
   boundary      W = 1 + x^{1/2}(b - E_u) at the maximizer u* of v_q: mean 1 - k(u*) x^{1/2};
-                delta / x^{1/2} -> c_q (Theorem 1)
+                delta / x^{1/2} -> c_q (Theorem 3)
   kappa50       the same family at the rate u with k(u) = 50: mean at distance 50 x^{1/2};
-                delta / x^{1/2} -> L_q(50) (Theorem 3)
-  centred       a fixed mean-zero law of Supplementary Proposition S1 (beta l = 0.5 on a unit segment);
+                delta / x^{1/2} -> L_q(50) (Theorem 5)
+  centred       a fixed mean-zero law of Supplementary Proposition S4 (beta l = 0.5 on a unit segment);
                 delta / x -> (beta r0 / 2) tanh(beta r0) = 0.0240. Larger coefficients (up to
                 0.0747 at beta l = 0.9375) sit closer to the end of the support, and their order-x
                 widening appears only once the noise is far smaller than that gap: at beta l = 0.9
