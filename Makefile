@@ -1,7 +1,7 @@
 PY ?= python3
 PROCS ?= 8
 
-.PHONY: test quick edge figures constants certified simulations table1-extra-laws comparison estimated apipop supplement-extras paper all
+.PHONY: test quick edge figures constants certified simulations synth-extra-laws comparison same-information estimated apipop supplement-extras paper all
 
 test:
 	$(PY) -m pytest -q
@@ -21,7 +21,8 @@ figures:
 	$(PY) experiments/fig_paper.py
 	$(PY) experiments/fig_mean_location.py
 
-# ball-arithmetic certificates for c_q and C_{p,q} (Corollary 1, Lemma 1)
+# ball-arithmetic certificates: c_q and C_{p,q} (Corollary 1, Supplementary Lemma S1), the coverage
+# form of Corollary 1, and the noise classes of Theorem 1
 constants:
 	$(PY) experiments/e27_interval_constants.py $(PROCS)
 	$(PY) experiments/e37_coverage_transfer.py $(PROCS)
@@ -36,19 +37,21 @@ certified:
 	$(PY) experiments/e24_certified_table.py $(PROCS) 5e-4 0.002 0.0095 0.9,0.9036
 	$(PY) experiments/e24_certified_table.py $(PROCS) 5e-4 0.002 0.366 0.9068
 
-# Table 1 and the shape-free rule (hours, dominated by per-data-set certificates)
+# known-variance comparison (Supplementary Table S5) and the shape-free rule (hours, dominated by
+# per-data-set certificates)
 simulations:
 	$(PY) experiments/e20_hetldc_synth.py 150 $(PROCS)
 	$(PY) experiments/e31_shape_free.py
 	$(PY) experiments/e28_level_decomposition.py
 
-# the last three laws of Table 1 (hours; merged into the existing results)
-table1-extra-laws:
+# the last three laws of Supplementary Table S5 (hours; merged into the existing results)
+synth-extra-laws:
 	$(PY) experiments/e20_hetldc_synth.py 150 $(PROCS) shapes=trunc_exp,bimodal_blc,t3_not_LC
 	$(PY) experiments/e31_shape_free.py
 	$(PY) experiments/e34_competitors.py 150 $(PROCS) analytic-shapes=trunc_exp,bimodal_blc,t3_not_LC
 
-# LatentCP and deconvolution conformal on the data sets of Table 1 (minutes)
+# LatentCP and deconvolution on the data sets of Supplementary Table S5, the analytic rules with
+# 2000 data sets, the stress test, the exact reliability of Proposition 3 and the sensitivity runs
 comparison:
 	$(PY) experiments/e34_competitors.py 150 $(PROCS)
 	$(PY) experiments/e34_competitors.py 150 $(PROCS) analytic-shapes=trunc_exp,bimodal_blc,t3_not_LC
@@ -57,7 +60,12 @@ comparison:
 	$(PY) experiments/e40_exact_reliability.py
 	$(PY) experiments/e39_sensitivity.py 2000
 
-# estimated noise variances (Supplementary Material, Section S4)
+# Proposition 2 (unimodal latent laws) and Table 2 (rules with the same information)
+same-information:
+	$(PY) experiments/e42_unimodal_boundary.py
+	$(PY) experiments/e43_same_information.py
+
+# estimated noise variances (Supplementary Material, Section S6)
 estimated:
 	$(PY) experiments/e29_estimated_scale.py 100 $(PROCS)
 	$(PY) experiments/e29_estimated_scale.py 30 $(PROCS) cert
@@ -79,4 +87,4 @@ paper:
 	cd paper && pdflatex main && bibtex main && pdflatex main && pdflatex main
 	cd paper && pdflatex supplement && bibtex supplement && pdflatex supplement && pdflatex supplement
 
-all: quick edge figures constants certified simulations comparison estimated apipop supplement-extras paper
+all: quick edge figures constants certified simulations comparison same-information estimated apipop supplement-extras paper
