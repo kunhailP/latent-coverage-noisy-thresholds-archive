@@ -59,7 +59,7 @@ Theorem~\ref{M-thm:small} & \S~\ref{sec:s-gauss}; constants \S~\ref{sec:s-cert} 
 feasibility bound and the $1.16\%$ and $0.22\%$ widenings & \S~\ref{sec:s-gauss}, feasibility; shape of the radius & proved; $0.22\%$ in double precision \\
 Theorems~\ref{M-thm:mean} and~\ref{M-thm:transition} & \S~\ref{sec:s-gauss} & proved; $\kappa^*_q$ in double precision \\
 Corollary~\ref{M-cor:slack} & \S~\ref{sec:s-gauss}, \S~\ref{sec:s-cert} & proved; slack intervals certified \\
-rules with known variances (\S~\ref{M-sec:hetero}) & \S\S~\ref{sec:s-ranks}, \ref{sec:s-gauss}, \ref{sec:s-hetero} & proved; computed radius in double precision \\
+rules with known variances (\S~\ref{sec:s-hetero}) & \S\S~\ref{sec:s-ranks}, \ref{sec:s-gauss}, \ref{sec:s-hetero} & proved; computed radius in double precision \\
 Table~\ref{M-tab:sameinfo} & \S~\ref{sec:s-sim} & simulation, exact conditional coverage \\
 shift of the new residual (\S~\ref{M-sec:discussion}) & \S~\ref{sec:s-shift} & proved \\
 \bottomrule
@@ -193,7 +193,7 @@ Proposition~\ref{M-prop:fail} is illustrated at an extremal law in \S~\ref{sec:s
 
 \subsection*{An order-statistic level for known variances}
 
-The computed radius and the shrunk threshold of \S~\ref{M-sec:hetero} use a level for the average noisy distribution function rather than a bound for each unit. Let $T = |V|_{(k)}$, let $\bar F$ be the average distribution function of the $|V_i|$, assumed continuous, and let $p_k$ be the $\delta$-quantile of the ${\rm Beta}(k, K+1-k)$ distribution.
+The computed radius and the shrunk threshold of \S~\ref{sec:s-hetero} use a level for the average noisy distribution function rather than a bound for each unit. Let $T = |V|_{(k)}$, let $\bar F$ be the average distribution function of the $|V_i|$, assumed continuous, and let $p_k$ be the $\delta$-quantile of the ${\rm Beta}(k, K+1-k)$ distribution.
 
 \begin{proposition}\label{prop:beta}
 If $k \ge Kp_k + 1$ then $\pr\{\bar F(T) \ge p_k\} \ge 1 - \delta$.
@@ -212,7 +212,7 @@ This section proves the results of \S~\ref{M-sec:mean}, for Gaussian noise $e \s
 Write $g_x(w) = \pr(|w + x^{1/2}Z| \le 1)$, so that the constraint in \eqref{M-eq:R} reads $E\{g_x(W)\} \ge p$, and let $\mathcal F$ be the family of point masses and of laws with density proportional to $\mathrm{e}^{\beta w}$ on a segment.
 
 \begin{proposition}\label{prop:reduction}
-$R_{p,q}(x) = \sup\{Q_q(|W|) : W \in \mathcal F,\ E\{g_x(W)\} \ge p\}$. The same holds for any continuous constraint kernel that vanishes at $\pm\infty$, in particular for the average kernel of \S~\ref{M-sec:hetero}.
+$R_{p,q}(x) = \sup\{Q_q(|W|) : W \in \mathcal F,\ E\{g_x(W)\} \ge p\}$. The same holds for any continuous constraint kernel that vanishes at $\pm\infty$, in particular for the average kernel of \S~\ref{sec:s-hetero}.
 \end{proposition}
 
 The proof uses the localization theorem; over $\mathcal F$ the problem is a two-dimensional maximization of closed forms.
@@ -222,7 +222,7 @@ Since $\mathcal F \subset \LC$ it suffices to bound the supremum over $\LC$. Let
 \[
 E\{g_x(W_M)\} \ge \frac{p - p\varepsilon_M}{1 - \varepsilon_M} = p, \qquad \pr(|W_M| < s) \le \frac{q - \gamma}{1-\varepsilon_M} < q
 \]
-for $M$ large. On $[-M, M]$ the constraint function $g_x - p$ is continuous, and $\mu \mapsto -\mu(-s, s)$ is linear and upper semicontinuous for weak convergence because $(-s,s)$ is open. By the localization theorem \citep{kannan1995, fradelizi2004}, the supremum of this functional over the log-concave probability measures on $[-M, M]$ that satisfy $\int(g_x - p)\,d\mu \ge 0$ is attained at a point mass or at a law with log-affine density on a segment. Hence some member of $\mathcal F$ is feasible and has $\pr(|W| < s) < q$, that is, $Q_q(|W|) \ge s$. Since $s < Q_q(|W|)$ was arbitrary the claim follows. Only continuity of the kernel and its decay at infinity were used, so the argument applies to the average kernel $\bar g$ of \S~\ref{M-sec:hetero}.
+for $M$ large. On $[-M, M]$ the constraint function $g_x - p$ is continuous, and $\mu \mapsto -\mu(-s, s)$ is linear and upper semicontinuous for weak convergence because $(-s,s)$ is open. By the localization theorem \citep{kannan1995, fradelizi2004}, the supremum of this functional over the log-concave probability measures on $[-M, M]$ that satisfy $\int(g_x - p)\,d\mu \ge 0$ is attained at a point mass or at a law with log-affine density on a segment. Hence some member of $\mathcal F$ is feasible and has $\pr(|W| < s) < q$, that is, $Q_q(|W|) \ge s$. Since $s < Q_q(|W|)$ was arbitrary the claim follows. Only continuity of the kernel and its decay at infinity were used, so the argument applies to the average kernel $\bar g$ of \S~\ref{sec:s-hetero}.
 \end{proof}
 
 For $\beta > 0$ and $\sigma = x^{1/2}$, integration by parts gives
@@ -331,7 +331,11 @@ Near $\pm r_0$ the density $f$ of $W$ is smooth with $f' = \beta f$, and the end
 
 \subsection*{The case $p > q$}
 
-In the constant $C_{p,q}$ of \eqref{M-eq:C}, $c_{1,q'} = -\infty$, since no law has noisy coverage one at a single end. Numerically the worst split puts the whole budget on one end, so that $C_{p,q} = c_{p,q}$; this observation is not used. Ball arithmetic gives $-0.0572 \le C_{0.9036,0.9} \le -0.057$, where $0.9036$ is the order-statistic level for $K = 110$, $k = 105$ at $\delta = 0.04$, used in \S~\ref{sec:s-hetero}.
+The constant of \S~\ref{M-sec:slack} is
+\begin{equation}\label{eq:C}
+C_{p,q} = \sup_{\alpha_L + \alpha_R = 1 - p}\ \inf_{\beta_L + \beta_R = 1 - q} \max(c_{1-\alpha_L, 1-\beta_L},\, c_{1-\alpha_R, 1-\beta_R}) \ge c_{p,q},
+\end{equation}
+where $\alpha_L, \alpha_R$ split the noisy failure probability and $\beta_L, \beta_R$ the latent one. If $C_{p,q} \le 0$ then $R^{\mathcal B}_{p,q}(x) \le 1$ for every $x$, and if $c_{p,q} > 0$ then $R_{p,q}(x) > 1$ for all small $x$; Corollary~\ref{M-cor:slack} follows from the certified values $C_{0.901,0.9} \le 0$ and $c_{0.90079,0.9} > 0$ of \S~\ref{sec:s-ball}. In $C_{p,q}$, $c_{1,q'} = -\infty$, since no law has noisy coverage one at a single end. Numerically the worst split puts the whole budget on one end, so that $C_{p,q} = c_{p,q}$; this observation is not used. Ball arithmetic gives $-0.0572 \le C_{0.9036,0.9} \le -0.057$, where $0.9036$ is the order-statistic level for $K = 110$, $k = 105$ at $\delta = 0.04$, used in \S~\ref{sec:s-hetero}.
 
 In the proof of the upper bound of Theorem~\ref{M-thm:small}, replace $1 - q$ by $1 - p$ for the noisy budget, choose any split $\beta_L + \beta_R = 1 - q$ of the latent budget, and use $F_Y^{-1}(1-\beta_R) \le c_{1-\alpha_R, 1-\beta_R}$ at each end. Since $c_{p',q'}$ decreases in $p'$, the worst case has $\alpha_L + \alpha_R = 1 - p$, which gives $R_{p,q}(x) \le 1 + C_{p,q}x^{1/2}$ for every $x$, with $C_{p,q}$ nonincreasing in $p$. The proof of the lower bound applies with $b_u(q)$ replaced by $b_u(p)$ and $p' = p + \eta_x$, giving $R_{p,q}(x) \ge 1 + c_{p,q}x^{1/2} - o(x^{1/2})$ for every $p \ge q$. This proves Corollary~\ref{M-cor:slack}, whose numerical intervals are certified in \S~\ref{sec:s-ball}.
 
@@ -474,6 +478,14 @@ Grid maximization over the extremal family, as in Fig.~\ref{fig:s-boundary}, giv
 
 \subsection*{Heterogeneous known variances}
 
+This section gives the rules of \S~\ref{M-sec:hetero}, which use the noise variances $D_i$ when they are known, with Gaussian noise. They are an extension: the main results need neither the variances nor the noise law.
+
+\emph{The computed radius.} Let $T = |V|_{(k)}$ and let
+\[
+\bar g(w) = K^{-1}\sum_{i=1}^K \pr(|w + e_i| \le T)
+\]
+be the average noisy kernel at $T$. By Proposition~\ref{prop:beta}, with probability at least $1 - \delta$ over calibration samples, $\int \bar g\,dG \ge p_k$, the $\delta$-quantile of the ${\rm Beta}(k, K+1-k)$ distribution; the proof needs $k \ge Kp_k + 1$, which holds for the ranks used here. Let $R^{\rm mix}$ be defined by \eqref{M-eq:R} with the constraint $\int \bar g\,dG \ge p_k - \omega$, where $\omega$ bounds the error from compressing the $D_i$ to a few support points. By Proposition~\ref{prop:reduction}, which holds for this kernel, the computed radius $T R^{\rm mix}$ covers the latent target with probability at least $q$, given the data, on an event of probability at least $1 - \delta$, for every log-concave $G$. This guarantee is for the exact $R^{\rm mix}$; the implementation computes a numerical upper bound on it in double precision, not a certificate.
+
 In the heterogeneous rule, $\omega$ bounds, for each data set, the sup-norm error of the average kernel after compressing the $D_i$ to $32$ support points: the maximum over a grid of spacing $h = 10^{-3}$ plus $Mh^2/8$, with $M$ a bound on the second derivative; it was about $2\times10^{-4}$. For each data set a numerical upper bound of $R^{\rm mix}$ is computed by the box bounds, which hold term by term for a mixture kernel, and the shape-free bound is used if the branch and bound fails.
 
 Replacing the average kernel by the kernel of a single variance is not safe. With the mean variance plugged in, the radius is $1.4\%$ too short at mean $x = 0.2$ with lognormal spread $1$ (numerical). The smallest variance also fails: take $W = b - E_2$ with $b = 1.0435647$ and noise an equal mixture of $N(0, 10^{-8})$ and $N(0, 5\times10^{-4})$. The noisy coverage of $[-1, 1]$ exceeds $0.9$, while the radius $1 + c_{0.9}10^{-4}$ given by the smaller variance covers $W$ with probability $0.89977$; this was checked in $192$-bit ball arithmetic.
@@ -495,7 +507,7 @@ At $q = 0.9$, $K = 110$ and $\delta = 0.05$, where $p_k = 0.906806$, ball arithm
 Suppose the $D_i$ are unknown and estimates $\hat D_i$ are available that are independent of the scores, as for the sample means and variances of normal unit data. The order-statistic event of Proposition~\ref{prop:beta} involves the scores only. Let $\mathcal A_\eta$ be an event determined by the $\hat D_i$ with $\pr(\mathcal A_\eta) \ge 1 - \eta$. For a vector $D = (D_1, \ldots, D_K)$ of variances and a threshold $t$, let $\bar g_{D,t}(w) = K^{-1}\sum_i \pr(|w + D_i^{1/2}Z| \le t)$ be the average kernel. For a kernel $u$, let $R_{p,q}[u]$ be the radius \eqref{M-eq:R} with the constraint replaced by $\int u\,dG \ge p$, in units in which the threshold is $1$, and write $R^{\rm mix}_{p,q}(x_1, \ldots, x_K) = R_{p,q}[\bar g_{x,1}]$, the radius for the average kernel with variances $x_i = D_i/t^2$ at threshold $1$.
 
 \begin{lemma}\label{lem:dominate}
-Let $G \in \LC$. Suppose that on $\mathcal A_\eta$ a continuous kernel $u_t$, vanishing at $\pm\infty$, satisfies $u_t \ge \bar g_{D,t}$ pointwise for every $t > 0$. Then $s = T\,R_{p_k,q}[u_T]$ covers a new latent residual with probability at least $q$, conditionally on the data, with probability at least $1 - \delta - \eta$. If $\mathcal D_\eta$ is a confidence set with $\pr(D \in \mathcal D_\eta) \ge 1 - \eta$, the same holds for $s = T\sup_{d \in \mathcal D_\eta} R^{\rm mix}_{p_k,q}(d/T^2)$. With a compressed kernel, $p_k$ is replaced by $p_k - \omega$ as in \S~\ref{M-sec:hetero}.
+Let $G \in \LC$. Suppose that on $\mathcal A_\eta$ a continuous kernel $u_t$, vanishing at $\pm\infty$, satisfies $u_t \ge \bar g_{D,t}$ pointwise for every $t > 0$. Then $s = T\,R_{p_k,q}[u_T]$ covers a new latent residual with probability at least $q$, conditionally on the data, with probability at least $1 - \delta - \eta$. If $\mathcal D_\eta$ is a confidence set with $\pr(D \in \mathcal D_\eta) \ge 1 - \eta$, the same holds for $s = T\sup_{d \in \mathcal D_\eta} R^{\rm mix}_{p_k,q}(d/T^2)$. With a compressed kernel, $p_k$ is replaced by $p_k - \omega$ as in \S~\ref{sec:s-hetero}.
 \end{lemma}
 
 \begin{proof}
@@ -534,7 +546,7 @@ Let $\bar g$ be a kernel that is symmetric, continuous, strictly decreasing in $
 Let $\tau = (p - qm)/(1-q) \in (0, m)$. Since $m - \bar g(W) \ge 0$, Markov's inequality gives $\pr\{\bar g(W) < \tau\} \le \{m - p\}/(m - \tau) = 1 - q$, and $\bar g(W) < \tau$ exactly when $|W| > r$, so $Q_q(|W|) \le r$. Conversely, for small $\epsilon > 0$ put mass $q - \epsilon$ at $0$ and mass $1 - q + \epsilon$ at the point $w_\epsilon > 0$ with $\bar g(w_\epsilon) = \{p - (q - \epsilon)m\}/(1 - q + \epsilon)$. This law meets the constraint with equality, has $Q_q(|W|) = w_\epsilon$, and $w_\epsilon \to r$ as $\epsilon \to 0$.
 \end{proof}
 
-The average kernel of \S~\ref{M-sec:hetero} satisfies these conditions, so for a fixed rank the Markov rule of Table~\ref{tab:synth} is the smallest radius that the single order-statistic constraint allows without a shape assumption. With $1$ in place of $\bar g(0)$ it contains the bound of \citet{guille2024}. It is not a bound on procedures that use several thresholds or tune the rank on independent data, as LatentCP \citep{zheng2026} can.
+The average kernel of \S~\ref{sec:s-hetero} satisfies these conditions, so for a fixed rank the Markov rule of Table~\ref{tab:synth} is the smallest radius that the single order-statistic constraint allows without a shape assumption. With $1$ in place of $\bar g(0)$ it contains the bound of \citet{guille2024}. It is not a bound on procedures that use several thresholds or tune the rank on independent data, as LatentCP \citep{zheng2026} can.
 
 \section{A shifted new residual}\label{sec:s-shift}
 
@@ -563,7 +575,7 @@ experiment & claim \\
 \midrule
 rules with the same information & Table~\ref{M-tab:sameinfo}: width of the ranks of Theorem~\ref{M-prop:unknown} when the noise is unknown \\
 stress test at the extremal law & Proposition~\ref{M-prop:fail}: without the raise the latent reliability falls as $K$ grows \\
-rules with known variances & \S~\ref{M-sec:hetero}: the computed radius and the shrunk threshold \\
+rules with known variances & \S~\ref{sec:s-hetero}: the computed radius and the shrunk threshold \\
 analytic rules, $2000$ data sets & how conservative the guarantees are for these laws \\
 sensitivity to a shared latent law & the Discussion: the guarantees need one latent law shared by all units \\
 oracle-matched widths & the width needed for a guarantee, separated from the shape of the interval \\
@@ -615,7 +627,7 @@ So the slack is not an artefact of the proofs: without it the latent guarantee f
 
 \subsection*{Rules with known variances}
 
-The rules of \S~\ref{M-sec:hetero}, which use the known noise variances, are compared with the noisy threshold, a Fay--Herriot interval and the Markov rule of \S~\ref{sec:s-shapefree}. The target is $\pr_{\mathcal D}\{\pr(W_{\rm new} \in C \mid \mathcal D) \ge 0.9\} \ge 0.95$, with $K = 110$, $\var(W) = 1$ and Gaussian noise with heterogeneous variances $D_i = 0.577\,L_i/E(L_i)$, $L_i$ lognormal with log-scale $0.7$. Latent residuals, all with mean zero, are drawn directly; conditional coverage given each data set is exact, and reliability is estimated from $150$ data sets per law. Besides four standard log-concave laws we use a truncated exponential law in $\mathcal F$, a bimodal law in $\mathcal B$ but not in $\LC$, and a $t_3$ law outside $\mathcal B$. We compare the noisy threshold at rank $105$, the shrunk threshold and the computed radius of \S~\ref{M-sec:hetero}, a Fay--Herriot tolerance interval adapted from \citet{chatterjee2008}, and the Markov rule, the radius $r$ with $\bar g(r) = \{p_k - q\bar g(0)\}/(1 - q)$, the smallest the single constraint allows without a shape assumption (\S~\ref{sec:s-shapefree}), at its best rank, $107$.
+The rules of \S~\ref{sec:s-hetero}, which use the known noise variances, are compared with the noisy threshold, a Fay--Herriot interval and the Markov rule of \S~\ref{sec:s-shapefree}. The target is $\pr_{\mathcal D}\{\pr(W_{\rm new} \in C \mid \mathcal D) \ge 0.9\} \ge 0.95$, with $K = 110$, $\var(W) = 1$ and Gaussian noise with heterogeneous variances $D_i = 0.577\,L_i/E(L_i)$, $L_i$ lognormal with log-scale $0.7$. Latent residuals, all with mean zero, are drawn directly; conditional coverage given each data set is exact, and reliability is estimated from $150$ data sets per law. Besides four standard log-concave laws we use a truncated exponential law in $\mathcal F$, a bimodal law in $\mathcal B$ but not in $\LC$, and a $t_3$ law outside $\mathcal B$. We compare the noisy threshold at rank $105$, the shrunk threshold and the computed radius of \S~\ref{sec:s-hetero}, a Fay--Herriot tolerance interval adapted from \citet{chatterjee2008}, and the Markov rule, the radius $r$ with $\bar g(r) = \{p_k - q\bar g(0)\}/(1 - q)$, the smallest the single constraint allows without a shape assumption (\S~\ref{sec:s-shapefree}), at its best rank, $107$.
 
 \begin{table}[h]
 \centering
