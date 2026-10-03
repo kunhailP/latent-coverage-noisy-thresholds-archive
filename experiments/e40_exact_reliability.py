@@ -47,6 +47,9 @@ if __name__ == '__main__':
         for rule, k in ranks.items():
             if k is not None and k <= K:
                 rows.append(dict(K=K, rule=rule, rank=k, reliability=stats.binom.cdf(k - 1, K, H)))
+    small = [(K, stats.binom.cdf(first_rank(K, Q) - 1, K, H)) for K in range(29, 301)]
+    K_min, rel_min = min(small, key=lambda t: t[1])
+    print(f'usual rank, 29 <= K <= 300: min reliability {rel_min:.5f} at K = {K_min}')
     df = pd.DataFrame(rows)
     df.to_csv(RESULTS / 'exact_reliability.csv', index=False)
     print(df[df.K.isin(QUOTED)].to_string(index=False))
