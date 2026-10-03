@@ -200,8 +200,8 @@ def eh_region1(q, k0, k1, L0, L1):
 def _ek_bounds(t0, t1):
     """For k in [1/t1, 1/t0] (t0 = 0 means k up to inf): balls for e^{-k}, k e^{-k}, and the
     interval of k as floats."""
-    k_lo = 1 / t1
-    k_hi = math.inf if t0 == 0 else 1 / t0
+    k_lo = fdown(1 / A(t1))                     # outward: k_lo <= 1/t1, k_hi >= 1/t0
+    k_hi = math.inf if t0 == 0 else fup(1 / A(t0))
     ek = _hull(0.0 if k_hi == math.inf else fdown((-A(k_hi)).exp()), fup((-A(k_lo)).exp()))
     kek = _hull(0.0 if k_hi == math.inf else fdown(A(k_hi) * (-A(k_hi)).exp()),
                 fup(A(k_lo) * (-A(k_lo)).exp()))
